@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.846Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\legacy-pages-router",
+  "summary": {
+    "totalScore": 94,
+    "scores": {
+      "visual": 100,
+      "copy": 100,
+      "code": 88,
+      "performance": 88
+    },
+    "findingsCount": {
+      "open": 4,
+      "waived": 0,
+      "fixed": 0,
+      "total": 4
+    },
+    "levelUsed": 2
+  },
+  "findings": [
+    {
+      "id": "CODE-003-11",
+      "ruleId": "CODE-003",
+      "category": "code",
+      "severity": "medium",
+      "message": "Raw <img> tag used in React component; prefer next/image or responsive <picture>",
+      "file": "pages/index.tsx",
+      "line": 11,
+      "evidence": "<img src=\"/static/hero.png\" />",
+      "fixClass": "image_component",
+      "status": "open"
+    },
+    {
+      "id": "PERF-001-7",
+      "ruleId": "PERF-001",
+      "category": "perf",
+      "severity": "high",
+      "message": "Google Fonts import missing display=swap parameter, blocking initial text render",
+      "file": "pages/index.tsx",
+      "line": 7,
+      "evidence": "<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;700\" rel=\"stylesheet\" />",
+      "fixClass": "font_display",
+      "status": "open"
+    },
+    {
+      "id": "PERF-003-11",
+      "ruleId": "PERF-003",
+      "category": "perf",
+      "severity": "medium",
+      "message": "Image tag missing explicit width/height dimensions, triggering Cumulative Layout Shift (CLS)",
+      "file": "pages/index.tsx",
+      "line": 11,
+      "evidence": "<img src=\"/static/hero.png\" />",
+      "fixClass": "cls_dimensions",
+      "status": "open"
+    },
+    {
+      "id": "A11Y-001-11",
+      "ruleId": "A11Y-001",
+      "category": "a11y",
+      "severity": "high",
+      "message": "<img> element missing required alt attribute for screen readers",
+      "file": "pages/index.tsx",
+      "line": 11,
+      "evidence": "<img src=\"/static/hero.png\" />",
+      "fixClass": "accessible_alt",
+      "status": "open"
+    }
+  ],
+  "identitySummary": {
+    "framework": "next",
+    "lockedCount": 0,
+    "waiversCount": 0
+  }
+}

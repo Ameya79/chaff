@@ -1,0 +1,10 @@
+{
+  "name": "example-l3-hero",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@chaff/tier": "workspace:*",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  }
+}

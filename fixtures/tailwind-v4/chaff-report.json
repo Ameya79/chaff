@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.866Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\tailwind-v4",
+  "summary": {
+    "totalScore": 100,
+    "scores": {
+      "visual": 100,
+      "copy": 100,
+      "code": 100,
+      "performance": 100
+    },
+    "findingsCount": {
+      "open": 0,
+      "waived": 1,
+      "fixed": 0,
+      "total": 1
+    },
+    "levelUsed": 2
+  },
+  "findings": [
+    {
+      "id": "UI-004-3",
+      "ruleId": "UI-004",
+      "category": "ui",
+      "severity": "high",
+      "message": "Purple/indigo AI glow gradient detected",
+      "file": "app/page.tsx",
+      "line": 3,
+      "evidence": "<div className=\"bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-8\">",
+      "fixClass": "color_hygiene",
+      "status": "waived",
+      "waiverReason": "Brand guideline explicitly specifies purple as primary brand color in DESIGN.md"
+    }
+  ],
+  "identitySummary": {
+    "framework": "next",
+    "lockedCount": 1,
+    "waiversCount": 1
+  }
+}

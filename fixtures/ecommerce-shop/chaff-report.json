@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.798Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\ecommerce-shop",
+  "summary": {
+    "totalScore": 98,
+    "scores": {
+      "visual": 100,
+      "copy": 100,
+      "code": 96,
+      "performance": 96
+    },
+    "findingsCount": {
+      "open": 2,
+      "waived": 0,
+      "fixed": 0,
+      "total": 2
+    },
+    "levelUsed": 2
+  },
+  "findings": [
+    {
+      "id": "MOBILE-002-7",
+      "ruleId": "MOBILE-002",
+      "category": "mobile",
+      "severity": "medium",
+      "message": "Interactive touch target under 44x44px mobile touch threshold",
+      "file": "app/page.tsx",
+      "line": 7,
+      "evidence": "<button type=\"submit\" className=\"w-6 h-6 p-0.5 bg-gray-200\">",
+      "fixClass": "touch_target_dimensions",
+      "status": "open"
+    },
+    {
+      "id": "A11Y-003-6",
+      "ruleId": "A11Y-003",
+      "category": "a11y",
+      "severity": "medium",
+      "message": "Form input missing associated label or aria-label",
+      "file": "app/page.tsx",
+      "line": 6,
+      "evidence": "<input type=\"text\" placeholder=\"Search catalog...\" />",
+      "fixClass": "form_label",
+      "status": "open"
+    }
+  ],
+  "identitySummary": {
+    "framework": "next",
+    "lockedCount": 0,
+    "waiversCount": 0
+  }
+}

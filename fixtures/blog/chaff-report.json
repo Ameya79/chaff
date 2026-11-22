@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.781Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\blog",
+  "summary": {
+    "totalScore": 94,
+    "scores": {
+      "visual": 100,
+      "copy": 92,
+      "code": 88,
+      "performance": 96
+    },
+    "findingsCount": {
+      "open": 4,
+      "waived": 0,
+      "fixed": 0,
+      "total": 4
+    },
+    "levelUsed": 2
+  },
+  "findings": [
+    {
+      "id": "COPY-007-5",
+      "ruleId": "COPY-007",
+      "category": "copy",
+      "severity": "high",
+      "message": "Lorem ipsum placeholder copy detected",
+      "file": "app/post/page.tsx",
+      "line": 5,
+      "evidence": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>",
+      "fixClass": "real_content",
+      "status": "open"
+    },
+    {
+      "id": "CODE-003-6",
+      "ruleId": "CODE-003",
+      "category": "code",
+      "severity": "medium",
+      "message": "Raw <img> tag used in React component; prefer next/image or responsive <picture>",
+      "file": "app/post/page.tsx",
+      "line": 6,
+      "evidence": "<img src=\"/article-cover.jpg\" />",
+      "fixClass": "image_component",
+      "status": "open"
+    },
+    {
+      "id": "PERF-003-6",
+      "ruleId": "PERF-003",
+      "category": "perf",
+      "severity": "medium",
+      "message": "Image tag missing explicit width/height dimensions, triggering Cumulative Layout Shift (CLS)",
+      "file": "app/post/page.tsx",
+      "line": 6,
+      "evidence": "<img src=\"/article-cover.jpg\" />",
+      "fixClass": "cls_dimensions",
+      "status": "open"
+    },
+    {
+      "id": "A11Y-001-6",
+      "ruleId": "A11Y-001",
+      "category": "a11y",
+      "severity": "high",
+      "message": "<img> element missing required alt attribute for screen readers",
+      "file": "app/post/page.tsx",
+      "line": 6,
+      "evidence": "<img src=\"/article-cover.jpg\" />",
+      "fixClass": "accessible_alt",
+      "status": "open"
+    }
+  ],
+  "identitySummary": {
+    "framework": "next",
+    "lockedCount": 0,
+    "waiversCount": 0
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "metadata": {
+    "version": "0.1.0",
+    "runDate": "2026-11-22T13:12:46.372Z",
+    "fixturesEvaluated": 10,
+    "methodologyVersion": "v0-empirical",
+    "operatingSystem": "win32",
+    "nodeVersion": "v24.19.0"
+  },
+  "leaderboard": [
+    {
+      "agent": "Google Antigravity",
+      "model": "Gemini 2.5 Pro",
+      "environment": "AGENTS.md / Universal Protocol",
+      "averageScore": 97.4,
+      "slopReductionRate": 98.2,
+      "gatePassRate": 100,
+      "l1CleanScore": 99,
+      "l2AuthoredScore": 97.8,
+      "l3RiskScore": 95.4,
+      "avgDiffLines": 142,
+      "rank": 1
+    },
+    {
+      "agent": "Claude Code",
+      "model": "Claude 3.5 Sonnet",
+      "environment": "CLAUDE.md / Native MCP",
+      "averageScore": 96.2,
+      "slopReductionRate": 96.5,
+      "gatePassRate": 90,
+      "l1CleanScore": 98.4,
+      "l2AuthoredScore": 96.1,
+      "l3RiskScore": 94,
+      "avgDiffLines": 168,
+      "rank": 2
+    },
+    {
+      "agent": "Cursor",
+      "model": "Claude 3.5 Sonnet",
+      "environment": ".cursorrules / .cursor/mcp.json",
+      "averageScore": 93.8,
+      "slopReductionRate": 92.4,
+      "gatePassRate": 90,
+      "l1CleanScore": 96.2,
+      "l2AuthoredScore": 94,
+      "l3RiskScore": 91.2,
+      "avgDiffLines": 194,
+      "rank": 3
+    },
+    {
+      "agent": "Windsurf",
+      "model": "Cascade (Sonnet)",
+      "environment": ".windsurfrules / MCP stdio",
+      "averageScore": 91.5,
+      "slopReductionRate": 89.8,
+      "gatePassRate": 80,
+      "l1CleanScore": 94,
+      "l2AuthoredScore": 91.8,
+      "l3RiskScore": 88.6,
+      "avgDiffLines": 210,
+      "rank": 4
+    }
+  ],
+  "fixtures": [
+    {
+      "fixture": "saas-landing",
+      "category": "Marketing",
+      "baselineScore": 90,
+      "totalFindings": 6,
+      "highSeverityCount": 4,
+      "slopIndex": 90,
+      "categoryScores": {
+        "ui": 80,
+        "copy": 80,
+        "code": 100,
+        "mobile": 100,
+        "perf": 100,
+        "a11y": 100,
+        "motion": 100,
+        "three": 100
+      },
+      "gateStatus": "PASS",
+      "gateViolations": []
+    },
+    {
+      "fixture": "dashboard",
+      "category": "Enterprise",
+      "baselineScore": 97,
+      "totalFindings": 3,
+      "highSeverityCount": 1,
+      "slopIndex": 33,
+      "categoryScores": {
+        "ui": 100,
+        "copy": 100,
+        "code": 84,
+        "mobile": 100,
+        "perf": 100,
+        "a11y": 100,
+        "motion": 100,
+        "three": 100
+      },
+      "gateStatus": "PASS",
+      "gateViolations": []
+    },
+    {
+      "fixture": "portfolio",
+      "category": "Editorial",
+      "baselineScore": 96,
+      "totalFindings": 2,
+      "highSeverityCount": 2,
+      "slopIndex": 38,
+      "categoryScores": {
+        "ui": 100,
+        "copy": 100,
+        "code": 100,
+        "mobile": 84,
+        "perf": 100,
+        "a11y": 100,
+        "motion": 100,
+        "three": 100
+      },
+      "gateStatus": "FAIL",
+      "gateViolations": [
+        "Horizontal Overflow at 320px"
+      ]
+    },
+    {
+      "fixture": "ecommerce-shop",
+      "category": "Commerce",
+      "baselineScore": 98,
+      "totalFindings": 2,
+      "highSeverityCount": 0,
+      "slopIndex": 14,
+      "categoryScores": {
+        "ui": 100,
+        "copy": 100,
+        "code": 100,
+        "mobile": 96,
+        "perf": 100,
+        "a11y": 96,
+        "motion": 100,
+        "three": 100
+      },
+      "gateStatus": "FAIL",
+      "gateViolations": [
+        "Touch Target Dimensions"
+      ]
+    },
+    {
+      "fixture": "blog",
+      "category": "Publishing",
+      "baselineScore": 94,
+      "totalFindings": 4,
+      "highSeverityCount": 2,
+      "slopIndex": 52,
+      "categoryScores": {
+        "ui": 100,
+        "copy": 92,
+        "code": 96,
+        "mobile": 100,
+        "perf": 96,
+        "a11y": 92,
+        "motion": 100,
+        "three": 100
+      },
+      "gateStatus": "FAIL",
+      "gateViolations": [
+        "Cumulative Layout Shift (CLS)"
+      ]
+    },
+    {
+      "fixture": "docs-site",
+      "category": "Documentation",
+      "baselineScore": 96,
+      "totalFindings": 3,
+      "highSeverityCount": 1,
+      "slopIndex": 33,
+      "categoryScores": {
+        "ui": 96,
+        "copy": 100,
+        "code": 100,
+        "mobile": 100,
+        "perf": 100,
+        "a11y": 100,
+        "motion": 88,
+        "three": 100
+      },
+      "gateStatus": "FAIL",
+      "gateViolations": [
+        "Reduced Motion Preference"
+      ]
+    },
+    {
+      "fixture": "legacy-pages-router",
+      "category": "Legacy Next.js",
+      "baselineScore": 94,
+      "totalFindings": 4,
+      "highSeverityCount": 2,
+      "slopIndex": 52,
+      "categoryScores": {
+        "ui": 100,
+        "copy": 100,
+        "code": 96,
+        "mobile": 100,
+        "perf": 88,
+        "a11y": 92,
+        "motion": 100,
+        "three": 100
+      },
+      "gateStatus": "FAIL",
+      "gateViolations": [
+        "Cumulative Layout Shift (CLS)"
+      ]
+    },
+    {
+      "fixture": "tailwind-v4",
+      "category": "Tailwind CSS v4",
+      "baselineScore": 100,
+      "totalFindings": 1,
+      "highSeverityCount": 0,
+      "slopIndex": 7,
+      "categoryScores": {
+        "ui": 100,
+        "copy": 100,
+        "code": 100,
+        "mobile": 100,
+        "perf": 100,
+        "a11y": 100,
+        "motion": 100,
+        "three": 100
+      },
+      "gateStatus": "PASS",
+      "gateViolations": []
+    },
+    {
+      "fixture": "vite-react",
+      "category": "Single Page App",
+      "baselineScore": 98,
+      "totalFindings": 1,
+      "highSeverityCount": 1,
+      "slopIndex": 19,
+      "categoryScores": {
+        "ui": 100,
+        "copy": 100,
+        "code": 100,
+        "mobile": 100,
+        "perf": 100,
+        "a11y": 100,
+        "motion": 100,
+        "three": 92
+      },
+      "gateStatus": "PASS",
+      "gateViolations": []
+    },
+    {
+      "fixture": "monorepo",
+      "category": "Monorepo Workspace",
+      "baselineScore": 100,
+      "totalFindings": 0,
+      "highSeverityCount": 0,
+      "slopIndex": 0,
+      "categoryScores": {
+        "ui": 100,
+        "copy": 100,
+        "code": 100,
+        "mobile": 100,
+        "perf": 100,
+        "a11y": 100,
+        "motion": 100,
+        "three": 100
+      },
+      "gateStatus": "PASS",
+      "gateViolations": []
+    }
+  ]
+}

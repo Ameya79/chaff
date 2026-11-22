@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.883Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\vite-react",
+  "summary": {
+    "totalScore": 98,
+    "scores": {
+      "visual": 92,
+      "copy": 100,
+      "code": 100,
+      "performance": 100
+    },
+    "findingsCount": {
+      "open": 1,
+      "waived": 0,
+      "fixed": 0,
+      "total": 1
+    },
+    "levelUsed": 2
+  },
+  "findings": [
+    {
+      "id": "THREE-004-6",
+      "ruleId": "THREE-004",
+      "category": "three",
+      "severity": "high",
+      "message": "Uncapped device pixel ratio triggers GPU thermal throttling and battery drain; cap at 1.5",
+      "file": "src/App.tsx",
+      "line": 6,
+      "evidence": "renderer.setPixelRatio(window.devicePixelRatio);",
+      "fixClass": "pixel_ratio_cap",
+      "status": "open"
+    }
+  ],
+  "identitySummary": {
+    "framework": "vite",
+    "lockedCount": 0,
+    "waiversCount": 0
+  }
+}

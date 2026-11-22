@@ -1,0 +1,11 @@
+---
+description: Chaff design audit and level enforcement
+globs: ["**/*.{tsx,jsx,ts,js,css}"]
+alwaysApply: true
+---
+
+# Chaff Protocol (Level 2)
+Inspect .chaff/identity.json before modifying styles.
+Locked tokens must never be overridden.
+Follow the 7-step autonomous protocol in CHAFF.md.
+Rules available on demand from rules/.

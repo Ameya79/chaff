@@ -1,0 +1,19 @@
+name: 'Chaff Design & Performance Gate'
+description: 'Audits PR for AI design tells, checks performance budgets, and posts sticky before/after commentary'
+author: 'Chaff Contributors'
+inputs:
+  github-token:
+    description: 'GitHub token for PR comment manipulation'
+    required: false
+    default: ''
+  level:
+    description: 'Operating level (1, 2, or 3)'
+    required: false
+    default: '2'
+  project-root:
+    description: 'Project root directory to audit'
+    required: false
+    default: '.'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.824Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\docs-site",
+  "summary": {
+    "totalScore": 96,
+    "scores": {
+      "visual": 84,
+      "copy": 100,
+      "code": 100,
+      "performance": 100
+    },
+    "findingsCount": {
+      "open": 3,
+      "waived": 0,
+      "fixed": 0,
+      "total": 3
+    },
+    "levelUsed": 2
+  },
+  "findings": [
+    {
+      "id": "UI-002-3",
+      "ruleId": "UI-002",
+      "category": "ui",
+      "severity": "medium",
+      "message": "Arbitrary spacing [13px] violates 4/8px spatial rhythm",
+      "file": "app/docs/page.tsx",
+      "line": 3,
+      "evidence": "<div className=\"p-[13px] docs-wrapper\">",
+      "fixClass": "spacing_hygiene",
+      "status": "open"
+    },
+    {
+      "id": "MOTION-001-css",
+      "ruleId": "MOTION-001",
+      "category": "motion",
+      "severity": "high",
+      "message": "CSS keyframe animations declared without @media (prefers-reduced-motion: reduce) fallback",
+      "file": "app/styles.css",
+      "line": 1,
+      "evidence": "CSS keyframes present without prefers-reduced-motion query",
+      "fixClass": "reduced_motion_query",
+      "status": "open"
+    },
+    {
+      "id": "MOTION-002-7",
+      "ruleId": "MOTION-002",
+      "category": "motion",
+      "severity": "medium",
+      "message": "CSS transition animates layout properties triggering recalculate style and layout; use transform and opacity",
+      "file": "app/styles.css",
+      "line": 7,
+      "evidence": "transition: width 0.3s ease;",
+      "fixClass": "composited_transforms",
+      "status": "open"
+    }
+  ],
+  "identitySummary": {
+    "framework": "next",
+    "lockedCount": 0,
+    "waiversCount": 0
+  }
+}

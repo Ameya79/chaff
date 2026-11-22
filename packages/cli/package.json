@@ -1,0 +1,28 @@
+{
+  "name": "@chaff/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "chaff": "./bin/chaff.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test dist/tests/**/*.test.js",
+    "chaff": "node ./bin/chaff.js"
+  },
+  "dependencies": {
+    "@chaff/core": "workspace:*",
+    "@chaff/checks": "workspace:*",
+    "@chaff/mcp": "workspace:*",
+    "commander": "^13.1.0",
+    "picocolors": "^1.1.1"
+  }
+}

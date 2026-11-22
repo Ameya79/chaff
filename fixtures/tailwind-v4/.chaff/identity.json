@@ -1,0 +1,33 @@
+{
+  "$schema": "https://chaff.dev/schemas/identity.v1.json",
+  "version": "1.0.0",
+  "generatedAt": "2026-11-22T14:06:44.650Z",
+  "framework": "next",
+  "router": "app",
+  "styling": "tailwind",
+  "fonts": [],
+  "colors": {},
+  "spacingRhythm": [
+    "4px",
+    "8px"
+  ],
+  "tokens": [
+    {
+      "name": "brand-guide",
+      "value": "DESIGN.md",
+      "confidence": 0.99,
+      "locked": true,
+      "source": "DESIGN.md"
+    }
+  ],
+  "locked": [
+    "brand-guide"
+  ],
+  "waivers": [
+    {
+      "ruleId": "UI-004",
+      "token": "color-purple",
+      "reason": "Brand guideline explicitly specifies purple as primary brand color in DESIGN.md"
+    }
+  ]
+}

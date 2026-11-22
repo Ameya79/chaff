@@ -1,0 +1,11 @@
+{
+  "name": "fixture-vite-react",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "three": "^0.160.0",
+    "vite": "^5.0.0"
+  }
+}

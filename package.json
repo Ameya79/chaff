@@ -1,0 +1,16 @@
+{
+  "name": "chaff-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r --filter \"./packages/*\" run build",
+    "test": "pnpm -r --filter \"./packages/*\" run test",
+    "chaff": "pnpm --filter @chaff/cli run chaff",
+    "bench": "npx tsx bench/runner.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "@types/node": "^22.0.0"
+  }
+}

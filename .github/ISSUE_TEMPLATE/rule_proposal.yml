@@ -1,0 +1,55 @@
+name: Rule Proposal (RFC)
+description: Propose a new automated design audit rule or AI tell detection pattern
+title: "[Rule RFC]: "
+labels: ["rule-rfc", "good first issue"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a new Chaff rule! Please review existing rules in `rules/` before submitting.
+  - type: input
+    id: rule-id
+    attributes:
+      label: Proposed Rule ID
+      description: e.g. UI-010, COPY-010, CODE-010, MOBILE-010, A11Y-010
+      placeholder: UI-010
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Rule Category
+      options:
+        - ui (Layout & Visuals)
+        - copy (Voice & Metrics)
+        - code (HTML & Framework Idioms)
+        - perf (Core Web Vitals)
+        - mobile (Viewport & Touch)
+        - a11y (Accessibility & Contrast)
+        - motion (Animation Hygiene)
+        - three (WebGL & Fallback Contract)
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Tell
+      description: What generic AI design pattern or quality defect does this rule target?
+    validations:
+      required: true
+  - type: textarea
+    id: bad-example
+    attributes:
+      label: Bad Example (Slop Pattern)
+      description: Provide an exact code snippet showing the tell.
+      render: jsx
+    validations:
+      required: true
+  - type: textarea
+    id: good-example
+    attributes:
+      label: Good Example (Authored Remediation)
+      description: Provide an exact code snippet showing the clean, grain-preserved alternative.
+      render: jsx
+    validations:
+      required: true

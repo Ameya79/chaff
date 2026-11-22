@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.745Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\dashboard",
+  "summary": {
+    "totalScore": 97,
+    "scores": {
+      "visual": 100,
+      "copy": 100,
+      "code": 88,
+      "performance": 100
+    },
+    "findingsCount": {
+      "open": 3,
+      "waived": 0,
+      "fixed": 0,
+      "total": 3
+    },
+    "levelUsed": 2
+  },
+  "findings": [
+    {
+      "id": "CODE-001-7",
+      "ruleId": "CODE-001",
+      "category": "code",
+      "severity": "high",
+      "message": "Non-semantic <div> used as button with onClick; use <button> or add role=\"button\"",
+      "file": "app/page.tsx",
+      "line": 7,
+      "evidence": "<div className=\"cursor-pointer bg-blue-500 text-white px-4 py-2\" ",
+      "fixClass": "semantic_html",
+      "status": "open"
+    },
+    {
+      "id": "CODE-007-3",
+      "ruleId": "CODE-007",
+      "category": "code",
+      "severity": "low",
+      "message": "Residual console.log detected in component code",
+      "file": "app/page.tsx",
+      "line": 3,
+      "evidence": "console.log('Rendering Dashboard');",
+      "fixClass": "code_hygiene",
+      "status": "open"
+    },
+    {
+      "id": "CODE-007-9",
+      "ruleId": "CODE-007",
+      "category": "code",
+      "severity": "low",
+      "message": "Residual console.log detected in component code",
+      "file": "app/page.tsx",
+      "line": 9,
+      "evidence": "onClick={() => console.log('Export data clicked')}",
+      "fixClass": "code_hygiene",
+      "status": "open"
+    }
+  ],
+  "identitySummary": {
+    "framework": "next",
+    "lockedCount": 0,
+    "waiversCount": 0
+  }
+}

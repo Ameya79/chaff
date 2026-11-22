@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.903Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\monorepo",
+  "summary": {
+    "totalScore": 100,
+    "scores": {
+      "visual": 100,
+      "copy": 100,
+      "code": 100,
+      "performance": 100
+    },
+    "findingsCount": {
+      "open": 0,
+      "waived": 0,
+      "fixed": 0,
+      "total": 0
+    },
+    "levelUsed": 2
+  },
+  "findings": [],
+  "identitySummary": {
+    "framework": "unknown",
+    "lockedCount": 0,
+    "waiversCount": 0
+  }
+}

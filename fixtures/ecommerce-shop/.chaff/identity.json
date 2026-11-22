@@ -1,0 +1,17 @@
+{
+  "$schema": "https://chaff.dev/schemas/identity.v1.json",
+  "version": "1.0.0",
+  "generatedAt": "2026-11-22T14:06:44.591Z",
+  "framework": "next",
+  "router": "app",
+  "styling": "tailwind",
+  "fonts": [],
+  "colors": {},
+  "spacingRhythm": [
+    "4px",
+    "8px"
+  ],
+  "tokens": [],
+  "locked": [],
+  "waivers": []
+}

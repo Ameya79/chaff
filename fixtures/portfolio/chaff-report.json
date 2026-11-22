@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.764Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\portfolio",
+  "summary": {
+    "totalScore": 96,
+    "scores": {
+      "visual": 100,
+      "copy": 100,
+      "code": 100,
+      "performance": 84
+    },
+    "findingsCount": {
+      "open": 2,
+      "waived": 0,
+      "fixed": 0,
+      "total": 2
+    },
+    "levelUsed": 2
+  },
+  "findings": [
+    {
+      "id": "MOBILE-004-4",
+      "ruleId": "MOBILE-004",
+      "category": "mobile",
+      "severity": "high",
+      "message": "Disabling viewport zoom (user-scalable=no) violates mobile accessibility guidelines",
+      "file": "src/App.tsx",
+      "line": 4,
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" />",
+      "fixClass": "viewport_accessibility",
+      "status": "open"
+    },
+    {
+      "id": "MOBILE-001-5",
+      "ruleId": "MOBILE-001",
+      "category": "mobile",
+      "severity": "high",
+      "message": "Fixed layout width >320px causes horizontal overflow on small mobile viewports",
+      "file": "src/App.tsx",
+      "line": 5,
+      "evidence": "<div style={{ width: '600px' }} className=\"portfolio-gallery\">",
+      "fixClass": "responsive_width",
+      "status": "open"
+    }
+  ],
+  "identitySummary": {
+    "framework": "react",
+    "lockedCount": 0,
+    "waiversCount": 0
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://chaff.dev/schemas/identity.v1.json",
+  "version": "1.0.0",
+  "generatedAt": "2026-11-22T11:28:31.224Z",
+  "framework": "unknown",
+  "router": "unknown",
+  "styling": "css",
+  "fonts": [],
+  "colors": {},
+  "spacingRhythm": [
+    "4px",
+    "8px"
+  ],
+  "tokens": [],
+  "locked": [],
+  "waivers": [
+    {
+      "ruleId": "UI-004",
+      "reason": "Client corporate color palette is purple",
+      "approvedBy": "mcp-user"
+    },
+    {
+      "ruleId": "UI-004",
+      "reason": "Client corporate color palette is purple",
+      "approvedBy": "mcp-user"
+    },
+    {
+      "ruleId": "UI-004",
+      "reason": "Client corporate color palette is purple",
+      "approvedBy": "mcp-user"
+    },
+    {
+      "ruleId": "UI-004",
+      "reason": "Client corporate color palette is purple",
+      "approvedBy": "mcp-user"
+    },
+    {
+      "ruleId": "UI-004",
+      "reason": "Client corporate color palette is purple",
+      "approvedBy": "mcp-user"
+    },
+    {
+      "ruleId": "UI-004",
+      "reason": "Client corporate color palette is purple",
+      "approvedBy": "mcp-user"
+    },
+    {
+      "ruleId": "UI-004",
+      "reason": "Client corporate color palette is purple",
+      "approvedBy": "mcp-user"
+    }
+  ]
+}

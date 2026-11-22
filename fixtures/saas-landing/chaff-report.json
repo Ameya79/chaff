@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T14:06:44.729Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\fixtures\\saas-landing",
+  "summary": {
+    "totalScore": 90,
+    "scores": {
+      "visual": 80,
+      "copy": 80,
+      "code": 100,
+      "performance": 100
+    },
+    "findingsCount": {
+      "open": 6,
+      "waived": 0,
+      "fixed": 0,
+      "total": 6
+    },
+    "levelUsed": 2
+  },
+  "findings": [
+    {
+      "id": "UI-004-3",
+      "ruleId": "UI-004",
+      "category": "ui",
+      "severity": "high",
+      "message": "Purple/indigo AI glow gradient detected",
+      "file": "app/page.tsx",
+      "line": 3,
+      "evidence": "<main className=\"min-h-screen bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex flex-col items-center justify-center p-8 hero\">",
+      "fixClass": "color_hygiene",
+      "status": "open"
+    },
+    {
+      "id": "UI-008-3",
+      "ruleId": "UI-008",
+      "category": "ui",
+      "severity": "medium",
+      "message": "min-h-screen causes mobile viewport jumping; use min-h-dvh",
+      "file": "app/page.tsx",
+      "line": 3,
+      "evidence": "<main className=\"min-h-screen bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex flex-col items-center justify-center p-8 hero\">",
+      "fixClass": "viewport_units",
+      "status": "open"
+    },
+    {
+      "id": "UI-001-layout",
+      "ruleId": "UI-001",
+      "category": "ui",
+      "severity": "high",
+      "message": "Generic centered hero with 3-card equal grid layout fingerprint detected",
+      "file": "app/page.tsx",
+      "line": 1,
+      "evidence": "Centered hero followed by md:grid-cols-3 cards block",
+      "fixClass": "editorial_layout",
+      "status": "open"
+    },
+    {
+      "id": "COPY-001-5",
+      "ruleId": "COPY-001",
+      "category": "copy",
+      "severity": "high",
+      "message": "AI buzzword 'delve' detected; replace with plain, specific copy",
+      "file": "app/page.tsx",
+      "line": 5,
+      "evidence": "Delve into our cutting-edge revolutionary platform",
+      "fixClass": "authentic_voice",
+      "status": "open"
+    },
+    {
+      "id": "COPY-001-8",
+      "ruleId": "COPY-001",
+      "category": "copy",
+      "severity": "high",
+      "message": "AI buzzword 'streamline' detected; replace with plain, specific copy",
+      "file": "app/page.tsx",
+      "line": 8,
+      "evidence": "Streamline and supercharge your team with 99.9% uptime and 10,000+ happy teams.",
+      "fixClass": "authentic_voice",
+      "status": "open"
+    },
+    {
+      "id": "COPY-003-8",
+      "ruleId": "COPY-003",
+      "category": "copy",
+      "severity": "medium",
+      "message": "Round synthetic statistic detected without attribution",
+      "file": "app/page.tsx",
+      "line": 8,
+      "evidence": "Streamline and supercharge your team with 99.9% uptime and 10,000+ happy teams.",
+      "fixClass": "grounded_metrics",
+      "status": "open"
+    }
+  ],
+  "identitySummary": {
+    "framework": "next",
+    "lockedCount": 0,
+    "waiversCount": 0
+  }
+}
