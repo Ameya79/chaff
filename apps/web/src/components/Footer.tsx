@@ -70,14 +70,14 @@ export function Footer() {
         </div>
 
         <div className="md:col-span-4 space-y-3">
-          <h4 className="font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)]">
-            THE WINNOWING STANDARD
+          <h4 className="font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] font-bold">
+            THE WINNOWING STANDARD //
           </h4>
-          <div className="p-4 rounded hairline bg-[var(--bg-canvas)] space-y-2 text-xs font-mono text-[var(--text-dim)]">
+          <div className="hairline-y py-3 space-y-2 text-xs font-mono text-[var(--text-dim)]">
             <div className="text-[var(--text-main)] font-semibold">Invariant Directives:</div>
             <div>- No purple/blue synthetic glow gradients</div>
             <div>- No unverified metrics or buzzword salads</div>
-            <div>- Asymmetric layouts over template 3-card grids</div>
+            <div>- Asymmetric broadsheets over template card grids</div>
             <div>- 5-part Fallback Contract on all Level 3 3D/WebGL</div>
             <div className="text-[var(--status-sage)] pt-1 font-semibold">
               Rule: Downgrade effect, never loosen budget.

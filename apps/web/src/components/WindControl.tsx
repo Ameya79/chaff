@@ -138,14 +138,14 @@ export function WindControl() {
   if (!mounted || deviceTier === 'poster') {
     // Clause 2 Fallback Contract: High-fidelity static poster
     return (
-      <div className="hairline p-6 sm:p-8 bg-[var(--bg-surface)] rounded-md space-y-4">
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-xs uppercase tracking-wider text-[var(--accent-ember)] font-semibold">
-            Winnowing Floor Static Poster (Tier 0 / Poster Mode)
+      <div className="hairline-y py-8 space-y-4">
+        <div className="flex items-center justify-between hairline-b pb-3">
+          <span className="font-mono text-xs uppercase tracking-wider text-[var(--accent-ember)] font-bold">
+            02 // WINNOWING FLOOR STATIC POSTER (TIER 0 / POSTER MODE)
           </span>
           <span className="font-mono text-xs text-[var(--status-sage)] font-semibold">0 GPU Overhead • Fallback Contract</span>
         </div>
-        <div className="aspect-[16/7] w-full bg-[var(--bg-canvas)] hairline rounded flex flex-col items-center justify-center p-6 text-center space-y-2">
+        <div className="aspect-[16/7] w-full bg-[var(--bg-surface)] hairline flex flex-col items-center justify-center p-6 text-center space-y-2">
           <span className="font-serif text-2xl text-[var(--text-main)]">
             The heavy grain settles on stone. The husk is winnowed away.
           </span>
@@ -158,12 +158,13 @@ export function WindControl() {
   }
 
   return (
-    <div className="hairline p-6 sm:p-8 bg-[var(--bg-surface)] rounded-md space-y-6">
+    <div className="hairline-y py-8 space-y-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 hairline-b pb-6">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)]">
+          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)]">
+            <span className="font-bold">02 //</span>
             <span>LEVEL 3 SIGNATURE INTERACTION</span>
-            <span>/</span>
+            <span>//</span>
             <span>PHYSICAL WINNOWING</span>
           </div>
           <h3 className="font-serif text-2xl text-[var(--text-main)]">
@@ -203,15 +204,15 @@ export function WindControl() {
       </div>
 
       {/* Physics Canvas Surface */}
-      <div className="relative aspect-[16/7] w-full bg-[var(--bg-canvas)] hairline rounded overflow-hidden">
+      <div className="relative aspect-[16/7] w-full bg-[var(--bg-canvas)] hairline overflow-hidden">
         <canvas ref={canvasRef} className="w-full h-full object-cover" />
         
         {/* Physical Status Badges */}
         <div className="absolute top-3 left-3 flex gap-2 pointer-events-none">
-          <span className="font-mono text-[10px] uppercase px-2 py-0.5 rounded hairline bg-[var(--bg-surface)]/90 text-[var(--text-main)] backdrop-blur-xs">
+          <span className="font-mono text-[10px] uppercase px-2 py-0.5 hairline bg-[var(--bg-surface)]/90 text-[var(--text-main)]">
             ● Grain: Heavy (Settling)
           </span>
-          <span className="font-mono text-[10px] uppercase px-2 py-0.5 rounded hairline bg-[var(--bg-surface)]/90 text-[var(--text-dim)] backdrop-blur-xs">
+          <span className="font-mono text-[10px] uppercase px-2 py-0.5 hairline bg-[var(--bg-surface)]/90 text-[var(--text-dim)]">
             ○ Chaff: Airborne (Drifting)
           </span>
         </div>

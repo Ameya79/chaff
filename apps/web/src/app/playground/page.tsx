@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import Link from 'next/link';
 import presetsData from '../../data/playground-presets.json';
 import { RollingCounter } from '../../components/RollingCounter';
 
@@ -162,13 +161,15 @@ export default function PlaygroundPage() {
   const score = Math.max(0, 100 - totalDeductions);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-16">
       {/* Header Register */}
       <div className="space-y-4">
-        <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] px-3 py-1 hairline rounded bg-[var(--bg-surface)]">
-          <span>INTERACTIVE SANDBOX</span>
-          <span>/</span>
-          <span>IN-BROWSER STATIC CHECKER</span>
+        <div className="flex items-center justify-between gap-4 hairline-b pb-3 font-mono text-xs text-[var(--text-dim)]">
+          <div className="flex items-center gap-2">
+            <span className="text-[var(--accent-ember)] font-bold">INTERACTIVE //</span>
+            <span className="uppercase tracking-widest text-[var(--text-main)] font-semibold">PLAYGROUND STATIC AUDIT</span>
+          </div>
+          <div>IN-BROWSER PARSER &amp; SCORER</div>
         </div>
         <h1 className="tracking-tight text-[var(--text-main)] font-serif">
           The Chaff Playground
@@ -178,10 +179,10 @@ export default function PlaygroundPage() {
         </p>
       </div>
 
-      {/* Preset Switcher */}
-      <div className="flex flex-wrap items-center gap-2 hairline-b pb-4">
-        <span className="font-mono text-xs text-[var(--text-dim)] uppercase mr-2">
-          Load Sample:
+      {/* Preset Switcher Bar (Continuous Ruled Toolbar, Zero Cards) */}
+      <div className="hairline-y py-3.5 px-2 sm:px-4 flex flex-wrap items-center gap-2 font-mono text-xs">
+        <span className="text-[var(--text-dim)] uppercase font-semibold mr-2">
+          Load Sample Specimen:
         </span>
         {PRESETS.map((p, idx) => (
           <button
@@ -194,26 +195,26 @@ export default function PlaygroundPage() {
         ))}
       </div>
 
-      {/* 2-Column Split Workbench */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* 2-Column Split Workbench (Continuous Ruled Ledger, Zero Cards) */}
+      <div className="hairline-y grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[var(--border-line)] items-start">
         {/* Left Column: Code Editor */}
-        <div className="lg:col-span-7 hairline p-6 rounded-md bg-[var(--bg-surface)] space-y-4">
+        <div className="lg:col-span-7 p-6 sm:p-8 space-y-4">
           <div className="flex justify-between items-baseline hairline-b pb-3 font-mono text-xs text-[var(--text-dim)]">
-            <span className="font-semibold text-[var(--text-main)] uppercase">Component JSX Source</span>
+            <span className="font-semibold text-[var(--text-main)] uppercase">Component JSX Source //</span>
             <span>{code.length} characters • Live AST parsing</span>
           </div>
 
           <textarea
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            rows={20}
+            rows={18}
             aria-label="Component JSX Source Code"
-            className="w-full font-mono text-xs p-4 bg-[var(--bg-canvas)] text-[var(--text-main)] rounded hairline outline-none focus:border-[var(--accent-ember)] resize-y leading-relaxed"
+            className="w-full font-mono text-xs p-4 bg-[var(--bg-canvas)] text-[var(--text-main)] hairline outline-none focus:border-[var(--accent-ember)] resize-y leading-relaxed"
             placeholder="Paste JSX component here..."
           />
 
           <div className="flex justify-between items-center text-xs font-mono text-[var(--text-dim)]">
-            <span>Runs 100% in browser</span>
+            <span>Runs 100% locally in browser</span>
             <button
               onClick={() => setCode('')}
               className="text-xs font-mono text-[var(--accent-ember)] underline min-h-[44px] px-2 flex items-center"
@@ -224,16 +225,16 @@ export default function PlaygroundPage() {
         </div>
 
         {/* Right Column: Live Audit Inspection Dossier */}
-        <div className="lg:col-span-5 hairline p-6 sm:p-7 rounded-md bg-[var(--bg-surface)] space-y-6">
+        <div className="lg:col-span-5 p-6 sm:p-8 space-y-6">
           <div className="flex justify-between items-baseline hairline-b pb-4">
             <div>
-              <span className="font-mono text-xs uppercase text-[var(--text-dim)] block">
-                AUDIT SCORE
+              <span className="font-mono text-xs uppercase text-[var(--text-dim)] block font-bold">
+                AUDIT SCORE //
               </span>
               <div className="flex items-baseline gap-2 mt-1">
                 <RollingCounter
                   value={score}
-                  className={`font-serif text-4xl ${
+                  className={`font-serif text-5xl font-bold ${
                     score >= 85
                       ? 'text-[var(--status-sage)]'
                       : score >= 60
@@ -247,7 +248,7 @@ export default function PlaygroundPage() {
 
             <div className="text-right">
               <span
-                className={`font-mono text-xs font-bold px-2.5 py-1 rounded hairline uppercase ${
+                className={`font-mono text-xs font-bold px-2.5 py-1 hairline uppercase ${
                   score >= 85
                     ? 'bg-[var(--status-sage)]/10 text-[var(--status-sage)] border-[var(--status-sage)]/30'
                     : 'bg-[var(--accent-ember)]/10 text-[var(--accent-ember)] border-[var(--accent-ember)]/30'
@@ -256,15 +257,15 @@ export default function PlaygroundPage() {
                 {score >= 85 ? 'GATE PASS' : 'TELLS FOUND'}
               </span>
               <span className="block text-[11px] font-mono text-[var(--text-dim)] mt-1">
-                {findings.length} Finding(s)
+                {findings.length} Finding(s) Detected
               </span>
             </div>
           </div>
 
-          {/* Findings List */}
+          {/* Continuous Ruled Findings Ledger (Zero Cards) */}
           <div className="space-y-4">
             {findings.length === 0 ? (
-              <div className="p-6 text-center hairline rounded bg-[var(--bg-canvas)] space-y-2 border-[var(--status-sage)]/40">
+              <div className="p-6 text-center hairline bg-[var(--bg-canvas)] space-y-2 border-[var(--status-sage)]/40">
                 <span className="font-serif text-lg text-[var(--status-sage)] font-semibold block">
                   [PASS] Authentic Grain Standard
                 </span>
@@ -273,15 +274,12 @@ export default function PlaygroundPage() {
                 </p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="hairline-y divide-y divide-[var(--border-line)]">
                 {findings.map((f, i) => (
-                  <div
-                    key={i}
-                    className="p-4 rounded hairline bg-[var(--bg-canvas)] space-y-2 border-[var(--accent-ember)]/30"
-                  >
-                    <div className="flex justify-between items-baseline font-mono text-xs">
+                  <div key={i} className="py-3.5 space-y-1.5 font-mono text-xs">
+                    <div className="flex justify-between items-baseline">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-[var(--accent-ember)]">{f.id}</span>
+                        <span className="font-bold text-[var(--accent-ember)]">{f.id} //</span>
                         <span className="text-[10px] uppercase text-[var(--text-dim)]">
                           [{f.category}]
                         </span>
@@ -291,15 +289,15 @@ export default function PlaygroundPage() {
                       </span>
                     </div>
 
-                    <h4 className="font-serif text-sm font-semibold text-[var(--text-main)]">
+                    <h4 className="font-serif text-base font-semibold text-[var(--text-main)]">
                       {f.name}
                     </h4>
 
-                    <p className="text-xs text-[var(--text-dim)] leading-relaxed">
+                    <p className="text-xs text-[var(--text-dim)] font-sans leading-relaxed">
                       {f.message}
                     </p>
 
-                    <div className="pt-2 hairline-t text-xs font-mono text-[var(--status-sage)]">
+                    <div className="pt-1 text-[11px] font-mono text-[var(--status-sage)]">
                       <strong>Remediation:</strong> {f.fix}
                     </div>
                   </div>

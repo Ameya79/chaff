@@ -116,7 +116,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 data-active={isActive ? 'true' : 'false'}
-                className={`relative px-3 py-2 text-xs sm:text-sm font-medium transition-colors min-h-[44px] inline-flex items-center rounded ${
+                className={`relative px-3 py-2 text-xs sm:text-sm font-medium transition-colors min-h-[44px] inline-flex items-center ${
                   isActive
                     ? 'text-[var(--accent-ember)] font-semibold'
                     : 'text-[var(--text-dim)] hover:text-[var(--text-main)]'
@@ -130,7 +130,7 @@ export function Header() {
           <button
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === 'light' ? 'night' : 'day'} theme`}
-            className="ml-2 px-2.5 py-1.5 font-mono text-xs hairline rounded bg-[var(--bg-surface)] text-[var(--text-main)] hover:bg-[var(--bg-surface-elevated)] min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="ml-2 px-2.5 py-1.5 font-mono text-xs hairline bg-[var(--bg-surface)] text-[var(--text-main)] hover:bg-[var(--bg-surface-elevated)] min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors"
             title={`Current theme: ${theme}. Click to toggle.`}
           >
             {theme === 'light' ? 'NIGHT' : 'DAY'}

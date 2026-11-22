@@ -30,13 +30,15 @@ export default async function RulesPage({
   const rules = await loadAllRules(getRulesDir());
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-10">
       {/* Header Register */}
       <div className="space-y-4">
-        <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] px-3 py-1 hairline rounded bg-[var(--bg-surface)]">
-          <span>ARCHITECTURAL TAXONOMY</span>
-          <span>/</span>
-          <span>72 ENFORCEMENT RULES</span>
+        <div className="flex items-center justify-between gap-4 hairline-b pb-3 font-mono text-xs text-[var(--text-dim)]">
+          <div className="flex items-center gap-2">
+            <span className="text-[var(--accent-ember)] font-bold">SPEC //</span>
+            <span className="uppercase tracking-widest text-[var(--text-main)] font-semibold">ARCHITECTURAL TAXONOMY</span>
+          </div>
+          <div>72 ENFORCEMENT RULES</div>
         </div>
         <h1 className="tracking-tight text-[var(--text-main)] font-serif">
           The Rules Directory

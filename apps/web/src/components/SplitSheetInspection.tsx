@@ -23,12 +23,14 @@ export function SplitSheetInspection() {
 
   return (
     <section className="space-y-6">
+      {/* Broadsheet Masthead Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 hairline-b pb-4">
         <div>
-          <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)]">
-            <span>01.5 / SIGNATURE AUDIT REGISTER</span>
-            <span>/</span>
-            <span>BEFORE & AFTER SPLIT SHEET</span>
+          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)]">
+            <span className="font-bold">01.5 //</span>
+            <span>SIGNATURE COMPARISON REGISTER</span>
+            <span>//</span>
+            <span>SLOP VS. GRAIN</span>
           </div>
           <h2 className="font-serif text-3xl text-[var(--text-main)] mt-1">
             The Split Sheet: Slop vs. Grain
@@ -38,13 +40,15 @@ export function SplitSheetInspection() {
           </p>
         </div>
 
-        {/* View mode toggle for mobile & deep inspection */}
-        <div className="flex items-center gap-1 p-1 rounded hairline bg-[var(--bg-surface)] font-mono text-xs">
+        {/* View mode toggle: ruled tab bar (min-h-[44px]) */}
+        <div className="flex items-center hairline font-mono text-xs divide-x divide-[var(--border-line)] bg-[var(--bg-surface)]">
           <button
             type="button"
             onClick={() => setViewMode('split')}
-            className={`px-3 py-1.5 rounded min-h-[44px] transition-colors ${
-              viewMode === 'split' ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold' : 'text-[var(--text-dim)] hover:text-[var(--text-main)]'
+            className={`px-4 py-2 min-h-[44px] transition-colors ${
+              viewMode === 'split'
+                ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold'
+                : 'text-[var(--text-dim)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-elevated)]'
             }`}
           >
             Split Sheet
@@ -52,8 +56,10 @@ export function SplitSheetInspection() {
           <button
             type="button"
             onClick={() => setViewMode('before')}
-            className={`px-3 py-1.5 rounded min-h-[44px] transition-colors ${
-              viewMode === 'before' ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold' : 'text-[var(--text-dim)] hover:text-[var(--text-main)]'
+            className={`px-4 py-2 min-h-[44px] transition-colors ${
+              viewMode === 'before'
+                ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold'
+                : 'text-[var(--text-dim)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-elevated)]'
             }`}
           >
             AI Slop
@@ -61,8 +67,10 @@ export function SplitSheetInspection() {
           <button
             type="button"
             onClick={() => setViewMode('after')}
-            className={`px-3 py-1.5 rounded min-h-[44px] transition-colors ${
-              viewMode === 'after' ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold' : 'text-[var(--text-dim)] hover:text-[var(--text-main)]'
+            className={`px-4 py-2 min-h-[44px] transition-colors ${
+              viewMode === 'after'
+                ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold'
+                : 'text-[var(--text-dim)] hover:text-[var(--text-main)] hover:bg-[var(--bg-surface-elevated)]'
             }`}
           >
             Winnowed
@@ -70,14 +78,14 @@ export function SplitSheetInspection() {
         </div>
       </div>
 
-      {/* Main Split Sheet Comparison */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      {/* Main Continuous Ruled Split Sheet (Zero Floating Cards) */}
+      <div className="hairline-y grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[var(--border-line)] items-stretch">
         {/* Left Sheet: Before Chaff (AI Slop with Ember Circles) */}
         {(viewMode === 'split' || viewMode === 'before') && (
           <div
             className={`${
               viewMode === 'split' ? 'lg:col-span-6' : 'lg:col-span-12'
-            } hairline p-6 sm:p-7 rounded-md bg-[#0f172a] text-slate-100 relative overflow-hidden flex flex-col justify-between space-y-6 shadow-sm`}
+            } p-6 sm:p-8 bg-[#0f172a] text-slate-100 relative overflow-hidden flex flex-col justify-between space-y-6`}
           >
             {/* Synthetic Glow Backdrop */}
             <div className={mockSlop.glowBackgroundClasses} />
@@ -96,7 +104,7 @@ export function SplitSheetInspection() {
               {/* Tell 1 & 2: Purple Glow & Gradient Text Clipping */}
               <button
                 type="button"
-                className={`w-full block relative p-3 rounded border transition-colors cursor-pointer text-center ${
+                className={`w-full block relative p-3 border transition-colors cursor-pointer text-center ${
                   activeTell === 'tell-2' ? 'border-rose-500 bg-rose-950/30' : 'border-transparent hover:border-slate-700'
                 }`}
                 onClick={() => setActiveTell('tell-2')}
@@ -117,7 +125,7 @@ export function SplitSheetInspection() {
                     opacity="0.85"
                   />
                 </svg>
-                <div className="absolute -top-3 left-4 font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-rose-600 text-white">
+                <div className="absolute -top-3 left-4 font-mono text-[10px] uppercase font-bold px-2 py-0.5 bg-rose-600 text-white">
                   {mockSlop.badgeGradient}
                 </div>
 
@@ -129,12 +137,12 @@ export function SplitSheetInspection() {
               {/* Tell 4: Buzzword Salad */}
               <button
                 type="button"
-                className={`w-full block relative p-3 rounded border transition-colors cursor-pointer text-center ${
+                className={`w-full block relative p-3 border transition-colors cursor-pointer text-center ${
                   activeTell === 'tell-4' ? 'border-amber-500 bg-amber-950/30' : 'border-transparent hover:border-slate-700'
                 }`}
                 onClick={() => setActiveTell('tell-4')}
               >
-                <div className="absolute -top-3 left-4 font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-amber-600 text-white">
+                <div className="absolute -top-3 left-4 font-mono text-[10px] uppercase font-bold px-2 py-0.5 bg-amber-600 text-white">
                   {mockSlop.badgeBuzzwords}
                 </div>
                 <span className="block text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
@@ -145,17 +153,17 @@ export function SplitSheetInspection() {
               {/* Tell 3: Centered 3-Card Grid */}
               <button
                 type="button"
-                className={`w-full block relative p-3 rounded border transition-colors cursor-pointer text-center ${
+                className={`w-full block relative p-3 border transition-colors cursor-pointer text-center ${
                   activeTell === 'tell-3' ? 'border-rose-500 bg-rose-950/30' : 'border-transparent hover:border-slate-700'
                 }`}
                 onClick={() => setActiveTell('tell-3')}
               >
-                <div className="absolute -top-3 left-4 font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-rose-600 text-white">
+                <div className="absolute -top-3 left-4 font-mono text-[10px] uppercase font-bold px-2 py-0.5 bg-rose-600 text-white">
                   {mockSlop.badgeCards}
                 </div>
                 <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-xs">
                   {mockSlop.cards.map((cardTitle) => (
-                    <span key={cardTitle} className="block p-2.5 rounded bg-slate-800/80 border border-slate-700">
+                    <span key={cardTitle} className="block p-2.5 bg-slate-800/80 border border-slate-700">
                       {cardTitle}
                     </span>
                   ))}
@@ -165,12 +173,12 @@ export function SplitSheetInspection() {
               {/* Tell 5: Synthetic Metrics */}
               <button
                 type="button"
-                className={`w-full block relative p-3 rounded border transition-colors cursor-pointer text-center ${
+                className={`w-full block relative p-3 border transition-colors cursor-pointer text-center ${
                   activeTell === 'tell-5' ? 'border-amber-500 bg-amber-950/30' : 'border-transparent hover:border-slate-700'
                 }`}
                 onClick={() => setActiveTell('tell-5')}
               >
-                <div className="absolute -top-3 left-4 font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-amber-600 text-white">
+                <div className="absolute -top-3 left-4 font-mono text-[10px] uppercase font-bold px-2 py-0.5 bg-amber-600 text-white">
                   {mockSlop.badgeMetrics}
                 </div>
                 <div className="flex justify-center gap-6 font-mono text-xs text-slate-300">
@@ -194,7 +202,7 @@ export function SplitSheetInspection() {
           <div
             className={`${
               viewMode === 'split' ? 'lg:col-span-6' : 'lg:col-span-12'
-            } hairline p-6 sm:p-7 rounded-md bg-[var(--bg-surface)] text-[var(--text-main)] flex flex-col justify-between space-y-6 shadow-sm`}
+            } p-6 sm:p-8 text-[var(--text-main)] flex flex-col justify-between space-y-6`}
           >
             {/* Header Register */}
             <div className="flex justify-between items-baseline hairline-b pb-3">
@@ -208,10 +216,9 @@ export function SplitSheetInspection() {
 
             {/* Authored Composition */}
             <div className="space-y-5 py-2">
-              <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] px-2.5 py-0.5 hairline rounded bg-[var(--bg-canvas)]">
-                <span>01</span>
-                <span>/</span>
-                <span>Execution Router</span>
+              <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)]">
+                <span className="font-bold">01 //</span>
+                <span>EXECUTION ROUTER SPEC</span>
               </div>
 
               <h3 className="text-2xl sm:text-3xl font-serif text-[var(--text-main)] tracking-tight">
@@ -222,9 +229,9 @@ export function SplitSheetInspection() {
                 Direct market gateway with automated smart order routing, pre-trade risk controls, and sub-millisecond execution logs.
               </p>
 
-              {/* Asymmetric Ruled Ledger */}
-              <div className="hairline p-4 rounded bg-[var(--bg-canvas)] space-y-3 font-mono text-xs">
-                <div className="flex justify-between text-[var(--text-dim)] uppercase text-[10px]">
+              {/* Asymmetric Continuous Ruled Ledger (Zero Boxed Cards) */}
+              <div className="hairline-y py-3 space-y-2 font-mono text-xs">
+                <div className="flex justify-between text-[var(--text-dim)] uppercase text-[10px] pb-1">
                   <span>Telemetry Metric</span>
                   <span>Audited Value</span>
                 </div>
@@ -257,11 +264,11 @@ export function SplitSheetInspection() {
         )}
       </div>
 
-      {/* Selected Tell Inspector Ledger */}
-      <div className="hairline p-4 rounded-md bg-[var(--bg-surface)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 font-mono text-xs">
-        <div className="flex items-center gap-3">
-          <span className="font-bold text-[var(--accent-ember)] px-2 py-0.5 hairline rounded bg-[var(--bg-canvas)]">
-            {selectedTell.rule}
+      {/* Selected Tell Inspector Ledger Row (Continuous Ruled Ledger) */}
+      <div className="hairline-b py-3.5 px-2 sm:px-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 font-mono text-xs">
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="font-bold text-[var(--accent-ember)]">
+            {selectedTell.rule} //
           </span>
           <span className="font-bold text-[var(--text-main)]">{selectedTell.name}</span>
           <span className="text-[var(--text-dim)] hidden md:inline">— {selectedTell.description}</span>
@@ -269,7 +276,7 @@ export function SplitSheetInspection() {
         <div className="flex items-center gap-4 text-[var(--accent-ember)]">
           <span>Deduction: -{selectedTell.deduction} pts</span>
           <Link href={`/rules#${selectedTell.rule}`} className="underline text-[var(--text-main)] hover:text-[var(--accent-ember)]">
-            View Rule Remediation →
+            View Rule Remediation &rarr;
           </Link>
         </div>
       </div>

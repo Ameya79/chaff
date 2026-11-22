@@ -16,10 +16,9 @@ export default function ErrorPage({
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-8 py-24 text-center space-y-6">
-      <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] px-2.5 py-1 hairline rounded bg-[var(--bg-surface)]">
-        <span>Exception</span>
-        <span>/</span>
-        <span>Grain Disrupted</span>
+      <div className="flex items-center justify-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] font-bold">
+        <span>ERROR //</span>
+        <span>GRAIN DISRUPTED</span>
       </div>
 
       <h1 className="text-3xl font-serif text-[var(--text-main)]">

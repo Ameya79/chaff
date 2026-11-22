@@ -7,15 +7,77 @@ export const metadata = {
     'The 3 creative operational contracts for AI coding agents and the mandatory 5-part Fallback Contract.',
 };
 
+const LEVELS_SPEC = [
+  {
+    num: '01',
+    name: 'Clean',
+    subtitle: 'Safe Tell Removal',
+    tag: 'Diff: \u2264 200 lines',
+    desc: 'Winnows synthetic purple glows, buzzwords, and spacing inconsistencies without altering structural layout or adding runtime dependencies.',
+    allowed: 'Typographic optical sizes, WCAG AA contrast adjustments, copy pruning, dvh units, touch target padding.',
+    forbidden: 'Layout restructurings, animation libraries (Framer Motion / GSAP), WebGL, new UI framework dependencies.',
+    fixture: 'fixtures/blog',
+    lh: '99 / 100',
+    leap: '46 \u2192 98 (+52 pts)',
+    isDefault: false,
+  },
+  {
+    num: '02',
+    name: 'Authored',
+    subtitle: '3 Pitches First \u2022 Editorial Craft',
+    tag: 'RECOMMENDED DEFAULT',
+    desc: 'Human-authored editorial redesign. The agent generates three diverse Concept Pitches in .chaff/pitches/, pauses for signoff, and implements with editorial rhythm.',
+    allowed: 'Editorial asymmetric grids, split sheets, ruled ledgers, SVG data visualizations, 1 signature interaction, max 1 motion library.',
+    forbidden: '3D WebGL canvases, heavy video backgrounds, main-thread blocking > 50ms, committing without pitch approval.',
+    fixture: 'fixtures/saas-landing',
+    lh: '96 / 100',
+    leap: '48 \u2192 96 (+48 pts)',
+    isDefault: true,
+  },
+  {
+    num: '03',
+    name: 'Risk',
+    subtitle: 'WebGL & Spatial Choreography',
+    tag: 'Hard Gate Enforced',
+    desc: 'High-ambition digital craft utilizing WebGL, Three.js, shaders, and tactile simulations. The Iron Rule is absolute: downgrade effect complexity, never loosen budget.',
+    allowed: 'Three.js, React Three Fiber, GLSL shaders, physical particle simulations, scrubbable spatial choreography.',
+    forbidden: 'Uncapped DPR > 1.5, synchronous 3D bundle imports affecting LCP, omitting poster fallback, memory leaks on unmount.',
+    fixture: 'examples/l3-hero',
+    lh: '91 (WebGL) / 100 (Poster)',
+    leap: 'Automatic Tier 0',
+    isDefault: false,
+  },
+];
+
+const FALLBACK_CLAUSES = [
+  { part: '\u00A7 01', title: 'Lazy Dynamic Island', desc: 'Dynamic post-hydration import (next/dynamic with ssr: false). The 3D chunk never blocks LCP.' },
+  { part: '\u00A7 02', title: 'Static Poster Fallback', desc: 'High-fidelity CSS/SVG poster rendered immediately for poster tier or prefers-reduced-motion.' },
+  { part: '\u00A7 03', title: '1.5 DPR Governor Ceiling', desc: 'Device pixel ratio capped at 1.5 ceiling. High-density screens clamped to protect GPU.' },
+  { part: '\u00A7 04', title: 'Offscreen Frame Pausing', desc: 'IntersectionObserver halts requestAnimationFrame when canvas scrolls out of viewport.' },
+  { part: '\u00A7 05', title: 'Teardown & Memory Disposal', desc: 'Explicit cleanup on unmount: geometries, textures, and contexts disposed cleanly.' },
+  { part: 'VERIFY', title: 'Deterministic Budget Gate', desc: 'Evaluated in CI via @chaff/tier and chaff gate. Downgrades effects gracefully.' },
+];
+
+const BUDGET_ROWS = [
+  { metric: 'Largest Contentful Paint (LCP)', l1l2: '\u2264 2.5 seconds', l3: '\u2264 2.5 seconds (poster counts)', action: 'Preload font subsets, defer 3D' },
+  { metric: 'Cumulative Layout Shift (CLS)', l1l2: '\u2264 0.10', l3: '\u2264 0.10', action: 'Fixed aspect ratio containers' },
+  { metric: 'Total Blocking Time (TBT)', l1l2: '\u2264 200 ms', l3: '\u2264 300 ms', action: 'Chunk computation, requestIdle' },
+  { metric: 'First-Load Route JS', l1l2: '\u2264 170 KB gzip', l3: '170 KB + 250 KB lazy 3D island', action: 'Tree-shake libraries, dynamic imports' },
+  { metric: '320px Viewport Overflow', l1l2: 'Zero horizontal scroll', l3: 'Zero horizontal scroll', action: 'Replace min-w or fixed pixel widths' },
+  { metric: 'Touch Target Size', l1l2: '\u2265 44 \u00D7 44px', l3: '\u2265 44 \u00D7 44px', action: 'min-h-[44px] min-w-[44px] on interactives' },
+];
+
 export default function LevelsPage() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-16">
       {/* Header Register */}
       <div className="space-y-4">
-        <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] px-3 py-1 hairline rounded bg-[var(--bg-surface)]">
-          <span>OPERATIONAL CONTRACTS</span>
-          <span>/</span>
-          <span>LEVELS 1 - 3</span>
+        <div className="flex items-center justify-between gap-4 hairline-b pb-3 font-mono text-xs text-[var(--text-dim)]">
+          <div className="flex items-center gap-2">
+            <span className="text-[var(--accent-ember)] font-bold">SPEC //</span>
+            <span className="uppercase tracking-widest text-[var(--text-main)] font-semibold">OPERATIONAL CONTRACTS</span>
+          </div>
+          <div>LEVELS 1 - 3 SPECIFICATION</div>
         </div>
         <h1 className="tracking-tight text-[var(--text-main)] font-serif">
           The Three Creative Levels
@@ -25,314 +87,162 @@ export default function LevelsPage() {
         </p>
       </div>
 
-      {/* Horizontal Rail on Desktop, Stacked on Mobile (PRD 7.2) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-        {/* Level 1: Clean */}
-        <div className="hairline p-6 sm:p-7 bg-[var(--bg-surface)] rounded-md flex flex-col justify-between space-y-6">
-          <div className="space-y-4">
-            <div className="flex justify-between items-baseline hairline-b pb-3">
-              <span className="font-mono text-xs font-bold text-[var(--accent-ember)] px-2.5 py-1 hairline rounded bg-[var(--bg-canvas)]">
-                LEVEL 1
-              </span>
-              <span className="font-mono text-[11px] text-[var(--text-dim)]">
-                Budget: &le; 200 lines diff
-              </span>
-            </div>
-
-            <div>
-              <h2 className="font-serif text-2xl text-[var(--text-main)]">Clean</h2>
-              <span className="font-mono text-xs text-[var(--text-dim)] block mt-0.5">Safe Tell Removal</span>
-            </div>
-
-            <p className="text-xs text-[var(--text-dim)] leading-relaxed">
-              Winnows synthetic purple glows, buzzwords, and spacing inconsistencies without altering existing structural layout or adding runtime dependencies.
-            </p>
-
-            <div className="space-y-3 font-mono text-xs pt-1">
-              <div className="p-3 rounded hairline bg-[var(--bg-canvas)] space-y-1 border-[var(--status-sage)]/40">
-                <span className="text-[var(--status-sage)] font-bold block uppercase text-[10px]">
-                  [ALLOWED] In Scope
-                </span>
-                <p className="text-[var(--text-dim)] font-sans text-xs">
-                  Typographic optical sizes, WCAG AA contrast adjustments, copy pruning, dvh units, touch target padding.
-                </p>
-              </div>
-
-              <div className="p-3 rounded hairline bg-[var(--bg-canvas)] space-y-1 border-[var(--accent-ember)]/40">
-                <span className="text-[var(--accent-ember)] font-bold block uppercase text-[10px]">
-                  [FORBIDDEN] Out of Scope
-                </span>
-                <p className="text-[var(--text-dim)] font-sans text-xs">
-                  Layout restructurings, animation libraries (Framer Motion / GSAP), WebGL, new UI framework dependencies.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Real Example & Verified Lighthouse Numbers (PRD 7.2) */}
-          <div className="hairline-t pt-4 space-y-2 font-mono text-xs">
-            <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
-              <span>Verified Fixture:</span>
-              <strong className="text-[var(--text-main)]">fixtures/blog</strong>
-            </div>
-            <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
-              <span>Lighthouse Mobile:</span>
-              <strong className="text-[var(--status-sage)] font-bold">99 / 100</strong>
-            </div>
-            <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
-              <span>Score Leap:</span>
-              <strong className="text-[var(--status-sage)]">46 &rarr; 98 (+52 pts)</strong>
-            </div>
-          </div>
+      {/* The Continuous 3-Column Comparative Broadsheet (Single Shared Top/Bottom Rules, Zero Cards) */}
+      <section className="space-y-3">
+        <div className="flex justify-between items-baseline font-mono text-xs text-[var(--text-dim)] pb-1">
+          <span className="uppercase font-semibold text-[var(--text-main)]">Comparative Level Matrix</span>
+          <span>Horizontal Comparative Broadsheet</span>
         </div>
 
-        {/* Level 2: Authored (Highlighted Default) */}
-        <div className="hairline p-6 sm:p-7 bg-[var(--bg-surface)] rounded-md flex flex-col justify-between space-y-6 border-[var(--accent-ember)] relative shadow-sm">
-          <div className="absolute top-0 right-6 -translate-y-1/2 font-mono text-[10px] uppercase font-bold tracking-widest px-3 py-0.5 rounded bg-[var(--accent-ember)] text-[var(--btn-primary-text)]">
-            RECOMMENDED DEFAULT
-          </div>
+        <div className="hairline-y grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-[var(--border-line)] items-stretch">
+          {LEVELS_SPEC.map((lvl) => (
+            <div
+              key={lvl.num}
+              className={`py-6 px-4 sm:p-8 flex flex-col justify-between space-y-6 ${
+                lvl.isDefault ? 'bg-[var(--bg-surface)]/40' : ''
+              }`}
+            >
+              <div className="space-y-4">
+                <div className="flex justify-between items-baseline hairline-b pb-3">
+                  <span className="font-mono text-xs font-bold text-[var(--accent-ember)]">
+                    LEVEL {lvl.num} //
+                  </span>
+                  <span
+                    className={`font-mono text-[10px] uppercase font-bold px-2 py-0.5 hairline ${
+                      lvl.isDefault
+                        ? 'text-[var(--accent-ember)] bg-[var(--accent-ember-soft)]/50'
+                        : 'text-[var(--text-dim)]'
+                    }`}
+                  >
+                    {lvl.tag}
+                  </span>
+                </div>
 
-          <div className="space-y-4">
-            <div className="flex justify-between items-baseline hairline-b pb-3">
-              <span className="font-mono text-xs font-bold text-[var(--accent-ember)] px-2.5 py-1 hairline rounded bg-[var(--bg-canvas)]">
-                LEVEL 2
-              </span>
-              <span className="font-mono text-[11px] text-[var(--status-sage)] font-semibold">
-                3 Pitches First
-              </span>
-            </div>
+                <div>
+                  <h2 className="font-serif text-3xl text-[var(--text-main)]">{lvl.name}</h2>
+                  <span className="font-mono text-xs text-[var(--text-dim)] block mt-0.5">{lvl.subtitle}</span>
+                </div>
 
-            <div>
-              <h2 className="font-serif text-2xl text-[var(--text-main)]">Authored</h2>
-              <span className="font-mono text-xs text-[var(--text-dim)] block mt-0.5">Confident Editorial Craft</span>
-            </div>
+                <p className="text-sm text-[var(--text-dim)] leading-relaxed">{lvl.desc}</p>
 
-            <p className="text-xs text-[var(--text-dim)] leading-relaxed">
-              Human-authored editorial redesign. The agent generates three diverse Concept Pitches in <code className="mono">.chaff/pitches/</code>, pauses for human signoff, and implements with editorial rhythm.
-            </p>
+                <div className="hairline-y py-3 space-y-3 font-mono text-xs">
+                  <div className="space-y-1">
+                    <span className="text-[var(--status-sage)] font-bold block uppercase text-[10px]">
+                      [ALLOWED] In Scope
+                    </span>
+                    <p className="text-[var(--text-dim)] font-sans text-xs">{lvl.allowed}</p>
+                  </div>
 
-            <div className="space-y-3 font-mono text-xs pt-1">
-              <div className="p-3 rounded hairline bg-[var(--bg-canvas)] space-y-1 border-[var(--status-sage)]/40">
-                <span className="text-[var(--status-sage)] font-bold block uppercase text-[10px]">
-                  [ALLOWED] In Scope
-                </span>
-                <p className="text-[var(--text-dim)] font-sans text-xs">
-                  Editorial asymmetric grids, split sheets, ruled ledgers, SVG data visualizations, 1 signature interaction, max 1 motion library.
-                </p>
+                  <div className="space-y-1 hairline-t pt-2">
+                    <span className="text-[var(--accent-ember)] font-bold block uppercase text-[10px]">
+                      [FORBIDDEN] Out of Scope
+                    </span>
+                    <p className="text-[var(--text-dim)] font-sans text-xs">{lvl.forbidden}</p>
+                  </div>
+                </div>
               </div>
 
-              <div className="p-3 rounded hairline bg-[var(--bg-canvas)] space-y-1 border-[var(--accent-ember)]/40">
-                <span className="text-[var(--accent-ember)] font-bold block uppercase text-[10px]">
-                  [FORBIDDEN] Out of Scope
-                </span>
-                <p className="text-[var(--text-dim)] font-sans text-xs">
-                  3D WebGL canvases, heavy video backgrounds, main-thread blocking &gt; 50ms, committing without pitch approval.
-                </p>
+              <div className="hairline-t pt-4 space-y-2 font-mono text-xs">
+                <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
+                  <span>Verified Fixture:</span>
+                  <strong className="text-[var(--text-main)]">{lvl.fixture}</strong>
+                </div>
+                <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
+                  <span>Lighthouse Mobile:</span>
+                  <strong className="text-[var(--status-sage)] font-bold">{lvl.lh}</strong>
+                </div>
+                <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
+                  <span>Score Leap:</span>
+                  <strong className="text-[var(--status-sage)]">{lvl.leap}</strong>
+                </div>
               </div>
-            </div>
-          </div>
-
-          {/* Real Example & Verified Lighthouse Numbers (PRD 7.2) */}
-          <div className="hairline-t pt-4 space-y-2 font-mono text-xs">
-            <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
-              <span>Verified Fixture:</span>
-              <strong className="text-[var(--text-main)]">fixtures/saas-landing</strong>
-            </div>
-            <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
-              <span>Lighthouse Mobile:</span>
-              <strong className="text-[var(--status-sage)] font-bold">96 / 100</strong>
-            </div>
-            <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
-              <span>Score Leap:</span>
-              <strong className="text-[var(--status-sage)]">48 &rarr; 96 (+48 pts)</strong>
-            </div>
-          </div>
-        </div>
-
-        {/* Level 3: Risk */}
-        <div className="hairline p-6 sm:p-7 bg-[var(--bg-surface)] rounded-md flex flex-col justify-between space-y-6">
-          <div className="space-y-4">
-            <div className="flex justify-between items-baseline hairline-b pb-3">
-              <span className="font-mono text-xs font-bold text-[var(--accent-ember)] px-2.5 py-1 hairline rounded bg-[var(--bg-canvas)]">
-                LEVEL 3
-              </span>
-              <span className="font-mono text-[11px] text-[var(--accent-ember)] font-semibold">
-                Hard Gate Enforced
-              </span>
-            </div>
-
-            <div>
-              <h2 className="font-serif text-2xl text-[var(--text-main)]">Risk (WebGL & Spatial)</h2>
-              <span className="font-mono text-xs text-[var(--text-dim)] block mt-0.5">Ultra Creative Ambition</span>
-            </div>
-
-            <p className="text-xs text-[var(--text-dim)] leading-relaxed">
-              High-ambition digital craft utilizing WebGL, Three.js, shaders, and tactile physical simulations. The Iron Rule is absolute: <strong>downgrade effect complexity, never loosen the budget</strong>.
-            </p>
-
-            <div className="space-y-3 font-mono text-xs pt-1">
-              <div className="p-3 rounded hairline bg-[var(--bg-canvas)] space-y-1 border-[var(--status-sage)]/40">
-                <span className="text-[var(--status-sage)] font-bold block uppercase text-[10px]">
-                  [ALLOWED] In Scope
-                </span>
-                <p className="text-[var(--text-dim)] font-sans text-xs">
-                  Three.js, React Three Fiber, GLSL shaders, physical particle simulations, scrubbable spatial choreography.
-                </p>
-              </div>
-
-              <div className="p-3 rounded hairline bg-[var(--bg-canvas)] space-y-1 border-[var(--accent-ember)]/40">
-                <span className="text-[var(--accent-ember)] font-bold block uppercase text-[10px]">
-                  [FORBIDDEN] Out of Scope
-                </span>
-                <p className="text-[var(--text-dim)] font-sans text-xs">
-                  Uncapped DPR &gt; 1.5, synchronous 3D bundle imports affecting LCP, omitting poster fallback, memory leaks on unmount.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Real Example & Verified Lighthouse Numbers (PRD 7.2) */}
-          <div className="hairline-t pt-4 space-y-2 font-mono text-xs">
-            <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
-              <span>Verified Fixture:</span>
-              <strong className="text-[var(--text-main)]">examples/l3-hero</strong>
-            </div>
-            <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
-              <span>Lighthouse Mobile:</span>
-              <strong className="text-[var(--status-sage)] font-bold">91 (WebGL) / 100 (Poster)</strong>
-            </div>
-            <div className="flex justify-between text-[11px] text-[var(--text-dim)]">
-              <span>Fallback Mode:</span>
-              <strong className="text-[var(--status-sage)]">Automatic Tier 0</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* The Mandatory 5-Part Fallback Contract */}
-      <section className="hairline p-6 sm:p-8 bg-[var(--bg-surface)] rounded-md space-y-6">
-        <div className="flex flex-col sm:flex-row justify-between sm:items-baseline gap-2 hairline-b pb-4">
-          <div>
-            <span className="font-mono text-xs text-[var(--accent-ember)] uppercase tracking-wider block">
-              LEVEL 3 ARCHITECTURAL SPEC
-            </span>
-            <h2 className="font-serif text-2xl text-[var(--text-main)] mt-1">
-              The Mandatory 5-Part Fallback Contract
-            </h2>
-          </div>
-          <span className="font-mono text-xs text-[var(--status-sage)] font-semibold">
-            Checked by chaff gate
-          </span>
-        </div>
-
-        <p className="text-sm text-[var(--text-dim)] max-w-[68ch]">
-          Any interactive 3D, canvas, or WebGL element authored at Level 3 must satisfy all five contractual clauses. If any clause fails verification, the build is rejected in CI.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
-          {[
-            {
-              part: 'Clause 1',
-              title: 'Lazy Dynamic Island',
-              desc: 'Dynamic post-hydration import (next/dynamic with ssr: false). The 3D chunk never blocks Largest Contentful Paint (LCP).',
-            },
-            {
-              part: 'Clause 2',
-              title: 'Static Poster Fallback',
-              desc: 'High-fidelity CSS/SVG poster rendered immediately for devices on poster tier, data-saver mode, or prefers-reduced-motion.',
-            },
-            {
-              part: 'Clause 3',
-              title: '1.5 DPR Governor Ceiling',
-              desc: 'Device pixel ratio is strictly capped at 1.5 ceiling. High-density screens (3.0x retina) are clamped to protect GPU fill-rate.',
-            },
-            {
-              part: 'Clause 4',
-              title: 'Offscreen Frame Pausing',
-              desc: 'IntersectionObserver and document visibility triggers halt requestAnimationFrame when the canvas scrolls out of viewport.',
-            },
-            {
-              part: 'Clause 5',
-              title: 'Teardown & Memory Disposal',
-              desc: 'Explicit cleanup on unmount: geometries, textures, materials, and WebGL contexts disposed to prevent SPA memory accumulation.',
-            },
-            {
-              part: 'Verification',
-              title: 'Deterministic Budget Gate',
-              desc: 'Evaluated automatically in CI via @chaff/tier and chaff gate. Downgrades effects gracefully without manual intervention.',
-            },
-          ].map((c) => (
-            <div key={c.part} className="hairline p-4 rounded bg-[var(--bg-canvas)] space-y-2">
-              <span className="font-mono text-xs font-bold text-[var(--accent-ember)]">
-                {c.part}
-              </span>
-              <h3 className="font-serif text-base text-[var(--text-main)]">{c.title}</h3>
-              <p className="text-xs text-[var(--text-dim)] leading-relaxed">{c.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Performance Budget Table */}
-      <section className="hairline p-6 sm:p-8 bg-[var(--bg-surface)] rounded-md space-y-6">
-        <div className="flex justify-between items-baseline hairline-b pb-4">
-          <h2 className="font-serif text-2xl text-[var(--text-main)]">
-            Performance Budget Thresholds
-          </h2>
-          <Link href="/gate" className="btn text-xs font-mono">
-            View Measured Gate CI &rarr;
-          </Link>
-        </div>
+      {/* The Mandatory 5-Part Fallback Contract Specification (Broadsheet Marginalia, Zero Cards) */}
+      <section className="hairline-y py-10 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-4 space-y-3">
+            <span className="font-mono text-xs text-[var(--accent-ember)] uppercase tracking-wider block font-bold">
+              SPEC // MANDATORY CONTRACT
+            </span>
+            <h2 className="font-serif text-3xl text-[var(--text-main)]">
+              The Mandatory 5-Part Fallback Contract
+            </h2>
+            <p className="text-sm text-[var(--text-dim)] leading-relaxed">
+              Any interactive 3D, canvas, or WebGL element authored at Level 3 must satisfy all five contractual clauses. If any clause fails verification, the build is rejected in CI.
+            </p>
+            <div className="pt-2 text-xs font-mono text-[var(--status-sage)] font-semibold flex items-center gap-2">
+              <span>●</span>
+              <span>Checked automatically by chaff gate</span>
+            </div>
+            <div className="font-mono text-xs text-[var(--text-dim)] pt-1">
+              Clause Index: <strong className="text-[var(--text-main)]">|||| / (5 Clauses + 1 Gate)</strong>
+            </div>
+          </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left font-mono text-xs border-collapse">
-            <thead>
-              <tr className="hairline-b text-[var(--text-dim)] uppercase">
-                <th className="py-3 pr-4">Metric</th>
-                <th className="py-3 px-4">Level 1 & Level 2 Budget</th>
-                <th className="py-3 px-4">Level 3 Budget</th>
-                <th className="py-3 pl-4">Remediation Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[var(--border-line)]">
-              <tr>
-                <td className="py-3 pr-4 font-bold text-[var(--text-main)]">Largest Contentful Paint (LCP)</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">&le; 2.5 seconds</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">&le; 2.5 seconds (poster counts)</td>
-                <td className="py-3 pl-4 text-[var(--text-dim)]">Preload font subsets, defer 3D</td>
-              </tr>
-              <tr>
-                <td className="py-3 pr-4 font-bold text-[var(--text-main)]">Cumulative Layout Shift (CLS)</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">&le; 0.10</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">&le; 0.10</td>
-                <td className="py-3 pl-4 text-[var(--text-dim)]">Fixed aspect ratio containers</td>
-              </tr>
-              <tr>
-                <td className="py-3 pr-4 font-bold text-[var(--text-main)]">Total Blocking Time (TBT)</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">&le; 200 ms</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">&le; 300 ms</td>
-                <td className="py-3 pl-4 text-[var(--text-dim)]">Chunk heavy computation, requestIdle</td>
-              </tr>
-              <tr>
-                <td className="py-3 pr-4 font-bold text-[var(--text-main)]">First-Load Route JS</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">&le; 170 KB gzip</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">170 KB + 250 KB lazy 3D island</td>
-                <td className="py-3 pl-4 text-[var(--text-dim)]">Tree-shake libraries, dynamic imports</td>
-              </tr>
-              <tr>
-                <td className="py-3 pr-4 font-bold text-[var(--text-main)]">320px Viewport Overflow</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">Zero horizontal scroll</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">Zero horizontal scroll</td>
-                <td className="py-3 pl-4 text-[var(--text-dim)]">Replace min-w or fixed pixel widths</td>
-              </tr>
-              <tr>
-                <td className="py-3 pr-4 font-bold text-[var(--text-main)]">Touch Target Size</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">&ge; 44 &times; 44px</td>
-                <td className="py-3 px-4 text-[var(--status-sage)]">&ge; 44 &times; 44px</td>
-                <td className="py-3 pl-4 text-[var(--text-dim)]">min-h-[44px] min-w-[44px] on interactives</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="lg:col-span-8 lg:border-l border-[var(--border-line)] lg:pl-8 divide-y divide-[var(--border-line)] hairline-t lg:hairline-t-0">
+            {FALLBACK_CLAUSES.map((c) => (
+              <div key={c.part} className="py-4 grid grid-cols-1 sm:grid-cols-12 gap-3 items-baseline">
+                <span className="sm:col-span-2 font-mono text-xs font-bold text-[var(--accent-ember)]">
+                  {c.part} //
+                </span>
+                <h3 className="sm:col-span-4 font-serif text-base text-[var(--text-main)]">
+                  {c.title}
+                </h3>
+                <p className="sm:col-span-6 text-xs text-[var(--text-dim)] leading-relaxed font-sans">
+                  {c.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Performance Budget Table Ledger (Broadsheet Marginalia, Zero Cards) */}
+      <section className="hairline-y py-10 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-3 space-y-3">
+            <span className="font-mono text-xs text-[var(--accent-ember)] uppercase tracking-wider block font-bold">
+              BUDGET LEDGER // THRESHOLDS
+            </span>
+            <h2 className="font-serif text-2xl text-[var(--text-main)]">
+              Performance Budget Thresholds
+            </h2>
+            <p className="text-xs text-[var(--text-dim)] font-mono leading-relaxed">
+              Enforced across Level 1, 2, and 3. The Iron Rule is absolute: downgrade effect complexity, never loosen the budget.
+            </p>
+            <div className="pt-2">
+              <Link href="/gate" className="btn text-xs font-mono">
+                View Measured Gate CI &rarr;
+              </Link>
+            </div>
+          </div>
+
+          <div className="lg:col-span-9 lg:border-l border-[var(--border-line)] lg:pl-8 overflow-x-auto hairline-t lg:hairline-t-0 pt-6 lg:pt-0">
+            <table className="w-full text-left font-mono text-xs border-collapse">
+              <thead>
+                <tr className="hairline-b text-[var(--text-dim)] uppercase">
+                  <th className="py-3 pr-4">Metric</th>
+                  <th className="py-3 px-4">Level 1 &amp; Level 2 Budget</th>
+                  <th className="py-3 px-4">Level 3 Budget</th>
+                  <th className="py-3 pl-4">Remediation Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--border-line)]">
+                {BUDGET_ROWS.map((b) => (
+                  <tr key={b.metric}>
+                    <td className="py-3 pr-4 font-bold text-[var(--text-main)]">{b.metric}</td>
+                    <td className="py-3 px-4 text-[var(--status-sage)]">{b.l1l2}</td>
+                    <td className="py-3 px-4 text-[var(--status-sage)]">{b.l3}</td>
+                    <td className="py-3 pl-4 text-[var(--text-dim)]">{b.action}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
     </div>
