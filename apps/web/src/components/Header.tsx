@@ -24,8 +24,8 @@ export function Header() {
   return (
     <header className="hairline-b sticky top-0 bg-[var(--bg-canvas)]/95 backdrop-blur-sm z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-baseline gap-3 text-decoration-none group">
-          <span className="font-serif text-2xl font-bold tracking-tight text-[var(--text-main)]">
+        <Link href="/" className="flex items-baseline gap-3 no-underline group">
+          <span className="font-serif text-2xl font-bold tracking-tight text-[var(--text-main)] group-hover:text-[var(--accent-ember)] transition-colors">
             CHAFF
           </span>
           <span className="text-xs uppercase tracking-widest text-[var(--accent-ember)] font-mono">
