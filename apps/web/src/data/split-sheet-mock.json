@@ -1,0 +1,52 @@
+{
+  "tells": [
+    {
+      "id": "tell-1",
+      "rule": "UI-001",
+      "name": "Purple/Blue Glow Gradient",
+      "deduction": 8,
+      "description": "Generic AI-generated radial purple gradient and heavy backdrop blur."
+    },
+    {
+      "id": "tell-2",
+      "rule": "UI-002",
+      "name": "Gradient Text Clipping",
+      "deduction": 6,
+      "description": "Illegible bg-clip-text text-transparent masking on the main h1 heading."
+    },
+    {
+      "id": "tell-3",
+      "rule": "UI-003",
+      "name": "Centered Hero + 3-Card Grid",
+      "deduction": 10,
+      "description": "Stereotypical centered hero followed by 3 uniform equal-width cards."
+    },
+    {
+      "id": "tell-4",
+      "rule": "COPY-001",
+      "name": "Synthetic Buzzword Salad",
+      "deduction": 12,
+      "description": "Generic LLM jargon: \"seamless synergy\", \"next-gen empowerment\", \"revolutionize\"."
+    },
+    {
+      "id": "tell-5",
+      "rule": "COPY-002",
+      "name": "Fabricated Placeholder Metrics",
+      "deduction": 6,
+      "description": "Unverified round numbers: \"10,000+ happy clients\" and \"99.99% uptime\"."
+    }
+  ],
+  "mockSlop": {
+    "gradientHeadline": "Empower Your Synergy with Next-Gen AI",
+    "gradientClasses": "text-2xl sm:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400",
+    "badgeGradient": "Tell: [UI-002] Gradient Text Mask",
+    "buzzwordParagraph": "Seamlessly revolutionize and elevate your cross-functional intelligence with holistic, automated paradigm shifts.",
+    "badgeBuzzwords": "Tell: [COPY-001] Buzzword Salad",
+    "badgeCards": "Tell: [UI-003] 3-Card Template",
+    "cards": ["Fast", "Secure", "Scalable"],
+    "badgeMetrics": "Tell: [COPY-002] Synthetic Numbers",
+    "metricUsers": "10,000+ Happy Users",
+    "metricUptime": "99.99% Uptime",
+    "glowBackgroundClasses": "absolute top-0 right-0 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"
+  }
+}

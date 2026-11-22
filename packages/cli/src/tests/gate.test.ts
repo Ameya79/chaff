@@ -1,10 +1,22 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import path from 'node:path';
+import fs from 'node:fs';
 import { gateCommand } from '../commands/gate.js';
 
+function findRepoRoot(dir = process.cwd()): string {
+  let cur = path.resolve(dir);
+  while (cur !== path.dirname(cur)) {
+    if (fs.existsSync(path.join(cur, 'pnpm-workspace.yaml'))) {
+      return cur;
+    }
+    cur = path.dirname(cur);
+  }
+  return cur;
+}
+
 describe('@chaff/cli gate Automated Budget Evaluation', () => {
-  const rootDir = path.resolve(process.cwd());
+  const rootDir = findRepoRoot();
 
   test('chaff gate fails with exitCode 1 on a deliberately bad fixture (portfolio)', async () => {
     const portfolioDir = path.join(rootDir, 'fixtures', 'portfolio');

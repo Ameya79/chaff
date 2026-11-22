@@ -3,25 +3,26 @@
 @tailwind utilities;
 
 :root {
-  /* Straw Paper & Bark Ink Palette (Light Theme) */
-  --bg-canvas: #fcfbf9;
-  --bg-surface: #f4f1ea;
-  --bg-surface-elevated: #eae5dc;
-  --text-main: #1c1917;
-  --text-dim: #6e655f;
-  --border-line: #e2ddd3;
-  --accent-ember: #c2410c;
-  --accent-ember-soft: #ffedd5;
-  --status-sage: #2d6a4f;
-  --status-sage-soft: #d8f3dc;
-  --status-warn: #b45309;
+  /* Winnowing Floor Straw Paper & Bark Ink Palette (Light Theme) */
+  --bg-canvas: #E9DFC4;
+  --bg-surface: #F4EEDA;
+  --bg-surface-elevated: #DFD4B5;
+  --text-main: #201A12;
+  --text-dim: #5C5040;
+  --border-line: #D5C9A9;
+  --accent-ember: #B8430E;
+  --accent-ember-soft: #F0DAC3;
+  --status-sage: #4B592B;
+  --status-sage-soft: #DCE4CC;
+  --status-warn: #964F0A;
+  --btn-primary-text: #F4EEDA;
 
-  /* Typography */
-  --font-serif: ui-serif, 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  /* Typography Fallbacks */
+  --font-serif: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
 
-  /* Spacing Grid */
+  /* Spacing Rhythm */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -34,18 +35,19 @@
 
 [data-theme='dark'],
 .dark {
-  /* Charred Bark & Straw Ecru (Dark Theme) */
-  --bg-canvas: #12100e;
-  --bg-surface: #1a1714;
-  --bg-surface-elevated: #24201c;
-  --text-main: #f5f3ef;
-  --text-dim: #9e948a;
-  --border-line: #292420;
-  --accent-ember: #ea580c;
-  --accent-ember-soft: #431407;
-  --status-sage: #52b788;
-  --status-sage-soft: #143625;
-  --status-warn: #f59e0b;
+  /* Ground & Ecru Palette (Designed Night Version, never raw invert) */
+  --bg-canvas: #17130D;
+  --bg-surface: #231D14;
+  --bg-surface-elevated: #2E271D;
+  --text-main: #E4DABF;
+  --text-dim: #A89E88;
+  --border-line: #362F24;
+  --accent-ember: #E0703A;
+  --accent-ember-soft: #3D2013;
+  --status-sage: #7E8F55;
+  --status-sage-soft: #252B1B;
+  --status-warn: #D98A32;
+  --btn-primary-text: #17130D;
 }
 
 * {
@@ -72,19 +74,19 @@ a {
   text-decoration: none;
 }
 
-/* Subtle raw paper grain overlay */
+/* Restrained fine grain layer via inline SVG noise filter */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: 0.035;
   z-index: 9999;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainFilter)'/%3E%3C/svg%3E");
 }
 
 /* Editorial Typography Rules */
-h1, h2, h3, .font-serif {
+h1, h2, h3, h4, .font-serif {
   font-family: var(--font-serif);
   font-weight: 500;
   text-wrap: balance;
@@ -108,15 +110,15 @@ h3 {
 
 p, li {
   text-wrap: pretty;
-  max-width: 65ch;
+  max-width: 68ch;
 }
 
-.mono, code, pre {
+.mono, code, pre, .tabular-nums {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
-/* Hairline borders & ledgers */
+/* Hairline borders & ledger rules */
 .hairline {
   border: 1px solid var(--border-line);
 }
@@ -137,6 +139,12 @@ p, li {
   border-left: 1px solid var(--border-line);
 }
 
+/* Ledger border with subtle double-rule feel */
+.ledger-border {
+  border: 1px solid var(--border-line);
+  box-shadow: 0 0 0 1px var(--bg-canvas), 0 0 0 2px var(--border-line);
+}
+
 /* Physical tactile focus and buttons */
 button, a.btn {
   font-family: var(--font-sans);
@@ -155,7 +163,7 @@ button, a.btn {
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 500;
-  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.12s ease;
+  transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.14s ease, border-color 0.14s ease;
 }
 
 button:hover, a.btn:hover {
@@ -168,12 +176,12 @@ button:active, a.btn:active {
 
 button.primary, a.btn.primary {
   background: var(--accent-ember);
-  color: #fff;
+  color: var(--btn-primary-text);
   border-color: var(--accent-ember);
 }
 
 button.primary:hover, a.btn.primary:hover {
-  background: #9a3412;
+  filter: brightness(0.94);
 }
 
 :focus-visible {
@@ -181,7 +189,7 @@ button.primary:hover, a.btn.primary:hover {
   outline-offset: 2px;
 }
 
-/* Range input styling for WindControl */
+/* Tactile Range input for WindControl */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -194,25 +202,30 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--accent-ember);
   cursor: pointer;
   border: 2px solid var(--bg-surface);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 3px rgba(32, 26, 18, 0.25);
+  transition: transform 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
 }
 
 input[type="range"]::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--accent-ember);
   cursor: pointer;
   border: 2px solid var(--bg-surface);
 }
 
-/* Motion Preferences */
+/* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

@@ -1,14 +1,26 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import path from 'node:path';
+import fsSync from 'node:fs';
 import fs from 'node:fs/promises';
 import { initCommand } from '../commands/init.js';
 import { auditCommand } from '../commands/audit.js';
 import { doctorCommand } from '../commands/doctor.js';
 import { levelCommand } from '../commands/level.js';
 
+function findRepoRoot(dir = process.cwd()): string {
+  let cur = path.resolve(dir);
+  while (cur !== path.dirname(cur)) {
+    if (fsSync.existsSync(path.join(cur, 'pnpm-workspace.yaml'))) {
+      return cur;
+    }
+    cur = path.dirname(cur);
+  }
+  return cur;
+}
+
 describe('@chaff/cli End-to-End Fixtures Suite', () => {
-  const rootDir = path.resolve(process.cwd());
+  const rootDir = findRepoRoot();
   const fixturesDir = path.join(rootDir, 'fixtures');
 
   const FIXTURES = [

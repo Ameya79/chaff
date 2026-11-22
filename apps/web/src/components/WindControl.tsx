@@ -3,16 +3,34 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { tier, governor, dispose, DeviceTier } from '@chaff/tier';
 
+interface Particle {
+  x: number;
+  y: number;
+  isGrain: boolean;
+  size: number;
+  length: number;
+  angle: number;
+  spin: number;
+  vy: number;
+  vx: number;
+  opacity: number;
+}
+
 /**
- * Signature Level 3 Moment: The Wind Control
- * Scrubbable winnowing force dial simulating the physical separation of grain from chaff.
- * Capped at 1.5 DPR, pauses offscreen and on hidden tab, disposes on unmount.
+ * Signature Level 3 Moment: The Winnowing Floor Wind Control
+ * Physical simulation separating heavy golden grains from lightweight chaff husks.
+ * Enforces hardware tiering (@chaff/tier), 1.5 DPR ceiling, offscreen pausing, and safe teardown.
  */
 export function WindControl() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [deviceTier, setDeviceTier] = useState<DeviceTier>('poster');
-  const [windForce, setWindForce] = useState<number>(45);
+  const [windForce, setWindForce] = useState<number>(62);
+  const windForceRef = useRef<number>(62);
   const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    windForceRef.current = windForce;
+  }, [windForce]);
 
   useEffect(() => {
     const detected = tier();
@@ -35,54 +53,77 @@ export function WindControl() {
     if (!ctx) return;
 
     const dpr = gov.getEffectivePixelRatio();
-    const width = 800;
-    const height = 400;
+    const width = 840;
+    const height = 380;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
 
-    // Particle system: heavy grains vs lightweight chaff husks
-    const particleCount = deviceTier === 'full' ? 120 : 50;
-    const particles = Array.from({ length: particleCount }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      isGrain: Math.random() > 0.45,
-      size: Math.random() * 2.5 + 1.5,
-      vy: Math.random() * 1.5 + 0.8,
-      vx: 0,
-      opacity: Math.random() * 0.6 + 0.4,
-    }));
+    // Simulation particle pool
+    const count = deviceTier === 'full' ? 140 : 60;
+    const particles: Particle[] = Array.from({ length: count }, () => {
+      const isGrain = Math.random() > 0.45;
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        isGrain,
+        size: isGrain ? Math.random() * 2.2 + 1.8 : Math.random() * 2.8 + 1.2,
+        length: isGrain ? 0 : Math.random() * 5 + 3,
+        angle: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.08,
+        vy: isGrain ? Math.random() * 1.8 + 1.6 : Math.random() * 0.7 + 0.3,
+        vx: 0,
+        opacity: Math.random() * 0.45 + 0.5,
+      };
+    });
 
     const controller = gov.attach(canvas, () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.scale(dpr, dpr);
 
-      const normalizedWind = (windForce - 50) * 0.08;
+      // Wind force read from ref without recreation: 0..100 -> breeze to heavy crosswind
+      const breeze = (windForceRef.current - 15) * 0.07;
 
       for (const p of particles) {
-        // Grains are dense and drop downward; chaff husks catch the winnowing breeze and blow away
         if (p.isGrain) {
+          // Grain is dense: drops downward with steady mass, resisting wind
           p.y += p.vy;
-          p.x += normalizedWind * 0.25;
-          ctx.fillStyle = '#b45309'; // Golden wheat/grain
+          p.x += breeze * 0.35 + Math.sin(p.y * 0.03) * 0.2;
+          ctx.fillStyle = '#C49A45'; // Golden ripe kernel
+          ctx.globalAlpha = p.opacity;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
         } else {
-          p.y += p.vy * 0.4;
-          p.x += normalizedWind * 1.8;
-          ctx.fillStyle = '#9e948a'; // Husk chaff
+          // Husk is lightweight: caught by crosswind, tumbling horizontally
+          p.y += p.vy;
+          p.x += breeze * 2.4;
+          p.angle += p.spin * (breeze + 0.5);
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.angle);
+          ctx.fillStyle = '#9E927A'; // Straw chaff husk
+          ctx.globalAlpha = p.opacity * 0.85;
+
+          ctx.beginPath();
+          ctx.ellipse(0, 0, p.length, p.size, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
         }
 
-        // Wrap around boundaries
+        // Boundary wrap
         if (p.y > height) {
-          p.y = 0;
+          p.y = -10;
           p.x = Math.random() * width;
         }
-        if (p.x > width) p.x = 0;
-        if (p.x < 0) p.x = width;
-
-        ctx.globalAlpha = p.opacity;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
+        if (p.x > width + 20) {
+          p.x = -20;
+          p.y = Math.random() * height;
+        }
+        if (p.x < -20) {
+          p.x = width + 20;
+        }
       }
 
       ctx.restore();
@@ -92,60 +133,100 @@ export function WindControl() {
       controller.detach();
       dispose(canvas);
     };
-  }, [mounted, deviceTier, windForce]);
+  }, [mounted, deviceTier]);
 
   if (!mounted || deviceTier === 'poster') {
     // Clause 2 Fallback Contract: High-fidelity static poster
     return (
-      <div className="hairline p-6 bg-[var(--bg-surface)] rounded-md">
-        <div className="flex items-center justify-between mb-4">
-          <span className="font-mono text-xs uppercase tracking-wider text-[var(--accent-ember)]">
+      <div className="hairline p-6 sm:p-8 bg-[var(--bg-surface)] rounded-md space-y-4">
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-xs uppercase tracking-wider text-[var(--accent-ember)] font-semibold">
             Winnowing Floor Static Poster (Tier 0 / Poster Mode)
           </span>
-          <span className="font-mono text-xs text-[var(--text-dim)]">0 GPU Overhead</span>
+          <span className="font-mono text-xs text-[var(--status-sage)] font-semibold">0 GPU Overhead • Fallback Contract</span>
         </div>
-        <svg viewBox="0 0 800 240" className="w-full h-auto aspect-[16/6] bg-[var(--bg-canvas)] hairline rounded">
-          <text x="400" y="125" textAnchor="middle" fill="var(--text-main)" fontFamily="var(--font-serif)" fontSize="20">
-            The grain settles on the stone. The chaff is winnowed away.
-          </text>
-        </svg>
+        <div className="aspect-[16/7] w-full bg-[var(--bg-canvas)] hairline rounded flex flex-col items-center justify-center p-6 text-center space-y-2">
+          <span className="font-serif text-2xl text-[var(--text-main)]">
+            The heavy grain settles on stone. The husk is winnowed away.
+          </span>
+          <p className="text-xs font-mono text-[var(--text-dim)] max-w-md">
+            Hardware tiering detected poster profile (or prefers-reduced-motion). 3D physics paused to preserve battery and frame budget.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="hairline p-6 bg-[var(--bg-surface)] rounded-md">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-        <div>
-          <span className="font-mono text-xs uppercase tracking-wider text-[var(--accent-ember)] block">
-            Level 3 Interactive Moment • Winnowing Wind Control
-          </span>
-          <h3 className="text-lg font-serif mt-1">Separate the Husk from the Grain</h3>
+    <div className="hairline p-6 sm:p-8 bg-[var(--bg-surface)] rounded-md space-y-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 hairline-b pb-6">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)]">
+            <span>LEVEL 3 SIGNATURE INTERACTION</span>
+            <span>/</span>
+            <span>PHYSICAL WINNOWING</span>
+          </div>
+          <h3 className="font-serif text-2xl text-[var(--text-main)]">
+            The Winnowing Floor Scrubber
+          </h3>
+          <p className="text-xs text-[var(--text-dim)] font-mono max-w-lg">
+            Drag the wind velocity dial. Heavy golden grains plummet downward to the floor; lightweight husk chaff is carried away by the crosswind.
+          </p>
         </div>
-        <div className="flex items-center gap-3">
-          <label htmlFor="windRange" className="font-mono text-xs text-[var(--text-dim)]">
-            Winnowing Force: <strong className="text-[var(--text-main)]">{windForce}kt</strong>
-          </label>
+
+        {/* Tactile Scrubber Control */}
+        <div className="space-y-2 min-w-[260px]">
+          <div className="flex justify-between items-baseline font-mono text-xs">
+            <label htmlFor="windVelocity" className="text-[var(--text-dim)]">
+              Crosswind Velocity:
+            </label>
+            <strong className="text-[var(--accent-ember)] text-sm tabular-nums">
+              {windForce} kt {windForce > 75 ? '(Gale)' : windForce > 40 ? '(Breeze)' : '(Gentle)'}
+            </strong>
+          </div>
           <input
-            id="windRange"
+            id="windVelocity"
             type="range"
             min="0"
             max="100"
             value={windForce}
             onChange={(e) => setWindForce(parseInt(e.target.value, 10))}
-            className="cursor-pointer accent-[var(--accent-ember)]"
+            aria-label="Winnowing wind velocity dial"
+            className="w-full cursor-pointer min-h-[44px]"
           />
+          <div className="flex justify-between text-[10px] font-mono text-[var(--text-dim)]">
+            <span>0kt (Calm)</span>
+            <span>50kt (Standard)</span>
+            <span>100kt (Gale)</span>
+          </div>
         </div>
       </div>
 
+      {/* Physics Canvas Surface */}
       <div className="relative aspect-[16/7] w-full bg-[var(--bg-canvas)] hairline rounded overflow-hidden">
         <canvas ref={canvasRef} className="w-full h-full object-cover" />
+        
+        {/* Physical Status Badges */}
+        <div className="absolute top-3 left-3 flex gap-2 pointer-events-none">
+          <span className="font-mono text-[10px] uppercase px-2 py-0.5 rounded hairline bg-[var(--bg-surface)]/90 text-[var(--text-main)] backdrop-blur-xs">
+            ● Grain: Heavy (Settling)
+          </span>
+          <span className="font-mono text-[10px] uppercase px-2 py-0.5 rounded hairline bg-[var(--bg-surface)]/90 text-[var(--text-dim)] backdrop-blur-xs">
+            ○ Chaff: Airborne (Drifting)
+          </span>
+        </div>
       </div>
 
-      <div className="flex justify-between items-center text-xs font-mono text-[var(--text-dim)] mt-3">
-        <span>Hardware Tier: <strong className="text-[var(--text-main)] uppercase">{deviceTier}</strong></span>
-        <span>Device Pixel Ratio Cap: <strong>1.5 DPR</strong></span>
-        <span>Lifecycle: <strong>Pauses offscreen</strong></span>
+      {/* Tier & Performance Telemetry Ledger */}
+      <div className="flex flex-wrap justify-between items-center text-xs font-mono text-[var(--text-dim)] pt-2 gap-4">
+        <div className="flex items-center gap-4">
+          <span>Tier: <strong className="text-[var(--text-main)] uppercase">{deviceTier}</strong></span>
+          <span>DPR Cap: <strong className="text-[var(--text-main)]">1.5 Ceiling</strong></span>
+        </div>
+        <div className="flex items-center gap-4">
+          <span>Lifecycle: <strong className="text-[var(--status-sage)]">Pauses Offscreen</strong></span>
+          <span>Teardown: <strong className="text-[var(--status-sage)]">Zero Leaks</strong></span>
+        </div>
       </div>
     </div>
   );

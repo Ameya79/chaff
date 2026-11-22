@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-11-22T17:57:20.013Z",
+  "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\apps\\web",
+  "summary": {
+    "totalScore": 100,
+    "scores": {
+      "visual": 100,
+      "copy": 100,
+      "code": 100,
+      "performance": 100
+    },
+    "findingsCount": {
+      "open": 0,
+      "waived": 0,
+      "fixed": 0,
+      "total": 0
+    },
+    "levelUsed": 2
+  },
+  "findings": [],
+  "identitySummary": {
+    "framework": "next",
+    "lockedCount": 5,
+    "waiversCount": 0
+  }
+}

@@ -1,11 +1,23 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import path from 'node:path';
+import fs from 'node:fs';
 import { buildIdentity } from '@chaff/core';
 import { runSourceChecks } from '../index.js';
 
+function findRepoRoot(dir = process.cwd()): string {
+  let cur = path.resolve(dir);
+  while (cur !== path.dirname(cur)) {
+    if (fs.existsSync(path.join(cur, 'pnpm-workspace.yaml'))) {
+      return cur;
+    }
+    cur = path.dirname(cur);
+  }
+  return cur;
+}
+
 describe('@chaff/checks', () => {
-  const rootDir = path.resolve(process.cwd());
+  const rootDir = findRepoRoot();
 
   test('detects UI tells in saas-landing fixture', async () => {
     const fixtureDir = path.join(rootDir, 'fixtures', 'saas-landing');

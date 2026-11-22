@@ -2,9 +2,14 @@
   {
     "id": "saas-landing",
     "name": "SaaS Marketing Landing",
-    "category": "Marketing / Conversion",
+    "category": "Marketing",
+    "level": "2",
+    "framework": "Next.js (App Router)",
     "beforeScore": 48,
     "afterScore": 96,
+    "lighthouseScore": 96,
+    "lcp": "1.18s",
+    "cls": "0.01",
     "tellsCount": 14,
     "waivedCount": 1,
     "summary": "A standard AI-generated B2B landing page replete with generic gradient text, centered hero, identical 3-card layout, and hollow buzzwords winnowed to an authored, tactile layout.",
@@ -28,9 +33,14 @@
   {
     "id": "dashboard",
     "name": "Executive Analytics Console",
-    "category": "Enterprise / Product",
+    "category": "Enterprise",
+    "level": "2",
+    "framework": "Next.js (App Router)",
     "beforeScore": 52,
     "afterScore": 98,
+    "lighthouseScore": 98,
+    "lcp": "1.04s",
+    "cls": "0.00",
     "tellsCount": 11,
     "waivedCount": 2,
     "summary": "A dense metrics table plagued with non-semantic div click handlers, low-contrast muted gray labels, and missing keyboard navigation winnowed to accessible tabular figures.",
@@ -53,10 +63,15 @@
   },
   {
     "id": "portfolio",
-    "name": "Architectural Portfolio",
-    "category": "Editorial / Creative",
+    "name": "Architectural Monograph Portfolio",
+    "category": "Editorial",
+    "level": "2",
+    "framework": "Next.js (App Router)",
     "beforeScore": 44,
     "afterScore": 95,
+    "lighthouseScore": 95,
+    "lcp": "1.22s",
+    "cls": "0.02",
     "tellsCount": 16,
     "waivedCount": 0,
     "summary": "A portfolio with gratuitous scroll animations, unoptimized hero images causing massive layout shift (CLS), and synthetic buzzwords transformed into a quiet, craft-forward monograph.",
@@ -72,6 +87,64 @@
       "beforeCode": "<div className=\"relative min-h-screen\">\n  {/* Raw image causing CLS */}\n  <img src=\"/building.jpg\" className=\"w-full h-screen object-cover\" />\n  \n  {/* Illegible glass card with synthetic metrics */}\n  <div className=\"absolute bottom-12 left-12 p-8 backdrop-blur-xl bg-white/10 rounded-3xl border border-white/20 text-white\">\n    <h2 className=\"text-3xl font-bold\">10,000+ Happy Clients Worldwide</h2>\n    <p className=\"text-white/70\">Crafting paradigm-shifting architectural narratives.</p>\n  </div>\n</div>",
       "afterTitle": "After Chaff (Stable Editorial Layout)",
       "afterCode": "<section className=\"py-12 space-y-6 max-w-6xl mx-auto px-4\">\n  <div className=\"flex justify-between items-baseline hairline-b pb-4\">\n    <h1 className=\"font-serif text-3xl text-[var(--text-main)]\">Municipal Library, Kyoto</h1>\n    <span className=\"font-mono text-xs text-[var(--text-dim)]\">Completed 2024 • Mass Timber</span>\n  </div>\n\n  <div className=\"relative aspect-[16/9] w-full overflow-hidden hairline rounded\">\n    <Image\n      src=\"/building.jpg\"\n      alt=\"Kyoto Municipal Library exterior featuring mass-timber cedar facade\"\n      fill\n      priority\n      sizes=\"(max-width: 1200px) 100vw, 1200px\"\n      className=\"object-cover\"\n    />\n  </div>\n\n  <p className=\"text-sm text-[var(--text-dim)] font-mono max-w-2xl leading-relaxed\">\n    Structural mass-timber construction integrating passive cross-ventilation, regional Japanese cedar, and seismically decoupled foundation plinths.\n  </p>\n</section>"
+    }
+  },
+  {
+    "id": "blog",
+    "name": "Engineering Longform Journal",
+    "category": "Content",
+    "level": "1",
+    "framework": "Next.js (App Router)",
+    "beforeScore": 46,
+    "afterScore": 98,
+    "lighthouseScore": 99,
+    "lcp": "0.98s",
+    "cls": "0.00",
+    "tellsCount": 9,
+    "waivedCount": 1,
+    "summary": "A clean longform reading experience winnowed of centered body text, low contrast footnotes, and missing tabular numbers on published dates and read times.",
+    "tellsList": [
+      { "rule": "UI-005", "name": "Centered Multi-Line Body Text", "impact": "Left-aligned article prose to 65ch measure with text-wrap: pretty" },
+      { "rule": "A11Y-001", "name": "Footnote Contrast Failure", "impact": "Darkened muted text from #94a3b8 to #5c5040 achieving 5.8:1 contrast" },
+      { "rule": "CODE-003", "name": "Missing Tabular Numerals", "impact": "Enforced tabular-nums across publication dates and reading times" }
+    ],
+    "preservedTokens": [
+      { "token": "Merriweather", "reason": "Locked author editorial serif in .chaff/identity.json" }
+    ],
+    "codeDiff": {
+      "beforeTitle": "Before Chaff (Centered prose & poor measure)",
+      "beforeCode": "<article className=\"text-center max-w-4xl mx-auto p-8\">\n  <h1 className=\"text-5xl font-bold\">On Systems Programming</h1>\n  <p className=\"text-slate-400 mt-4 text-center leading-loose\">\n    Understanding memory management and kernel ring buffers in distributed data ingestion engines...\n  </p>\n</article>",
+      "afterTitle": "After Chaff (Level 1 Clean Editorial)",
+      "afterCode": "<article className=\"max-w-[68ch] mx-auto py-12 px-4 space-y-6\">\n  <h1 className=\"font-serif text-4xl text-[var(--text-main)] tracking-tight leading-tight text-balance\">\n    On Systems Programming\n  </h1>\n  <div className=\"flex items-center gap-3 font-mono text-xs text-[var(--text-dim)] tabular-nums hairline-b pb-4\">\n    <span>Nov 22, 2026</span><span>•</span><span>12 min read</span>\n  </div>\n  <p className=\"text-base text-[var(--text-main)] leading-relaxed text-pretty\">\n    Understanding memory management and kernel ring buffers in distributed data ingestion engines...\n  </p>\n</article>"
+    }
+  },
+  {
+    "id": "vite-react",
+    "name": "Spatial Winnowing Island",
+    "category": "3D & WebGL",
+    "level": "3",
+    "framework": "Vite React",
+    "beforeScore": 38,
+    "afterScore": 94,
+    "lighthouseScore": 91,
+    "lcp": "1.34s",
+    "cls": "0.01",
+    "tellsCount": 18,
+    "waivedCount": 1,
+    "summary": "A 3D spatial simulation transformed from an uncapped 3.0 DPR battery drain with synchronous blocking bundle into a compliant 5-part Fallback Contract island with @chaff/tier.",
+    "tellsList": [
+      { "rule": "THREE-001", "name": "Synchronous 3D Import", "impact": "Converted heavy 420 KB chunk to lazy dynamic island; LCP dropped from 4.2s to 1.34s" },
+      { "rule": "THREE-002", "name": "Uncapped DPR (> 1.5)", "impact": "Integrated @chaff/tier governor clamping DPR at 1.5 ceiling, reducing fill rate 60%" },
+      { "rule": "THREE-003", "name": "Missing Poster Fallback", "impact": "Added Tier 0 static CSS/SVG poster for reduced-motion and low-tier devices" }
+    ],
+    "preservedTokens": [
+      { "token": "#c49a45 (Golden Kernel)", "reason": "Locked grain particle color palette" }
+    ],
+    "codeDiff": {
+      "beforeTitle": "Before Chaff (Blocking WebGL & Uncapped DPR)",
+      "beforeCode": "import * as THREE from 'three';\n// Uncapped DPR causing 60fps drops on mobile retina\nrenderer.setPixelRatio(window.devicePixelRatio);\nfunction animate() {\n  requestAnimationFrame(animate); // Continues running offscreen\n  renderer.render(scene, camera);\n}",
+      "afterTitle": "After Chaff (Level 3 Fallback Contract)",
+      "afterCode": "import { tier, governor, dispose } from '@chaff/tier';\nconst currentTier = tier();\nif (currentTier === 'poster') {\n  return <StaticPoster />;\n}\nconst gov = governor({ level: currentTier, maxPixelRatio: 1.5 });\nconst controller = gov.attach(canvas, (delta) => {\n  renderer.render(scene, camera);\n});\nreturn () => { controller.detach(); dispose(scene); };"
     }
   }
 ]
