@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Chaff — Archival Design Audit & Level 3 Enforcement Toolkit';
+export const alt = 'Chaff — Obsidian Atelier & Level 3 Gate';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -15,10 +15,9 @@ export default function OpenGraphImage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          backgroundColor: '#FBF7EE',
-          color: '#16120E',
-          padding: '56px 64px',
-          border: '12px solid #16120E',
+          backgroundColor: '#09090B',
+          color: '#F4F1EA',
+          padding: '64px 72px',
         }}
       >
         <div
@@ -26,25 +25,23 @@ export default function OpenGraphImage() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: '2px solid #DDD4C3',
-            paddingBottom: '20px',
             fontSize: '20px',
-            letterSpacing: '0.14em',
+            letterSpacing: '0.16em',
             textTransform: 'uppercase',
-            color: '#9E3308',
-            fontWeight: 700,
+            color: '#F2713A',
+            fontWeight: 600,
           }}
         >
-          <span>CHAFF PROTOCOL V0.1</span>
-          <span>LEVEL 1 · LEVEL 2 · LEVEL 3</span>
+          <span>CHAFF · LEVEL 3</span>
+          <span style={{ color: '#9D968B' }}>72 RULES</span>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '980px' }}>
-          <div style={{ fontSize: '74px', fontWeight: 700, lineHeight: 1.05, letterSpacing: '-0.03em' }}>
-            Keep the grain. Winnow the slop.
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '940px' }}>
+          <div style={{ fontSize: '84px', fontWeight: 500, lineHeight: 1.0, letterSpacing: '-0.04em' }}>
+            Winnow the slop. Keep the grain.
           </div>
-          <div style={{ fontSize: '28px', color: '#544B40', lineHeight: 1.4 }}>
-            Audits rendered UI against 72 rules, locks deliberate brand identity, and enforces strict mobile and WebGL performance gates.
+          <div style={{ fontSize: '28px', color: '#9D968B', lineHeight: 1.35 }}>
+            Audits rendered UI, locks brand identity, and enforces Level 3 WebGL budgets.
           </div>
         </div>
 
@@ -53,13 +50,13 @@ export default function OpenGraphImage() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderTop: '2px solid #DDD4C3',
+            borderTop: '1px solid rgba(244, 241, 234, 0.12)',
             paddingTop: '24px',
             fontSize: '22px',
           }}
         >
-          <span style={{ color: '#354A21', fontWeight: 700 }}>Identity Lock: Enforced (#6D28D9 Preserved)</span>
-          <span style={{ color: '#16120E', fontWeight: 600 }}>npx chaff init --level 3</span>
+          <span style={{ color: '#7DC885', fontWeight: 600 }}>Identity Lock · #A78BFA Preserved</span>
+          <span style={{ color: '#F4F1EA' }}>npx chaff init --level 3</span>
         </div>
       </div>
     ),

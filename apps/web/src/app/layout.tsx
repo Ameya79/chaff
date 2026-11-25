@@ -17,11 +17,11 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   metadataBase: new URL('https://chaff.dev'),
   title: {
-    default: 'Chaff — Design Audit & Level 3 Enforcement Toolkit',
+    default: 'Chaff — Winnow the slop. Keep the grain.',
     template: '%s | Chaff',
   },
   description:
-    'Chaff audits rendered UI against 72 rules, locks intentional brand tokens, enforces three creative contracts, and fails the pull request when performance degrades.',
+    'Design audit engine, identity lock, and Level 3 WebGL performance gate.',
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },
@@ -29,14 +29,14 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: 'Chaff — Keep the grain. Winnow the slop.',
+    title: 'Chaff — Winnow the slop. Keep the grain.',
     description:
-      'Autonomous design audit and level enforcement toolkit preserving authored brand craft and strict Core Web Vitals budgets.',
+      '72 architectural rules, locked brand identity, and Level 3 WebGL gates.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chaff — Design Audit & Level 3 Enforcement Toolkit',
+    title: 'Chaff — Winnow the slop. Keep the grain.',
     description:
       'Audit rendered pages, preserve brand identity locks, and gate CI on 320px overflow and WebGL performance budgets.',
   },
@@ -50,13 +50,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-theme="dark"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${fraunces.variable} ${GeistSans.variable} ${GeistMono.variable} dark`}
     >
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('chaff-theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('chaff-theme')||'dark';document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.toggle('dark',t==='dark');}catch(e){}`,
           }}
         />
       </head>

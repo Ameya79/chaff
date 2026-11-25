@@ -7,10 +7,12 @@ import zlib from 'node:zlib';
 import { checkRenderedBudgets } from '@chaff/checks';
 import { GateClientSimulator } from '../../components/GateClientSimulator';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
-  title: 'Live Performance & Mobile Gate',
+  title: 'Gate',
   description:
-    'Live measured output from chaff gate --level 3 and chaff audit on apps/web, plus interactive PR budget simulator.',
+    'Live chaff gate --level 3 budgets, .next bundle telemetry, and threshold simulator.',
 };
 
 function resolveWebRoot(): string {
@@ -33,7 +35,7 @@ async function readCompiledBundleTelemetry(webRoot: string): Promise<{
   const nextDir = path.join(webRoot, '.next');
   let baselineGzipKb: number | null = null;
   let webglGzipKb: number | null = null;
-  let webglSourceLabel = 'Compiled .next lazy chunk';
+  let webglSourceLabel = '.next lazy Three.js chunk';
 
   try {
     const appBuildRaw = await fs.readFile(path.join(nextDir, 'app-build-manifest.json'), 'utf-8');
@@ -52,25 +54,27 @@ async function readCompiledBundleTelemetry(webRoot: string): Promise<{
       baselineGzipKb = Math.round((gz / 1024) * 10) / 10;
     }
   } catch {
-    // .next/app-build-manifest.json unavailable on cold first build
+    // .next/app-build-manifest.json unavailable prior to build
   }
 
   try {
     const loadableRaw = await fs.readFile(path.join(nextDir, 'react-loadable-manifest.json'), 'utf-8');
     const loadable = JSON.parse(loadableRaw) as Record<string, { files?: string[] }>;
+    let gz = 0;
+    let found = false;
     for (const [key, entry] of Object.entries(loadable)) {
-      if (/KestrelWebGLStage/i.test(key) && Array.isArray(entry.files)) {
-        let gz = 0;
+      if (/(WinnowThreeScene|webgl|three|3d|scene|stage|canvas)/i.test(key) && Array.isArray(entry.files)) {
         for (const rel of entry.files) {
           if (rel.endsWith('.js')) {
             const buf = await fs.readFile(path.join(nextDir, rel));
             gz += zlib.gzipSync(buf).length;
+            found = true;
           }
         }
-        if (gz > 0) {
-          webglGzipKb = Math.round((gz / 1024) * 10) / 10;
-        }
       }
+    }
+    if (found) {
+      webglGzipKb = Math.round((gz / 1024) * 10) / 10;
     }
   } catch {
     // fallback below
@@ -79,10 +83,10 @@ async function readCompiledBundleTelemetry(webRoot: string): Promise<{
   if (webglGzipKb === null) {
     try {
       const stageSrc = await fs.readFile(
-        path.join(webRoot, 'src', 'components', 'KestrelWebGLStage.tsx')
+        path.join(webRoot, 'src', 'components', 'WinnowThreeScene.tsx')
       );
       webglGzipKb = Math.round((zlib.gzipSync(stageSrc).length / 1024) * 10) / 10;
-      webglSourceLabel = 'KestrelWebGLStage.tsx gzip source';
+      webglSourceLabel = 'WinnowThreeScene.tsx source';
     } catch {
       webglGzipKb = 0;
     }
@@ -99,7 +103,6 @@ export default async function GatePage() {
   let auditScore = 100;
   let openCount = 0;
   let waivedCount = 0;
-  let lockedCount = 5;
 
   try {
     const raw = await fs.readFile(path.join(webRoot, 'chaff-report.json'), 'utf-8');
@@ -107,59 +110,55 @@ export default async function GatePage() {
     auditScore = parsed?.summary?.totalScore ?? 100;
     openCount = parsed?.summary?.findingsCount?.open ?? 0;
     waivedCount = parsed?.summary?.findingsCount?.waived ?? 0;
-    lockedCount = parsed?.identitySummary?.lockedCount ?? 5;
   } catch {
-    // Use defaults if chaff-report.json has not been generated yet
+    // Use defaults if report has not been generated yet
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-10">
-      <header className="space-y-3 pb-6 hairline-b">
-        <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-[var(--text-dim)]">
-          <span className="uppercase tracking-[0.16em] text-[var(--accent-ember)] font-semibold">
-            Live Runtime Verification
-          </span>
-          <span>chaff gate --level 3 · apps/web</span>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-14 sm:py-20 space-y-16">
+      <header className="space-y-3">
+        <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-ember)] block">
+          chaff gate --level 3
+        </span>
         <h1 className="font-serif text-[var(--text-main)]">
-          Performance &amp; Mobile Gate
+          Performance Gate
         </h1>
-        <p className="text-base sm:text-lg text-[var(--text-dim)] max-w-[65ch] leading-relaxed">
-          Evaluated directly against <code className="mono">apps/web</code> using <code className="mono">@chaff/checks</code> and compiled <code className="mono">.next</code> bundle chunks. Every Level 3 budget below reflects real measurements on this showcase.
+        <p className="text-base text-[var(--text-dim)] max-w-[46ch]">
+          Live <code className="mono">.next</code> bundle chunks and Level 3 budget telemetry.
         </p>
       </header>
 
-      {/* Live Measured Summary Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--border-line)] hairline">
-        <div className="p-5 space-y-1 min-w-0 bg-[var(--bg-surface)]">
-          <span className="font-mono text-xs uppercase text-[var(--text-dim)] block">
-            Gate Status (L3)
+      {/* Open Monumental KPI Metrics */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-8 hairline-y">
+        <div className="space-y-1 min-w-0">
+          <span className="font-mono text-xs text-[var(--text-dim)] block">
+            Gate (L3)
           </span>
-          <div className="font-serif text-3xl sm:text-4xl font-bold text-[var(--status-sage)]">
+          <div className="font-serif text-4xl sm:text-5xl text-[var(--status-sage)]">
             {gateReport.passed ? 'PASS' : 'FAIL'}
           </div>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
-            {gateReport.results.length - gateReport.failuresCount} / {gateReport.results.length} budgets green
+            {gateReport.results.length - gateReport.failuresCount}/{gateReport.results.length} green
           </span>
         </div>
 
-        <div className="p-5 space-y-1 min-w-0 bg-[var(--bg-surface)]">
-          <span className="font-mono text-xs uppercase text-[var(--text-dim)] block">
-            Chaff Audit Score
+        <div className="space-y-1 min-w-0">
+          <span className="font-mono text-xs text-[var(--text-dim)] block">
+            Audit Score
           </span>
-          <div className="font-serif text-3xl sm:text-4xl font-bold text-[var(--status-sage)] tabular-nums">
-            {auditScore} / 100
+          <div className="font-serif text-4xl sm:text-5xl text-[var(--status-sage)] tabular-nums">
+            {auditScore}
           </div>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
-            {openCount} open · {waivedCount} waived ({lockedCount} locked)
+            {openCount} open · {waivedCount} waived
           </span>
         </div>
 
-        <div className="p-5 space-y-1 min-w-0 bg-[var(--bg-surface)]">
-          <span className="font-mono text-xs uppercase text-[var(--text-dim)] block">
-            Lazy WebGL2 Chunk
+        <div className="space-y-1 min-w-0">
+          <span className="font-mono text-xs text-[var(--text-dim)] block">
+            Lazy 3D Chunk
           </span>
-          <div className="font-serif text-3xl sm:text-4xl font-bold text-[var(--status-sage)] tabular-nums">
+          <div className="font-serif text-4xl sm:text-5xl text-[var(--status-sage)] tabular-nums">
             {bundleTelemetry.webglGzipKb} KB
           </div>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
@@ -167,34 +166,27 @@ export default async function GatePage() {
           </span>
         </div>
 
-        <div className="p-5 space-y-1 min-w-0 bg-[var(--bg-surface)]">
-          <span className="font-mono text-xs uppercase text-[var(--text-dim)] block">
-            {bundleTelemetry.baselineGzipKb !== null ? 'Compiled Home JS' : '320px Overflow'}
+        <div className="space-y-1 min-w-0">
+          <span className="font-mono text-xs text-[var(--text-dim)] block">
+            Home Baseline JS
           </span>
-          <div className="font-serif text-3xl sm:text-4xl font-bold text-[var(--status-sage)] tabular-nums">
+          <div className="font-serif text-4xl sm:text-5xl text-[var(--status-sage)] tabular-nums">
             {bundleTelemetry.baselineGzipKb !== null ? `${bundleTelemetry.baselineGzipKb} KB` : '0px'}
           </div>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
-            {bundleTelemetry.baselineGzipKb !== null
-              ? 'First-Load gzip (.next <= 170 KB)'
-              : 'Zero horizontal scroll'}
+            {bundleTelemetry.baselineGzipKb !== null ? 'gzip <= 170 KB' : '320px overflow'}
           </span>
         </div>
       </div>
 
-      {/* Live Measured Gate Table */}
-      <section className="hairline bg-[var(--bg-surface)] p-5 sm:p-6 space-y-4 min-w-0">
-        <div className="flex flex-wrap items-baseline justify-between gap-2 pb-3 hairline-b">
-          <div>
-            <span className="font-mono text-xs uppercase text-[var(--accent-ember)] font-bold block">
-              checkRenderedBudgets(apps/web, 3)
-            </span>
-            <h2 className="font-serif text-2xl text-[var(--text-main)]">
-              Live Measured Level 3 Gate Results
-            </h2>
-          </div>
-          <span className="font-mono text-xs text-[var(--status-sage)] font-bold">
-            {gateReport.passed ? 'All Checks Passing' : `${gateReport.failuresCount} Failure(s)`}
+      {/* Live Gate Table */}
+      <section className="space-y-6 min-w-0">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="font-serif text-3xl text-[var(--text-main)]">
+            Measured Budgets
+          </h2>
+          <span className="font-mono text-xs text-[var(--status-sage)]">
+            {gateReport.passed ? 'All Passing' : `${gateReport.failuresCount} Failed`}
           </span>
         </div>
 
@@ -202,27 +194,27 @@ export default async function GatePage() {
           <table className="w-full text-left font-mono text-xs border-collapse">
             <thead>
               <tr className="hairline-b text-[var(--text-dim)] uppercase">
-                <th className="py-3 pr-4 whitespace-nowrap">Gate Metric</th>
-                <th className="py-3 px-3 whitespace-nowrap">Target Budget</th>
-                <th className="py-3 px-3 whitespace-nowrap">Live Measured</th>
+                <th className="py-3 pr-4 whitespace-nowrap">Metric</th>
+                <th className="py-3 px-3 whitespace-nowrap">Target</th>
+                <th className="py-3 px-3 whitespace-nowrap">Measured</th>
                 <th className="py-3 pl-3 text-right whitespace-nowrap">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border-line)]">
               {gateReport.results.map((r) => (
-                <tr key={r.metric} className="hover:bg-[var(--bg-inset)] transition-colors">
-                  <td className="py-3.5 pr-4 font-bold text-[var(--text-main)] whitespace-nowrap">
+                <tr key={r.metric} className="hover:bg-[var(--bg-surface-hover)] transition-colors">
+                  <td className="py-4 pr-4 font-semibold text-[var(--text-main)] whitespace-nowrap">
                     {r.metric}
                   </td>
-                  <td className="py-3.5 px-3 text-[var(--text-dim)] whitespace-nowrap">
+                  <td className="py-4 px-3 text-[var(--text-dim)] whitespace-nowrap">
                     {r.budget}
                   </td>
-                  <td className="py-3.5 px-3 text-[var(--text-main)] whitespace-nowrap">
+                  <td className="py-4 px-3 text-[var(--text-main)] whitespace-nowrap">
                     {r.measured}
                   </td>
-                  <td className="py-3.5 pl-3 text-right whitespace-nowrap">
+                  <td className="py-4 pl-3 text-right whitespace-nowrap">
                     <span
-                      className={`px-2.5 py-0.5 font-bold uppercase ${
+                      className={`px-2.5 py-0.5 rounded-full uppercase ${
                         r.status === 'pass'
                           ? 'bg-[var(--status-sage-soft)] text-[var(--status-sage)]'
                           : 'bg-[var(--accent-ember-soft)] text-[var(--accent-ember)]'

@@ -8,9 +8,9 @@ import {
 } from '../../components/BenchClientTable';
 
 export const metadata: Metadata = {
-  title: 'Chaff Bench — Fixture Suite & Agent Profiles',
+  title: 'Bench',
   description:
-    'Measured static audit and gate runs across 10 workspace fixtures alongside Chaff Bench v0 agent evaluation profiles.',
+    'Measured static audit and gate runs across 10 workspace fixtures and agent profiles.',
 };
 
 export default function BenchPage() {
@@ -22,19 +22,16 @@ export default function BenchPage() {
   }).format(new Date(benchData.metadata.runDate));
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-8">
-      <header className="space-y-3 pb-6 hairline-b">
-        <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-[var(--text-dim)]">
-          <span className="uppercase tracking-[0.16em] text-[var(--accent-ember)] font-semibold">
-            Benchmark Telemetry
-          </span>
-          <span>10 Fixture Suite · Methodology v0</span>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-14 sm:py-20 space-y-12">
+      <header className="space-y-3">
+        <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-ember)] block">
+          Telemetry · 10 Fixtures
+        </span>
         <h1 className="font-serif text-[var(--text-main)]">
-          Chaff Bench &amp; Fixture Telemetry
+          Chaff Bench
         </h1>
-        <p className="text-base sm:text-lg text-[var(--text-dim)] max-w-[65ch] leading-relaxed">
-          Measured baseline scores, slop indices (/100), and performance gate outcomes across ten real fixture repositories, paired with reference harness comparison baselines.
+        <p className="text-base text-[var(--text-dim)] max-w-[46ch]">
+          Measured fixture scores, slop indices, and harness comparison baselines.
         </p>
       </header>
 

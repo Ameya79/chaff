@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 export function GateClientSimulator() {
   const [simLevel, setSimLevel] = useState<2 | 3>(3);
   const [simJsSize, setSimJsSize] = useState<number>(142);
-  const [simLazy3dKb, setSimLazy3dKb] = useState<number>(6);
+  const [simLazy3dKb, setSimLazy3dKb] = useState<number>(152);
   const [simCls, setSimCls] = useState<number>(0.02);
   const [simTouchTarget, setSimTouchTarget] = useState<number>(44);
 
@@ -17,57 +17,54 @@ export function GateClientSimulator() {
   const overallPass = isBaselinePass && isLazyPass && isClsPass && isTouchPass;
 
   return (
-    <section className="hairline bg-[var(--bg-surface)] p-5 sm:p-6 space-y-6 min-w-0">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 hairline-b">
+    <section className="rounded-2xl bg-[var(--bg-surface)] p-6 sm:p-10 space-y-8 min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-1">
-          <span className="font-mono text-xs uppercase tracking-wider text-[var(--accent-ember)] font-bold block">
-            Interactive Threshold Simulator
+          <span className="font-mono text-xs uppercase text-[var(--accent-ember)] block">
+            Simulator
           </span>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[var(--text-main)]">
-            Test Pull Request Budgets Against Level {simLevel}
+          <h2 className="font-serif text-3xl text-[var(--text-main)]">
+            PR Budget Check (Level {simLevel})
           </h2>
-          <p className="text-xs sm:text-sm text-[var(--text-dim)] max-w-[60ch]">
-            Drag metrics to observe how <code className="mono">chaff gate</code> accepts or rejects pull requests in CI.
-          </p>
         </div>
 
-        <div className="inline-flex hairline divide-x divide-[var(--border-line)] bg-[var(--bg-canvas)] shrink-0">
+        <div className="inline-flex rounded-full bg-[var(--bg-surface-elevated)] p-1 gap-1 shrink-0">
           <button
             type="button"
             onClick={() => setSimLevel(2)}
             aria-pressed={simLevel === 2}
-            className={`px-3.5 py-2 min-h-[44px] font-mono text-xs ${
+            className={`px-4 py-2 rounded-full min-h-[44px] min-w-[44px] font-mono text-xs transition-colors ${
               simLevel === 2
-                ? 'bg-[var(--text-main)] text-[var(--bg-surface)] font-bold'
-                : 'text-[var(--text-main)]'
+                ? 'bg-[var(--text-main)] text-[var(--bg-canvas)] font-semibold'
+                : 'text-[var(--text-dim)]'
             }`}
           >
-            Level 2 (170 KB)
+            Level 2
           </button>
           <button
             type="button"
             onClick={() => setSimLevel(3)}
             aria-pressed={simLevel === 3}
-            className={`px-3.5 py-2 min-h-[44px] font-mono text-xs ${
+            className={`px-4 py-2 rounded-full min-h-[44px] min-w-[44px] font-mono text-xs transition-colors ${
               simLevel === 3
-                ? 'bg-[var(--text-main)] text-[var(--bg-surface)] font-bold'
-                : 'text-[var(--text-main)]'
+                ? 'bg-[var(--text-main)] text-[var(--bg-canvas)] font-semibold'
+                : 'text-[var(--text-dim)]'
             }`}
           >
-            Level 3 (+250 KB Lazy)
+            Level 3
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         <div className="lg:col-span-7 space-y-5 font-mono text-xs min-w-0">
           <div className="space-y-1.5">
             <div className="flex justify-between items-baseline gap-2">
-              <label htmlFor="simJs" className="text-[var(--text-main)] font-semibold">
+              <label htmlFor="simJs" className="text-[var(--text-main)]">
                 Baseline JS: {simJsSize} KB
               </label>
-              <span className={isBaselinePass ? 'text-[var(--status-sage)] font-bold' : 'text-[var(--accent-ember)] font-bold'}>
-                {isBaselinePass ? 'PASS (<= 170 KB)' : 'FAIL (> 170 KB)'}
+              <span className={isBaselinePass ? 'text-[var(--status-sage)]' : 'text-[var(--accent-ember)]'}>
+                {isBaselinePass ? 'PASS' : 'FAIL > 170 KB'}
               </span>
             </div>
             <input
@@ -77,18 +74,18 @@ export function GateClientSimulator() {
               max="260"
               value={simJsSize}
               onChange={(e) => setSimJsSize(parseInt(e.target.value, 10))}
-              className="w-full min-h-[44px] cursor-pointer"
+              className="w-full min-h-[44px] text-base cursor-pointer"
             />
           </div>
 
           {simLevel === 3 && (
             <div className="space-y-1.5">
               <div className="flex justify-between items-baseline gap-2">
-                <label htmlFor="simLazy3d" className="text-[var(--text-main)] font-semibold">
-                  Lazy 3D / WebGL Chunk: {simLazy3dKb} KB
+                <label htmlFor="simLazy3d" className="text-[var(--text-main)]">
+                  Lazy 3D Chunk: {simLazy3dKb} KB
                 </label>
-                <span className={isLazyPass ? 'text-[var(--status-sage)] font-bold' : 'text-[var(--accent-ember)] font-bold'}>
-                  {isLazyPass ? 'PASS (<= 250 KB)' : 'FAIL (> 250 KB)'}
+                <span className={isLazyPass ? 'text-[var(--status-sage)]' : 'text-[var(--accent-ember)]'}>
+                  {isLazyPass ? 'PASS' : 'FAIL > 250 KB'}
                 </span>
               </div>
               <input
@@ -98,18 +95,18 @@ export function GateClientSimulator() {
                 max="340"
                 value={simLazy3dKb}
                 onChange={(e) => setSimLazy3dKb(parseInt(e.target.value, 10))}
-                className="w-full min-h-[44px] cursor-pointer"
+                className="w-full min-h-[44px] text-base cursor-pointer"
               />
             </div>
           )}
 
           <div className="space-y-1.5">
             <div className="flex justify-between items-baseline gap-2">
-              <label htmlFor="simCls" className="text-[var(--text-main)] font-semibold">
-                Cumulative Layout Shift (CLS): {simCls.toFixed(2)}
+              <label htmlFor="simCls" className="text-[var(--text-main)]">
+                CLS: {simCls.toFixed(2)}
               </label>
-              <span className={isClsPass ? 'text-[var(--status-sage)] font-bold' : 'text-[var(--accent-ember)] font-bold'}>
-                {isClsPass ? 'PASS (<= 0.10)' : 'FAIL (> 0.10)'}
+              <span className={isClsPass ? 'text-[var(--status-sage)]' : 'text-[var(--accent-ember)]'}>
+                {isClsPass ? 'PASS' : 'FAIL > 0.10'}
               </span>
             </div>
             <input
@@ -119,17 +116,17 @@ export function GateClientSimulator() {
               max="30"
               value={Math.round(simCls * 100)}
               onChange={(e) => setSimCls(parseInt(e.target.value, 10) / 100)}
-              className="w-full min-h-[44px] cursor-pointer"
+              className="w-full min-h-[44px] text-base cursor-pointer"
             />
           </div>
 
           <div className="space-y-1.5">
             <div className="flex justify-between items-baseline gap-2">
-              <label htmlFor="simTouch" className="text-[var(--text-main)] font-semibold">
-                Minimum Touch Target: {simTouchTarget}px
+              <label htmlFor="simTouch" className="text-[var(--text-main)]">
+                Touch Target: {simTouchTarget}px
               </label>
-              <span className={isTouchPass ? 'text-[var(--status-sage)] font-bold' : 'text-[var(--accent-ember)] font-bold'}>
-                {isTouchPass ? 'PASS (>= 44px)' : 'FAIL (< 44px)'}
+              <span className={isTouchPass ? 'text-[var(--status-sage)]' : 'text-[var(--accent-ember)]'}>
+                {isTouchPass ? 'PASS' : 'FAIL < 44px'}
               </span>
             </div>
             <input
@@ -139,36 +136,30 @@ export function GateClientSimulator() {
               max="60"
               value={simTouchTarget}
               onChange={(e) => setSimTouchTarget(parseInt(e.target.value, 10))}
-              className="w-full min-h-[44px] cursor-pointer"
+              className="w-full min-h-[44px] text-base cursor-pointer"
             />
           </div>
         </div>
 
-        <div className="lg:col-span-5 p-5 hairline bg-[var(--bg-inset)] space-y-4 font-mono text-xs min-w-0">
-          <div className="flex items-center justify-between gap-2 pb-3 hairline-b">
-            <span className="uppercase text-[var(--text-dim)] font-semibold">
-              Simulated CI Verdict
-            </span>
+        <div className="lg:col-span-5 rounded-xl bg-[var(--bg-surface-elevated)] p-6 space-y-4 font-mono text-xs min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <span className="uppercase text-[var(--text-dim)]">CI Verdict</span>
             <span
-              className={`px-2.5 py-1 font-bold uppercase ${
+              className={`px-3 py-1 rounded-full uppercase font-semibold ${
                 overallPass
                   ? 'bg-[var(--status-sage-soft)] text-[var(--status-sage)]'
                   : 'bg-[var(--accent-ember-soft)] text-[var(--accent-ember)]'
               }`}
             >
-              {overallPass ? 'Gate Pass' : 'PR Blocked'}
+              {overallPass ? 'PASS' : 'BLOCKED'}
             </span>
           </div>
 
           <p className="font-sans text-sm text-[var(--text-dim)] leading-relaxed">
             {overallPass
-              ? 'All simulated thresholds satisfy Chaff budgets. Pull request is eligible to merge.'
-              : 'Gate violation detected. Chaff exits with code 1 and instructs the agent to downgrade effect complexity, never loosen the budget.'}
+              ? 'All budgets satisfied. Ready to merge.'
+              : 'Exit code 1. Downgrade effect complexity, never loosen the budget.'}
           </p>
-
-          <div className="pt-3 hairline-t text-[var(--text-main)] font-semibold">
-            Hard Rule: Downgrade effect complexity, never loosen the budget.
-          </div>
         </div>
       </div>
     </section>

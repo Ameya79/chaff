@@ -4,9 +4,9 @@ import { getCachedRules } from '../../lib/rules-loader';
 import { RulesClientLedger, RulePublicDto } from '../../components/RulesClientLedger';
 
 export const metadata: Metadata = {
-  title: '72 Architectural Rules Directory',
+  title: '72 Rules',
   description:
-    'Search and inspect all 72 Chaff design, accessibility, mobile, motion, and Level 3 WebGL rules with canonical bad-vs-good patterns.',
+    'Search and inspect all 72 Chaff design, accessibility, mobile, motion, and Level 3 WebGL rules.',
 };
 
 export default async function RulesPage() {
@@ -30,26 +30,23 @@ export default async function RulesPage() {
   }));
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-8">
-      <header className="space-y-3 pb-6 hairline-b">
-        <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-[var(--text-dim)]">
-          <span className="uppercase tracking-[0.16em] text-[var(--accent-ember)] font-semibold">
-            Canonical Specification
-          </span>
-          <span>72 Rules Across 8 Domains</span>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-14 sm:py-20 space-y-10">
+      <header className="space-y-3">
+        <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-ember)] block">
+          Specification · 8 Domains
+        </span>
         <h1 className="font-serif text-[var(--text-main)]">
-          Architectural Rules Index
+          72 Architectural Rules
         </h1>
-        <p className="text-base sm:text-lg text-[var(--text-dim)] max-w-[65ch] leading-relaxed">
-          Every Chaff rule pairs reproducible AI tell anti-patterns with concrete craft remediations, detection heuristics, and explicit brand waiver criteria.
+        <p className="text-base text-[var(--text-dim)] max-w-[48ch]">
+          Canonical bad-vs-good patterns and waiver rules across Levels 1–3.
         </p>
       </header>
 
       <Suspense
         fallback={
-          <div className="p-8 hairline bg-[var(--bg-surface)] font-mono text-xs text-[var(--text-dim)]">
-            Loading 72 canonical rules...
+          <div className="py-12 font-mono text-xs text-[var(--text-dim)]">
+            Loading 72 rules...
           </div>
         }
       >

@@ -78,20 +78,17 @@ export function BenchClientTable({
     sortKey === key ? (sortAsc ? '↑' : '↓') : '';
 
   return (
-    <div className="space-y-12">
-      {/* 1. Measured 10-Fixture Corpus Scans */}
-      <section className="hairline bg-[var(--bg-surface)] p-5 sm:p-6 space-y-5 min-w-0">
-        <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 pb-4 hairline-b">
+    <div className="space-y-20">
+      {/* 10-Fixture Baseline Corpus */}
+      <section className="space-y-6 min-w-0">
+        <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
           <div className="space-y-1">
-            <span className="font-mono text-xs uppercase tracking-wider text-[var(--status-sage)] font-bold block">
-              Measured Static &amp; Gate Scans · {formattedRunDate}
+            <span className="font-mono text-xs text-[var(--status-sage)] block">
+              Measured · {formattedRunDate}
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--text-main)]">
-              10-Fixture Baseline Corpus
+            <h2 className="font-serif text-3xl text-[var(--text-main)]">
+              Fixture Corpus
             </h2>
-            <p className="text-xs sm:text-sm text-[var(--text-dim)]">
-              Executed locally across all ten workspace fixtures via <code className="mono">pnpm bench</code>.
-            </p>
           </div>
 
           <div className="flex flex-wrap gap-1.5">
@@ -101,13 +98,13 @@ export function BenchClientTable({
                 type="button"
                 onClick={() => setFilterCategory(cat)}
                 aria-pressed={filterCategory === cat}
-                className={`px-3 py-1.5 min-h-[44px] font-mono text-xs border transition-colors ${
+                className={`px-3.5 py-2 rounded-full min-h-[44px] min-w-[44px] font-mono text-xs uppercase transition-colors ${
                   filterCategory === cat
-                    ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] border-[var(--accent-ember)] font-bold'
-                    : 'bg-[var(--bg-canvas)] text-[var(--text-main)] border-[var(--border-line)] hover:bg-[var(--bg-surface-elevated)]'
+                    ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold'
+                    : 'bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-main)]'
                 }`}
               >
-                {cat.toUpperCase()}
+                {cat}
               </button>
             ))}
           </div>
@@ -120,33 +117,33 @@ export function BenchClientTable({
                 <th className="py-3 pr-4 whitespace-nowrap">Fixture</th>
                 <th className="py-3 px-3 whitespace-nowrap">Domain</th>
                 <th className="py-3 px-3 text-right whitespace-nowrap">Score</th>
-                <th className="py-3 px-3 text-right whitespace-nowrap">Tells (High/All)</th>
-                <th className="py-3 px-3 text-right whitespace-nowrap">Slop Index</th>
+                <th className="py-3 px-3 text-right whitespace-nowrap">Tells</th>
+                <th className="py-3 px-3 text-right whitespace-nowrap">Slop</th>
                 <th className="py-3 px-3 whitespace-nowrap">Gate</th>
                 <th className="py-3 pl-4 whitespace-nowrap">Violations</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border-line)]">
               {filteredFixtures.map((fx) => (
-                <tr key={fx.fixture} className="hover:bg-[var(--bg-inset)] transition-colors">
-                  <td className="py-3.5 pr-4 font-bold text-[var(--text-main)] whitespace-nowrap">
+                <tr key={fx.fixture} className="hover:bg-[var(--bg-surface-hover)] transition-colors">
+                  <td className="py-4 pr-4 font-semibold text-[var(--text-main)] whitespace-nowrap">
                     {fx.fixture}
                   </td>
-                  <td className="py-3.5 px-3 text-[var(--text-dim)] uppercase whitespace-nowrap">
+                  <td className="py-4 px-3 text-[var(--text-dim)] whitespace-nowrap">
                     {fx.category}
                   </td>
-                  <td className="py-3.5 px-3 text-right text-[var(--text-main)] tabular-nums font-semibold whitespace-nowrap">
-                    {fx.baselineScore} / 100
+                  <td className="py-4 px-3 text-right text-[var(--text-main)] tabular-nums whitespace-nowrap">
+                    {fx.baselineScore}
                   </td>
-                  <td className="py-3.5 px-3 text-right text-[var(--accent-ember)] tabular-nums whitespace-nowrap">
-                    {fx.highSeverityCount} / {fx.totalFindings}
+                  <td className="py-4 px-3 text-right text-[var(--accent-ember)] tabular-nums whitespace-nowrap">
+                    {fx.highSeverityCount}/{fx.totalFindings}
                   </td>
-                  <td className="py-3.5 px-3 text-right text-[var(--status-warn)] tabular-nums font-bold whitespace-nowrap">
-                    {fx.slopIndex} / 100
+                  <td className="py-4 px-3 text-right text-[var(--status-warn)] tabular-nums whitespace-nowrap">
+                    {fx.slopIndex}
                   </td>
-                  <td className="py-3.5 px-3 whitespace-nowrap">
+                  <td className="py-4 px-3 whitespace-nowrap">
                     <span
-                      className={`text-[11px] font-mono uppercase px-2 py-0.5 font-bold ${
+                      className={`text-[11px] uppercase px-2.5 py-0.5 rounded-full ${
                         fx.gateStatus === 'PASS'
                           ? 'bg-[var(--status-sage-soft)] text-[var(--status-sage)]'
                           : 'bg-[var(--accent-ember-soft)] text-[var(--accent-ember)]'
@@ -155,13 +152,13 @@ export function BenchClientTable({
                       {fx.gateStatus}
                     </span>
                   </td>
-                  <td className="py-3.5 pl-4 text-xs">
+                  <td className="py-4 pl-4 text-xs">
                     {fx.gateViolations && fx.gateViolations.length > 0 ? (
-                      <span className="text-[var(--accent-ember)] font-semibold">
+                      <span className="text-[var(--accent-ember)]">
                         {fx.gateViolations.join(', ')}
                       </span>
                     ) : (
-                      <span className="text-[var(--status-sage)]">Zero gate violations</span>
+                      <span className="text-[var(--text-dim)]">None</span>
                     )}
                   </td>
                 </tr>
@@ -171,23 +168,15 @@ export function BenchClientTable({
         </div>
       </section>
 
-      {/* 2. Reference Agent Harness Profiles */}
-      <section className="hairline bg-[var(--bg-surface)] p-5 sm:p-6 space-y-5 min-w-0">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-4 hairline-b">
-          <div className="space-y-1">
-            <span className="font-mono text-xs uppercase tracking-wider text-[var(--accent-ember)] font-bold block">
-              Benchmark Reference Profiles · Methodology v0
-            </span>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[var(--text-main)]">
-              Agent Harness Comparison Model
-            </h2>
-            <p className="text-xs sm:text-sm text-[var(--text-dim)] max-w-[65ch]">
-              Reference benchmark baselines recorded from harness evaluations under <code className="mono">bench/METHODOLOGY.md</code> (sortable by metric).
-            </p>
-          </div>
-          <span className="font-mono text-xs text-[var(--text-dim)]">
-            Use column buttons to sort
+      {/* Agent Harness Model */}
+      <section className="space-y-6 min-w-0">
+        <div className="space-y-1">
+          <span className="font-mono text-xs text-[var(--accent-ember)] block">
+            Methodology v0
           </span>
+          <h2 className="font-serif text-3xl text-[var(--text-main)]">
+            Agent Harness Baselines
+          </h2>
         </div>
 
         <div className="w-full max-w-full overflow-x-auto">
@@ -198,7 +187,7 @@ export function BenchClientTable({
                   <button
                     type="button"
                     onClick={() => handleSort('rank')}
-                    className="min-h-[44px] min-w-[44px] px-2.5 text-left font-bold hover:text-[var(--text-main)] whitespace-nowrap"
+                    className="min-h-[44px] min-w-[44px] px-2 text-left hover:text-[var(--text-main)] whitespace-nowrap"
                   >
                     Rank {sortArrow('rank')}
                   </button>
@@ -207,7 +196,7 @@ export function BenchClientTable({
                   <button
                     type="button"
                     onClick={() => handleSort('agent')}
-                    className="min-h-[44px] min-w-[44px] px-2.5 text-left font-bold hover:text-[var(--text-main)] whitespace-nowrap"
+                    className="min-h-[44px] min-w-[44px] px-2 text-left hover:text-[var(--text-main)] whitespace-nowrap"
                   >
                     Harness {sortArrow('agent')}
                   </button>
@@ -217,7 +206,7 @@ export function BenchClientTable({
                   <button
                     type="button"
                     onClick={() => handleSort('averageScore')}
-                    className="min-h-[44px] min-w-[44px] px-2.5 text-right font-bold hover:text-[var(--text-main)] whitespace-nowrap"
+                    className="min-h-[44px] min-w-[44px] px-2 text-right hover:text-[var(--text-main)] whitespace-nowrap"
                   >
                     Avg {sortArrow('averageScore')}
                   </button>
@@ -226,7 +215,7 @@ export function BenchClientTable({
                   <button
                     type="button"
                     onClick={() => handleSort('slopReductionRate')}
-                    className="min-h-[44px] min-w-[44px] px-2.5 text-right font-bold hover:text-[var(--text-main)] whitespace-nowrap"
+                    className="min-h-[44px] min-w-[44px] px-2 text-right hover:text-[var(--text-main)] whitespace-nowrap"
                   >
                     Winnowed {sortArrow('slopReductionRate')}
                   </button>
@@ -235,49 +224,47 @@ export function BenchClientTable({
                   <button
                     type="button"
                     onClick={() => handleSort('gatePassRate')}
-                    className="min-h-[44px] min-w-[44px] px-2.5 text-right font-bold hover:text-[var(--text-main)] whitespace-nowrap"
+                    className="min-h-[44px] min-w-[44px] px-2 text-right hover:text-[var(--text-main)] whitespace-nowrap"
                   >
-                    Gate Pass {sortArrow('gatePassRate')}
+                    Gate {sortArrow('gatePassRate')}
                   </button>
                 </th>
                 <th className="py-2 pl-2 text-right">
                   <button
                     type="button"
                     onClick={() => handleSort('avgDiffLines')}
-                    className="min-h-[44px] min-w-[44px] px-2.5 text-right font-bold hover:text-[var(--text-main)] whitespace-nowrap"
+                    className="min-h-[44px] min-w-[44px] px-2 text-right hover:text-[var(--text-main)] whitespace-nowrap"
                   >
-                    Diff Lines {sortArrow('avgDiffLines')}
+                    Diff {sortArrow('avgDiffLines')}
                   </button>
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border-line)]">
               {sortedAgents.map((ag) => (
-                <tr key={ag.agent} className="hover:bg-[var(--bg-inset)] transition-colors">
-                  <td className="py-3.5 px-2 font-serif italic font-bold text-sm text-[var(--accent-ember)]">
+                <tr key={ag.agent} className="hover:bg-[var(--bg-surface-hover)] transition-colors">
+                  <td className="py-4 px-2 font-serif italic text-sm text-[var(--accent-ember)]">
                     #{ag.rank}
                   </td>
-                  <td className="py-3.5 px-2 whitespace-nowrap">
-                    <strong className="text-[var(--text-main)] block font-sans text-sm">
+                  <td className="py-4 px-2 whitespace-nowrap">
+                    <strong className="text-[var(--text-main)] block font-sans text-sm font-medium">
                       {ag.agent}
                     </strong>
                     <span className="text-[11px] text-[var(--text-dim)]">{ag.model}</span>
                   </td>
-                  <td className="py-3.5 px-3 text-[var(--text-dim)] whitespace-nowrap">
+                  <td className="py-4 px-3 text-[var(--text-dim)] whitespace-nowrap">
                     {ag.environment}
                   </td>
-                  <td className="py-3.5 px-2 text-right font-bold text-[var(--text-main)] tabular-nums text-sm">
+                  <td className="py-4 px-2 text-right font-semibold text-[var(--text-main)] tabular-nums text-sm">
                     {ag.averageScore}
                   </td>
-                  <td className="py-3.5 px-2 text-right text-[var(--status-sage)] tabular-nums font-semibold">
+                  <td className="py-4 px-2 text-right text-[var(--status-sage)] tabular-nums">
                     {ag.slopReductionRate}%
                   </td>
-                  <td className="py-3.5 px-2 text-right tabular-nums">
-                    <span className="px-2 py-0.5 bg-[var(--status-sage-soft)] text-[var(--status-sage)] font-semibold">
-                      {ag.gatePassRate}%
-                    </span>
+                  <td className="py-4 px-2 text-right tabular-nums text-[var(--status-sage)]">
+                    {ag.gatePassRate}%
                   </td>
-                  <td className="py-3.5 pl-2 text-right text-[var(--text-dim)] tabular-nums whitespace-nowrap">
+                  <td className="py-4 pl-2 text-right text-[var(--text-dim)] tabular-nums whitespace-nowrap">
                     {ag.avgDiffLines} lines
                   </td>
                 </tr>

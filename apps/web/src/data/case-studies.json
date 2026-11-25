@@ -1,7 +1,7 @@
 [
   {
     "id": "saas-landing",
-    "name": "SaaS Marketing Landing",
+    "name": "Kestrel SaaS",
     "fixturePath": "fixtures/saas-landing",
     "category": "Marketing",
     "level": "2",
@@ -13,13 +13,13 @@
     "gateAfter": "PASS",
     "tellsCount": 6,
     "waivedCount": 1,
-    "summary": "AI-generated SaaS landing page with purple-indigo hero gradient, min-h-screen, centered 3-card template, buzzwords, and unattributed 99.9% uptime claims winnowed to an authored asymmetric layout.",
+    "summary": "Purple-indigo gradient template winnowed to an asymmetric Kestrel telemetry layout with #6D28D9 locked.",
     "tellsList": [
-      { "rule": "UI-001", "name": "Purple/Indigo Glow Gradient", "impact": "Replaced unmotivated gradient backdrop with archival ground while keeping brand #6D28D9 waiver." },
-      { "rule": "UI-009", "name": "Centered Hero + 3-Card Grid", "impact": "Refactored uniform 3-card block into a 7/5 asymmetric layout with live telemetry." },
-      { "rule": "MOBILE-001", "name": "Static Viewport Height", "impact": "Upgraded min-h-screen to min-h-dvh so mobile controls stay above browser chrome." },
-      { "rule": "COPY-001", "name": "AI Marketing Buzzwords", "impact": "Replaced 'delve', 'cutting-edge', 'streamline', and 'supercharge' with plain domain specs." },
-      { "rule": "COPY-002", "name": "Round Synthetic Metrics", "impact": "Removed unattributed '99.9% uptime' and '10,000+ happy teams' claims." }
+      { "rule": "UI-001", "name": "Purple/Indigo Glow Gradient", "impact": "Replaced unmotivated gradient backdrop while keeping brand #6D28D9 waiver." },
+      { "rule": "UI-009", "name": "Centered Hero + 3-Card Grid", "impact": "Refactored uniform 3-card block into an asymmetric telemetry split." },
+      { "rule": "MOBILE-001", "name": "Static Viewport Height", "impact": "Upgraded min-h-screen to min-h-dvh above mobile browser chrome." },
+      { "rule": "COPY-001", "name": "AI Marketing Buzzwords", "impact": "Replaced hollow adjectives with concrete venue specs." },
+      { "rule": "COPY-002", "name": "Round Synthetic Metrics", "impact": "Removed unattributed 99.9% uptime and 10,000+ team claims." }
     ],
     "preservedTokens": [
       { "token": "#6D28D9 (Brand Violet)", "reason": "Waived under UI-004 via .chaff/identity.json for primary controls and logomark." }
@@ -28,12 +28,12 @@
       "beforeTitle": "fixtures/saas-landing/app/page.tsx (Before)",
       "beforeCode": "<main className=\"min-h-screen bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex flex-col items-center justify-center p-8 hero\">\n  <h1 className=\"text-5xl font-bold text-center\">\n    Delve into our cutting-edge revolutionary platform\n  </h1>\n  <p className=\"text-xl mt-4 text-center\">\n    Streamline and supercharge your team with 99.9% uptime and 10,000+ happy teams.\n  </p>\n  <div className=\"grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-5xl\">\n    <div className=\"p-6 bg-white/10 rounded-lg\">Card 1</div>\n    <div className=\"p-6 bg-white/10 rounded-lg\">Card 2</div>\n    <div className=\"p-6 bg-white/10 rounded-lg\">Card 3</div>\n  </div>\n</main>",
       "afterTitle": "After Chaff Level 2 Authored",
-      "afterCode": "<main className=\"min-h-dvh bg-[#FBF7EE] text-[#16120E] py-16 px-4 sm:px-8 max-w-7xl mx-auto\">\n  <div className=\"grid grid-cols-1 lg:grid-cols-12 gap-10 items-start\">\n    <div className=\"lg:col-span-7 space-y-5\">\n      <span className=\"font-mono text-xs uppercase tracking-widest text-[#9E3308]\">Kestrel Router</span>\n      <h1 className=\"font-serif text-5xl tracking-tight leading-[1.08]\">\n        Route spot orders across 14 venues in 11.8 ms.\n      </h1>\n      <p className=\"text-base text-[#544B40] max-w-[58ch] leading-relaxed\">\n        Deterministic clearing engine with pre-trade margin checks and venue latency logs.\n      </p>\n      <button type=\"button\" className=\"min-h-[44px] px-5 py-2.5 bg-[#6D28D9] text-white rounded-sm\">\n        Deploy Route\n      </button>\n    </div>\n    <aside className=\"lg:col-span-5 p-6 bg-white border border-[#DDD4C3] font-mono text-xs space-y-3\">\n      <div className=\"flex justify-between\"><span>Median Hop</span><strong>11.8 ms</strong></div>\n      <div className=\"flex justify-between\"><span>Fill Rate</span><strong className=\"text-[#354A21]\">99.94%</strong></div>\n    </aside>\n  </div>\n</main>"
+      "afterCode": "<main className=\"min-h-dvh bg-[#09090B] text-[#F4F1EA] py-16 px-4 sm:px-8 max-w-7xl mx-auto\">\n  <div className=\"grid grid-cols-1 lg:grid-cols-12 gap-10 items-start\">\n    <div className=\"lg:col-span-7 space-y-5\">\n      <span className=\"font-mono text-xs uppercase tracking-widest text-[#F2713A]\">Kestrel Router</span>\n      <h1 className=\"font-serif text-5xl tracking-tight leading-[1.08]\">\n        Route spot orders across 14 venues in 11.8 ms.\n      </h1>\n      <p className=\"text-base text-[#9D968B] max-w-[58ch] leading-relaxed\">\n        Deterministic clearing engine with pre-trade margin checks and venue latency logs.\n      </p>\n      <button type=\"button\" className=\"min-h-[44px] px-5 py-2.5 bg-[#6D28D9] text-white rounded-full\">\n        Deploy Route\n      </button>\n    </div>\n    <aside className=\"lg:col-span-5 p-6 bg-[#111114] rounded-2xl font-mono text-xs space-y-3\">\n      <div className=\"flex justify-between\"><span>Median Hop</span><strong>11.8 ms</strong></div>\n      <div className=\"flex justify-between\"><span>Fill Rate</span><strong className=\"text-[#7DC885]\">99.94%</strong></div>\n    </aside>\n  </div>\n</main>"
     }
   },
   {
     "id": "dashboard",
-    "name": "Executive Analytics Console",
+    "name": "Analytics",
     "fixturePath": "fixtures/dashboard",
     "category": "Enterprise",
     "level": "2",
@@ -45,7 +45,7 @@
     "gateAfter": "PASS",
     "tellsCount": 3,
     "waivedCount": 1,
-    "summary": "Enterprise analytics console containing clickable div actions without keyboard semantics and lingering debug console.log statements remediated into accessible controls with tabular figures.",
+    "summary": "Clickable div actions and debug console logs replaced with native buttons and tabular figures.",
     "tellsList": [
       { "rule": "CODE-007", "name": "Non-Semantic Clickable Div", "impact": "Converted div onClick handler into a native keyboard-accessible <button type=\"button\">." },
       { "rule": "CODE-004", "name": "Development Console Logs", "impact": "Stripped two residual console.log calls from render and click paths." }
@@ -57,12 +57,12 @@
       "beforeTitle": "fixtures/dashboard/app/page.tsx (Before)",
       "beforeCode": "console.log('Rendering Dashboard');\nreturn (\n  <div className=\"p-8\">\n    <h2>Analytics Summary</h2>\n    <div\n      className=\"cursor-pointer bg-blue-500 text-white px-4 py-2\"\n      onClick={() => console.log('Export data clicked')}\n    >\n      Export CSV\n    </div>\n    <table className=\"mt-4\">\n      <tbody><tr><td>Q1 Sales</td><td>$1,234,567.89</td></tr></tbody>\n    </table>\n  </div>\n);",
       "afterTitle": "After Chaff Level 2 Authored",
-      "afterCode": "return (\n  <section className=\"p-6 sm:p-8 space-y-6\">\n    <div className=\"flex flex-wrap items-center justify-between gap-4 border-b border-[#DDD4C3] pb-4\">\n      <h1 className=\"font-serif text-3xl text-[#16120E]\">Analytics Summary</h1>\n      <button\n        type=\"button\"\n        onClick={handleExportCsv}\n        className=\"min-h-[44px] px-4 py-2 bg-[#9E3308] text-[#FBF7EE] font-mono text-xs font-semibold\"\n      >\n        Export CSV\n      </button>\n    </div>\n    <table className=\"w-full font-mono text-sm tabular-nums\">\n      <tbody><tr className=\"border-b border-[#DDD4C3]\"><td className=\"py-3\">Q1 Sales</td><td className=\"py-3 text-right font-bold\">$1,234,567.89</td></tr></tbody>\n    </table>\n  </section>\n);"
+      "afterCode": "return (\n  <section className=\"p-6 sm:p-8 space-y-6 bg-[#111114] text-[#F4F1EA]\">\n    <div className=\"flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4\">\n      <h1 className=\"font-serif text-3xl\">Analytics Summary</h1>\n      <button\n        type=\"button\"\n        onClick={handleExportCsv}\n        className=\"min-h-[44px] px-5 py-2 rounded-full bg-[#F2713A] text-[#09090B] font-mono text-xs font-semibold\"\n      >\n        Export CSV\n      </button>\n    </div>\n    <table className=\"w-full font-mono text-sm tabular-nums\">\n      <tbody><tr className=\"border-b border-white/10\"><td className=\"py-3\">Q1 Sales</td><td className=\"py-3 text-right font-bold text-[#7DC885]\">$1,234,567.89</td></tr></tbody>\n    </table>\n  </section>\n);"
     }
   },
   {
     "id": "portfolio",
-    "name": "Architectural Portfolio",
+    "name": "Portfolio",
     "fixturePath": "fixtures/portfolio",
     "category": "Editorial",
     "level": "2",
@@ -74,7 +74,7 @@
     "gateAfter": "PASS",
     "tellsCount": 2,
     "waivedCount": 0,
-    "summary": "Portfolio failing the CI mobile gate due to a hardcoded 600px container causing 320px horizontal overflow and viewport zoom lock (user-scalable=no), converted into a fluid responsive layout.",
+    "summary": "Fixed 600px container overflow at 320px and zoom lock resolved into fluid responsive grid.",
     "tellsList": [
       { "rule": "MOBILE-003", "name": "320px Horizontal Overflow", "impact": "Replaced fixed 600px width with fluid w-full max-w-5xl, eliminating horizontal scroll." },
       { "rule": "MOBILE-004", "name": "Disabled Pinch Zoom", "impact": "Removed user-scalable=no so low-vision users can zoom freely." }
@@ -84,12 +84,12 @@
       "beforeTitle": "fixtures/portfolio/src/App.tsx (Before — Gate FAIL)",
       "beforeCode": "<div>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" />\n  <div style={{ width: '600px' }} className=\"portfolio-gallery\">\n    <h1>Creative Showcase</h1>\n    <p>A broad portfolio layout spanning fixed desktop width.</p>\n  </div>\n</div>",
       "afterTitle": "After Chaff Level 2 Authored (Gate PASS)",
-      "afterCode": "<main className=\"max-w-5xl mx-auto px-4 sm:px-8 py-12 space-y-6\">\n  <header className=\"border-b border-[#DDD4C3] pb-4\">\n    <h1 className=\"font-serif text-4xl text-[#16120E]\">Monograph Showcase</h1>\n  </header>\n  <div className=\"grid grid-cols-1 md:grid-cols-12 gap-8\">\n    <p className=\"md:col-span-7 text-base text-[#544B40] leading-relaxed\">\n      Mass-timber civic installations engineered for zero horizontal overflow at 320px.\n    </p>\n  </div>\n</main>"
+      "afterCode": "<main className=\"max-w-5xl mx-auto px-4 sm:px-8 py-12 space-y-6 bg-[#09090B] text-[#F4F1EA]\">\n  <header className=\"border-b border-white/10 pb-4\">\n    <h1 className=\"font-serif text-4xl\">Monograph Showcase</h1>\n  </header>\n  <div className=\"grid grid-cols-1 md:grid-cols-12 gap-8\">\n    <p className=\"md:col-span-7 text-base text-[#9D968B] leading-relaxed\">\n      Mass-timber civic installations engineered for zero horizontal overflow at 320px.\n    </p>\n  </div>\n</main>"
     }
   },
   {
     "id": "blog",
-    "name": "Engineering Longform Journal",
+    "name": "Journal",
     "fixturePath": "fixtures/blog",
     "category": "Publishing",
     "level": "1",
@@ -101,7 +101,7 @@
     "gateAfter": "PASS",
     "tellsCount": 4,
     "waivedCount": 1,
-    "summary": "Longform post failing the CLS gate from an unsized raw <img> tag without alt text, paired with Lorem ipsum dummy prose, remediated under Level 1 without changing layout geometry.",
+    "summary": "Unsized <img> CLS risk and Lorem ipsum prose upgraded under Level 1 without layout churn.",
     "tellsList": [
       { "rule": "COPY-004", "name": "Lorem Ipsum Placeholder", "impact": "Replaced dummy Latin copy with authentic engineering essay prose." },
       { "rule": "CODE-001", "name": "Raw Unoptimized <img>", "impact": "Swapped raw <img> for next/image with responsive sizes." },
@@ -115,12 +115,12 @@
       "beforeTitle": "fixtures/blog/app/post/page.tsx (Before — Gate FAIL)",
       "beforeCode": "<article className=\"prose\">\n  <h1>Understanding Modern Web Typography</h1>\n  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>\n  <img src=\"/article-cover.jpg\" />\n</article>",
       "afterTitle": "After Chaff Level 1 Clean (Gate PASS)",
-      "afterCode": "<article className=\"max-w-[68ch] mx-auto px-4 py-10 space-y-6\">\n  <h1 className=\"font-serif text-4xl text-[#16120E] leading-tight\">\n    Understanding Modern Web Typography\n  </h1>\n  <div className=\"relative aspect-[16/9] w-full overflow-hidden border border-[#DDD4C3]\">\n    <Image src=\"/article-cover.jpg\" alt=\"Archival serif specimen sheet\" fill sizes=\"(max-width: 768px) 100vw, 680px\" />\n  </div>\n  <p className=\"text-base text-[#16120E] leading-relaxed\">\n    Optical sizing adjusts stroke contrast and letterspacing across display and caption scales.\n  </p>\n</article>"
+      "afterCode": "<article className=\"max-w-[68ch] mx-auto px-4 py-10 space-y-6 text-[#F4F1EA]\">\n  <h1 className=\"font-serif text-4xl leading-tight\">\n    Understanding Modern Web Typography\n  </h1>\n  <div className=\"relative aspect-[16/9] w-full overflow-hidden rounded-xl\">\n    <Image src=\"/article-cover.jpg\" alt=\"Serif specimen sheet\" fill sizes=\"(max-width: 768px) 100vw, 680px\" />\n  </div>\n  <p className=\"text-base text-[#9D968B] leading-relaxed\">\n    Optical sizing adjusts stroke contrast and letterspacing across display and caption scales.\n  </p>\n</article>"
     }
   },
   {
     "id": "vite-react",
-    "name": "Spatial WebGL Island",
+    "name": "Vite WebGL",
     "fixturePath": "fixtures/vite-react",
     "category": "3D & WebGL",
     "level": "3",
@@ -132,7 +132,7 @@
     "gateAfter": "PASS",
     "tellsCount": 1,
     "waivedCount": 1,
-    "summary": "Three.js Vite SPA running uncapped native devicePixelRatio (3x-4x on mobile screens) upgraded to the 5-part Level 3 Fallback Contract via @chaff/tier.",
+    "summary": "Uncapped Three.js DPR 3.0 governed by @chaff/tier 1.5 cap, lazy boundary, and GPU disposal.",
     "tellsList": [
       { "rule": "THREE-005", "name": "Uncapped Device Pixel Ratio", "impact": "Clamped DPR at 1.5 ceiling via @chaff/tier governor, cutting mobile fragment load 56%." },
       { "rule": "THREE-001", "name": "Eager 3D Initialization", "impact": "Wrapped WebGL scene in lazy boundary with static SVG poster and unmount dispose()." }

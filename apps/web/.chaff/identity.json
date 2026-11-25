@@ -1,7 +1,7 @@
 {
   "$schema": "https://chaff.dev/schemas/identity.v1.json",
   "version": "1.0.0",
-  "generatedAt": "2026-11-25T00:00:00.000Z",
+  "generatedAt": "2026-11-25T18:45:00.000Z",
   "framework": "next",
   "router": "app",
   "styling": "tailwind",
@@ -11,11 +11,13 @@
     "GeistMono"
   ],
   "colors": {
-    "bg-canvas": "#FBF7EE",
-    "bg-surface": "#FFFFFF",
-    "text-main": "#16120E",
-    "accent-ember": "#9E3308",
-    "status-sage": "#354A21",
+    "bg-canvas": "#09090B",
+    "bg-surface": "#111114",
+    "bg-surface-elevated": "#18181D",
+    "text-main": "#F4F1EA",
+    "text-dim": "#9D968B",
+    "accent-ember": "#F2713A",
+    "status-sage": "#7DC885",
     "kestrel-brand-violet": "#6D28D9"
   },
   "spacingRhythm": [
@@ -24,17 +26,19 @@
   ],
   "tokens": [
     {
-      "name": "pitch-1-archival-palette",
+      "name": "obsidian-atelier-palette",
       "value": {
-        "canvas": "#FBF7EE",
-        "stage": "#FFFFFF",
-        "ink": "#16120E",
-        "ember": "#9E3308",
-        "sage": "#354A21"
+        "darkCanvas": "#09090B",
+        "darkSurface": "#111114",
+        "darkInk": "#F4F1EA",
+        "darkEmber": "#F2713A",
+        "darkSage": "#7DC885",
+        "dayCanvas": "#F8F6F1",
+        "dayInk": "#11100E"
       },
-      "confidence": 0.96,
+      "confidence": 0.97,
       "locked": true,
-      "source": ".chaff/pitches/pitch-1.md"
+      "source": "src/app/globals.css"
     },
     {
       "name": "typography-fraunces-geist",
@@ -58,25 +62,25 @@
       "source": "tailwind.config.ts"
     },
     {
-      "name": "level-3-webgl2-engine",
-      "value": "Custom GLSL WebGL2 Winnowing Shader (~6KB)",
-      "confidence": 0.92,
+      "name": "level-3-three-sculpture",
+      "value": "Three.js InstancedMesh Sculpture & Curl-Wind Field (Tree-shaken lazy island)",
+      "confidence": 0.94,
       "locked": true,
-      "source": "src/components/KestrelWebGLStage.tsx"
+      "source": "src/components/WinnowThreeScene.tsx"
     }
   ],
   "locked": [
-    "pitch-1-archival-palette",
+    "obsidian-atelier-palette",
     "typography-fraunces-geist",
     "color-kestrel-violet",
     "tailwind-config",
-    "level-3-webgl2-engine"
+    "level-3-three-sculpture"
   ],
   "waivers": [
     {
       "ruleId": "UI-004",
       "token": "color-kestrel-violet",
-      "reason": "Kestrel showcase product primary brand identity (#6D28D9) locked intentionally and preserved across Before/After transformation.",
+      "reason": "Kestrel showcase product primary brand identity (#6D28D9 / #A78BFA) locked intentionally and preserved across Before/After transformation.",
       "approvedBy": "user"
     }
   ]

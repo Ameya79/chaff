@@ -43,7 +43,6 @@ export function RulesClientLedger({
   const [mobileExpandedId, setMobileExpandedId] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Sync state when URL query params change via client navigation (e.g. from footer/taxonomy links)
   useEffect(() => {
     setSelectedCategory(urlCategory);
   }, [urlCategory]);
@@ -52,7 +51,6 @@ export function RulesClientLedger({
     setSearchQuery(urlQuery);
   }, [urlQuery]);
 
-  // '/' shortcut focuses search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === '/' && document.activeElement !== searchInputRef.current) {
@@ -67,7 +65,6 @@ export function RulesClientLedger({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Hash anchor sync: /rules#UI-009 selects and scrolls smoothly to that rule
   useEffect(() => {
     const applyHash = () => {
       const hashId = window.location.hash.replace('#', '').trim();
@@ -99,14 +96,14 @@ export function RulesClientLedger({
   const categories = useMemo(
     () => [
       { id: 'all', name: 'All', count: initialRules.length },
-      { id: 'ui', name: 'UI & Layout', count: initialRules.filter((r) => r.category === 'ui').length },
+      { id: 'ui', name: 'UI', count: initialRules.filter((r) => r.category === 'ui').length },
       { id: 'copy', name: 'Copy', count: initialRules.filter((r) => r.category === 'copy').length },
       { id: 'code', name: 'Code', count: initialRules.filter((r) => r.category === 'code').length },
       { id: 'perf', name: 'Perf', count: initialRules.filter((r) => r.category === 'perf').length },
       { id: 'mobile', name: 'Mobile', count: initialRules.filter((r) => r.category === 'mobile').length },
       { id: 'a11y', name: 'A11y', count: initialRules.filter((r) => r.category === 'a11y').length },
       { id: 'motion', name: 'Motion', count: initialRules.filter((r) => r.category === 'motion').length },
-      { id: 'three', name: '3D & WebGL', count: initialRules.filter((r) => r.category === 'three').length },
+      { id: 'three', name: '3D', count: initialRules.filter((r) => r.category === 'three').length },
     ],
     [initialRules]
   );
@@ -144,16 +141,13 @@ export function RulesClientLedger({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Search & Category Controls */}
-      <div className="hairline bg-[var(--bg-surface)] p-4 sm:p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end justify-between">
-          <div className="flex-1 min-w-0 space-y-1.5">
-            <label
-              htmlFor="rules-search"
-              className="block font-mono text-xs uppercase tracking-wider text-[var(--text-dim)] font-semibold"
-            >
-              Search 72 Rules (Press / to focus)
+    <div className="space-y-8">
+      {/* Borderless Search & Category Bar */}
+      <div className="space-y-5">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
+          <div className="flex-1 min-w-0">
+            <label htmlFor="rules-search" className="sr-only">
+              Search 72 rules
             </label>
             <input
               ref={searchInputRef}
@@ -166,8 +160,8 @@ export function RulesClientLedger({
                 setSearchQuery(nextQ);
                 syncUrl(selectedCategory, nextQ);
               }}
-              placeholder="Filter by ID (UI-009), keyword, or class..."
-              className="w-full px-3.5 py-2.5 min-h-[44px] border border-[var(--border-control)] bg-[var(--bg-canvas)] text-[var(--text-main)] font-mono text-base placeholder:text-[var(--text-dim)]"
+              placeholder="Filter rules by ID, keyword, or pattern (press /)..."
+              className="w-full px-4 py-3 min-h-[44px] rounded-xl bg-[var(--bg-surface)] text-[var(--text-main)] font-mono text-base placeholder:text-[var(--text-dim)]"
             />
           </div>
 
@@ -180,52 +174,48 @@ export function RulesClientLedger({
               }}
               className="btn text-xs font-mono shrink-0"
             >
-              Clear Search
+              Clear
             </button>
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5 pt-2 hairline-t">
-          {categories.map((c) => {
-            const active = selectedCategory === c.id;
-            return (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => {
-                  setSelectedCategory(c.id);
-                  syncUrl(c.id, searchQuery);
-                }}
-                aria-pressed={active}
-                className={`px-3 py-1.5 min-h-[44px] font-mono text-xs border transition-colors ${
-                  active
-                    ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] border-[var(--accent-ember)] font-bold'
-                    : 'bg-[var(--bg-canvas)] text-[var(--text-main)] border-[var(--border-line)] hover:bg-[var(--bg-surface-elevated)]'
-                }`}
-              >
-                {c.name} <span className="opacity-80 tabular-nums">({c.count})</span>
-              </button>
-            );
-          })}
-        </div>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {categories.map((c) => {
+              const active = selectedCategory === c.id;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategory(c.id);
+                    syncUrl(c.id, searchQuery);
+                  }}
+                  aria-pressed={active}
+                  className={`px-3.5 py-2 rounded-full min-h-[44px] min-w-[44px] font-mono text-xs transition-colors ${
+                    active
+                      ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold'
+                      : 'bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-main)]'
+                  }`}
+                >
+                  {c.name} <span className="opacity-75 tabular-nums">{c.count}</span>
+                </button>
+              );
+            })}
+          </div>
 
-        <div className="flex flex-wrap justify-between items-center gap-2 font-mono text-xs text-[var(--text-dim)]">
-          <span>
-            Showing <strong className="text-[var(--text-main)]">{filteredRules.length}</strong> of {initialRules.length} rules
+          <span className="font-mono text-xs text-[var(--text-dim)] tabular-nums">
+            {filteredRules.length} / {initialRules.length}
           </span>
-          <span>Select any row to inspect Bad vs Good code diff</span>
         </div>
       </div>
 
-      {/* Desktop 2-Pane Split: Left Rule Index + Right Sticky Spec Inspector */}
+      {/* Split Index + Sticky Spec */}
       {filteredRules.length === 0 ? (
-        <div className="p-10 hairline bg-[var(--bg-surface)] space-y-3">
-          <h2 className="font-serif text-xl text-[var(--text-main)]">
-            No matching rules found
+        <div className="py-16 space-y-4 hairline-t">
+          <h2 className="font-serif text-2xl text-[var(--text-main)]">
+            No matching rules
           </h2>
-          <p className="text-sm text-[var(--text-dim)]">
-            Clear your search query or switch back to All categories.
-          </p>
           <button
             type="button"
             onClick={() => {
@@ -239,9 +229,8 @@ export function RulesClientLedger({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left 7-col Rule List */}
-          <div className="lg:col-span-7 hairline bg-[var(--bg-surface)] divide-y divide-[var(--border-line)] min-w-0">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start hairline-t pt-6">
+          <div className="lg:col-span-7 divide-y divide-[var(--border-line)] min-w-0">
             {filteredRules.map((r) => {
               const isSelected = activeRule?.id === r.id;
               const isMobileOpen = mobileExpandedId === r.id;
@@ -251,7 +240,7 @@ export function RulesClientLedger({
                   key={r.id}
                   id={r.id}
                   className={`scroll-mt-24 transition-colors ${
-                    isSelected ? 'bg-[var(--bg-surface-elevated)]/70' : ''
+                    isSelected ? 'bg-[var(--bg-surface-active)] rounded-xl' : ''
                   }`}
                 >
                   <button
@@ -261,51 +250,52 @@ export function RulesClientLedger({
                       setMobileExpandedId(isMobileOpen ? null : r.id);
                     }}
                     aria-expanded={isMobileOpen}
-                    className="w-full text-left p-4 min-h-[44px] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[var(--bg-surface-elevated)]/50 transition-colors"
+                    className="w-full text-left px-3 py-4 min-h-[44px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[var(--bg-surface-hover)] rounded-xl transition-colors"
                   >
-                    <div className="flex flex-wrap items-center gap-2.5 min-w-0">
-                      <span className="font-mono text-xs font-bold text-[var(--accent-ember)] min-w-[82px]">
+                    <div className="flex flex-wrap items-center gap-3 min-w-0">
+                      <span className="font-mono text-xs font-semibold text-[var(--accent-ember)] min-w-[76px]">
                         {r.id}
-                      </span>
-                      <span
-                        className={`font-mono text-[11px] uppercase px-2 py-0.5 font-semibold ${
-                          r.severity === 'high'
-                            ? 'bg-[var(--accent-ember-soft)] text-[var(--accent-ember)]'
-                            : 'bg-[var(--bg-inset)] text-[var(--status-warn)]'
-                        }`}
-                      >
-                        {r.severity}
                       </span>
                       <span className="font-serif text-base sm:text-lg text-[var(--text-main)]">
                         {r.title}
                       </span>
                     </div>
 
-                    <span className="font-mono text-xs text-[var(--text-dim)] shrink-0">
-                      L[{r.levels.join(',')}]
-                    </span>
+                    <div className="flex items-center gap-3 font-mono text-xs shrink-0">
+                      <span
+                        className={
+                          r.severity === 'high'
+                            ? 'text-[var(--accent-ember)]'
+                            : 'text-[var(--status-warn)]'
+                        }
+                      >
+                        {r.severity}
+                      </span>
+                      <span className="text-[var(--text-dim)]">
+                        L{r.levels.join(',')}
+                      </span>
+                    </div>
                   </button>
 
-                  {/* Mobile Inline Spec Drawer */}
                   {isMobileOpen && (
-                    <div className="lg:hidden px-4 pb-5 pt-2 space-y-4 hairline-t bg-[var(--bg-inset)]">
+                    <div className="lg:hidden px-3 pb-6 pt-2 space-y-4">
                       <p className="text-sm text-[var(--text-dim)] leading-relaxed">
                         {r.why}
                       </p>
                       <div className="space-y-3">
                         <div>
-                          <span className="font-mono text-xs font-bold text-[var(--accent-ember)] block mb-1">
-                            Anti-Pattern (Chaff)
+                          <span className="font-mono text-xs text-[var(--accent-ember)] block mb-1.5">
+                            Before
                           </span>
-                          <pre className="p-3 bg-[var(--bg-surface)] hairline font-mono text-xs overflow-x-auto leading-relaxed">
+                          <pre className="p-3.5 rounded-xl bg-[var(--bg-surface)] font-mono text-xs overflow-x-auto leading-relaxed">
                             <code>{r.bad}</code>
                           </pre>
                         </div>
                         <div>
-                          <span className="font-mono text-xs font-bold text-[var(--status-sage)] block mb-1">
-                            Authored Solution (Grain)
+                          <span className="font-mono text-xs text-[var(--status-sage)] block mb-1.5">
+                            After
                           </span>
-                          <pre className="p-3 bg-[var(--bg-surface)] hairline font-mono text-xs overflow-x-auto leading-relaxed">
+                          <pre className="p-3.5 rounded-xl bg-[var(--bg-surface)] font-mono text-xs overflow-x-auto leading-relaxed">
                             <code>{r.good}</code>
                           </pre>
                         </div>
@@ -315,7 +305,7 @@ export function RulesClientLedger({
                         onClick={() => copyPermalink(r.id)}
                         className="btn text-xs font-mono"
                       >
-                        {copiedId === r.id ? 'Permalink Copied' : `Copy #${r.id} Link`}
+                        {copiedId === r.id ? 'Copied' : `#${r.id} Link`}
                       </button>
                     </div>
                   )}
@@ -324,24 +314,21 @@ export function RulesClientLedger({
             })}
           </div>
 
-          {/* Right 5-col Sticky Desktop Spec Inspector */}
           {activeRule && (
             <aside
               aria-label="Rule inspection panel"
-              className="hidden lg:block lg:col-span-5 lg:sticky lg:top-24 hairline bg-[var(--bg-surface)] p-6 space-y-5 min-w-0"
+              className="hidden lg:block lg:col-span-5 lg:sticky lg:top-24 rounded-2xl bg-[var(--bg-surface)] p-6 sm:p-8 space-y-6 min-w-0"
             >
-              <div className="flex items-start justify-between gap-3 pb-4 hairline-b">
-                <div className="space-y-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
-                    <span className="font-bold text-[var(--accent-ember)]">
+              <div className="flex items-start justify-between gap-4">
+                <div className="space-y-1.5 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2.5 font-mono text-xs text-[var(--text-dim)]">
+                    <span className="font-semibold text-[var(--accent-ember)]">
                       {activeRule.id}
                     </span>
-                    <span className="text-[var(--text-dim)] uppercase">
-                      {activeRule.category}
-                    </span>
-                    <span className="text-[var(--text-dim)]">
-                      Detect: {activeRule.detect}
-                    </span>
+                    <span aria-hidden="true">·</span>
+                    <span className="uppercase">{activeRule.category}</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{activeRule.detect}</span>
                   </div>
                   <h2 className="font-serif text-2xl text-[var(--text-main)]">
                     {activeRule.title}
@@ -353,46 +340,38 @@ export function RulesClientLedger({
                   onClick={() => copyPermalink(activeRule.id)}
                   className="btn text-xs font-mono shrink-0"
                 >
-                  {copiedId === activeRule.id ? 'Copied' : '# Link'}
+                  {copiedId === activeRule.id ? 'Copied' : 'Link'}
                 </button>
               </div>
 
-              <div className="space-y-2">
-                <span className="font-mono text-xs uppercase font-semibold text-[var(--text-dim)] block">
-                  Rationale
-                </span>
-                <p className="text-sm text-[var(--text-main)] leading-relaxed">
-                  {activeRule.why}
-                </p>
-              </div>
+              <p className="text-sm text-[var(--text-dim)] leading-relaxed">
+                {activeRule.why}
+              </p>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <span className="font-mono text-xs font-bold uppercase text-[var(--accent-ember)] block">
-                    Bad · AI Fingerprint
+                  <span className="font-mono text-xs text-[var(--accent-ember)] block">
+                    Bad
                   </span>
-                  <pre className="p-3 bg-[var(--bg-inset)] hairline font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
+                  <pre className="p-4 rounded-xl bg-[var(--bg-surface-elevated)] font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
                     <code>{activeRule.bad}</code>
                   </pre>
                 </div>
 
                 <div className="space-y-1.5">
-                  <span className="font-mono text-xs font-bold uppercase text-[var(--status-sage)] block">
-                    Good · Authored Craft
+                  <span className="font-mono text-xs text-[var(--status-sage)] block">
+                    Good
                   </span>
-                  <pre className="p-3 bg-[var(--bg-inset)] hairline font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
+                  <pre className="p-4 rounded-xl bg-[var(--bg-surface-elevated)] font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
                     <code>{activeRule.good}</code>
                   </pre>
                 </div>
               </div>
 
               {activeRule.exceptions && (
-                <div className="pt-3 hairline-t text-xs font-mono text-[var(--text-dim)] leading-relaxed">
-                  <strong className="text-[var(--text-main)] block mb-0.5">
-                    Waiver Criteria:
-                  </strong>
-                  {activeRule.exceptions}
-                </div>
+                <p className="text-xs font-mono text-[var(--text-dim)] leading-relaxed hairline-t pt-4">
+                  Waiver: {activeRule.exceptions}
+                </p>
               )}
             </aside>
           )}
