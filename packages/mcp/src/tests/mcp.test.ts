@@ -1,8 +1,10 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import path from 'node:path';
+import os from 'node:os';
 import fs from 'node:fs';
-import { processJsonRpcMessage, MCP_TOOLS_DEFINITIONS } from '../index.js';
+import fsPromises from 'node:fs/promises';
+import { processJsonRpcMessage } from '../index.js';
 
 function findRepoRoot(dir = process.cwd()): string {
   let cur = path.resolve(dir);
@@ -13,6 +15,12 @@ function findRepoRoot(dir = process.cwd()): string {
     cur = path.dirname(cur);
   }
   return cur;
+}
+
+async function createIsolatedWorkspace(rootDir: string): Promise<string> {
+  const tmpDir = await fsPromises.mkdtemp(path.join(os.tmpdir(), 'chaff-mcp-test-'));
+  await fsPromises.cp(path.join(rootDir, 'fixtures', 'saas-landing'), tmpDir, { recursive: true });
+  return tmpDir;
 }
 
 describe('@chaff/mcp Server & Tools Protocol', () => {
@@ -88,22 +96,30 @@ describe('@chaff/mcp Server & Tools Protocol', () => {
   });
 
   test('calls plan and generates 3 diverse Concept Pitches at Level 2', async () => {
-    const res = await processJsonRpcMessage(ctx, {
-      jsonrpc: '2.0',
-      id: 5,
-      method: 'tools/call',
-      params: {
-        name: 'plan',
-        arguments: { level: 2 },
-      },
-    });
+    const tmpDir = await createIsolatedWorkspace(rootDir);
+    try {
+      const res = await processJsonRpcMessage(
+        { projectRoot: tmpDir },
+        {
+          jsonrpc: '2.0',
+          id: 5,
+          method: 'tools/call',
+          params: {
+            name: 'plan',
+            arguments: { level: 2 },
+          },
+        }
+      );
 
-    assert.strictEqual(res.id, 5);
-    const plan = JSON.parse(res.result.content[0].text);
-    assert.strictEqual(plan.level, 2);
-    assert.ok(plan.pitches, 'Pitches must be generated at Level 2');
-    assert.strictEqual(plan.pitches.pitchesGenerated.length, 3);
-    assert.strictEqual(plan.pitches.diversityVerified, true);
+      assert.strictEqual(res.id, 5);
+      const plan = JSON.parse(res.result.content[0].text);
+      assert.strictEqual(plan.level, 2);
+      assert.ok(plan.pitches, 'Pitches must be generated at Level 2');
+      assert.strictEqual(plan.pitches.pitchesGenerated.length, 3);
+      assert.strictEqual(plan.pitches.diversityVerified, true);
+    } finally {
+      await fsPromises.rm(tmpDir, { recursive: true, force: true });
+    }
   });
 
   test('calls gate and returns budget evaluation', async () => {
@@ -124,21 +140,38 @@ describe('@chaff/mcp Server & Tools Protocol', () => {
   });
 
   test('calls waive and persists waiver to identity file', async () => {
-    const res = await processJsonRpcMessage(ctx, {
-      jsonrpc: '2.0',
-      id: 7,
-      method: 'tools/call',
-      params: {
-        name: 'waive',
-        arguments: {
-          ruleId: 'UI-004',
-          reason: 'Client corporate color palette is purple',
-        },
-      },
-    });
+    const tmpDir = await createIsolatedWorkspace(rootDir);
+    try {
+      const res = await processJsonRpcMessage(
+        { projectRoot: tmpDir },
+        {
+          jsonrpc: '2.0',
+          id: 7,
+          method: 'tools/call',
+          params: {
+            name: 'waive',
+            arguments: {
+              ruleId: 'UI-004',
+              reason: 'Client corporate color palette is purple',
+            },
+          },
+        }
+      );
 
-    assert.strictEqual(res.id, 7);
-    assert.ok(res.result.content[0].text.includes('Recorded waiver for rule UI-004'));
+      assert.strictEqual(res.id, 7);
+      assert.ok(res.result.content[0].text.includes('Recorded waiver for rule UI-004'));
+
+      const savedIdentity = JSON.parse(
+        await fsPromises.readFile(path.join(tmpDir, '.chaff', 'identity.json'), 'utf-8')
+      );
+      assert.ok(
+        savedIdentity.waivers.some(
+          (w: any) => w.ruleId === 'UI-004' && w.reason === 'Client corporate color palette is purple'
+        )
+      );
+    } finally {
+      await fsPromises.rm(tmpDir, { recursive: true, force: true });
+    }
   });
 
   test('calls revert and returns instruction', async () => {

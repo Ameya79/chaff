@@ -1,10 +1,26 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import type { Rule } from '@chaff/core';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+export interface RulePublicDto {
+  id: string;
+  title: string;
+  category: string;
+  severity: 'high' | 'medium' | 'low';
+  levels: number[];
+  detect: string;
+  fix_class: string;
+  bad: string;
+  good: string;
+  why: string;
+  exceptions: string;
+  detectionLogic: string;
+  remediationSteps: string;
+}
 
 interface RulesClientLedgerProps {
-  initialRules: Rule[];
+  initialRules: RulePublicDto[];
   initialCategory?: string;
   initialQuery?: string;
 }
@@ -14,18 +30,34 @@ export function RulesClientLedger({
   initialCategory = 'all',
   initialQuery = '',
 }: RulesClientLedgerProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
-  const [searchQuery, setSearchQuery] = useState<string>(initialQuery);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const urlCategory = searchParams.get('category') || initialCategory || 'all';
+  const urlQuery = searchParams.get('q') ?? searchParams.get('query') ?? initialQuery ?? '';
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(urlCategory);
+  const [searchQuery, setSearchQuery] = useState<string>(urlQuery);
+  const [selectedId, setSelectedId] = useState<string>(initialRules[0]?.id || 'UI-001');
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [mobileExpandedId, setMobileExpandedId] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Global keyboard shortcut: Press '/' to focus search input
+  // Sync state when URL query params change via client navigation (e.g. from footer/taxonomy links)
+  useEffect(() => {
+    setSelectedCategory(urlCategory);
+  }, [urlCategory]);
+
+  useEffect(() => {
+    setSearchQuery(urlQuery);
+  }, [urlQuery]);
+
+  // '/' shortcut focuses search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === '/' && document.activeElement !== searchInputRef.current) {
-        const tagName = document.activeElement?.tagName.toLowerCase();
-        if (tagName !== 'input' && tagName !== 'textarea') {
+        const tag = document.activeElement?.tagName.toLowerCase();
+        if (tag !== 'input' && tag !== 'textarea') {
           e.preventDefault();
           searchInputRef.current?.focus();
         }
@@ -35,31 +67,49 @@ export function RulesClientLedger({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Hash anchor navigation: expand rule if anchor matches
+  // Hash anchor sync: /rules#UI-009 selects and scrolls smoothly to that rule
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash) {
-      const hashId = window.location.hash.replace('#', '');
-      if (hashId) {
-        setExpandedIds((prev) => new Set([...prev, hashId]));
-        const el = document.getElementById(hashId);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
+    const applyHash = () => {
+      const hashId = window.location.hash.replace('#', '').trim();
+      if (!hashId) return;
+      const match = initialRules.find((r) => r.id.toLowerCase() === hashId.toLowerCase());
+      if (match) {
+        setSelectedCategory('all');
+        setSearchQuery('');
+        setSelectedId(match.id);
+        setMobileExpandedId(match.id);
+        requestAnimationFrame(() => {
+          document.getElementById(match.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
       }
-    }
-  }, []);
+    };
+    applyHash();
+    window.addEventListener('hashchange', applyHash);
+    return () => window.removeEventListener('hashchange', applyHash);
+  }, [initialRules]);
 
-  const categories = useMemo(() => [
-    { id: 'all', name: 'All Rules', count: initialRules.length },
-    { id: 'ui', name: 'UI & Layout', count: initialRules.filter((r) => r.category === 'ui').length },
-    { id: 'copy', name: 'Copy & Voice', count: initialRules.filter((r) => r.category === 'copy').length },
-    { id: 'code', name: 'Code & AST', count: initialRules.filter((r) => r.category === 'code').length },
-    { id: 'perf', name: 'Performance', count: initialRules.filter((r) => r.category === 'perf').length },
-    { id: 'mobile', name: 'Mobile', count: initialRules.filter((r) => r.category === 'mobile').length },
-    { id: 'a11y', name: 'Accessibility', count: initialRules.filter((r) => r.category === 'a11y').length },
-    { id: 'motion', name: 'Motion Physics', count: initialRules.filter((r) => r.category === 'motion').length },
-    { id: 'three', name: '3D & WebGL', count: initialRules.filter((r) => r.category === 'three').length },
-  ], [initialRules]);
+  const syncUrl = (cat: string, q: string) => {
+    const params = new URLSearchParams();
+    if (cat && cat !== 'all') params.set('category', cat);
+    if (q.trim()) params.set('q', q.trim());
+    const qs = params.toString();
+    router.replace(qs ? `/rules?${qs}` : '/rules', { scroll: false });
+  };
+
+  const categories = useMemo(
+    () => [
+      { id: 'all', name: 'All', count: initialRules.length },
+      { id: 'ui', name: 'UI & Layout', count: initialRules.filter((r) => r.category === 'ui').length },
+      { id: 'copy', name: 'Copy', count: initialRules.filter((r) => r.category === 'copy').length },
+      { id: 'code', name: 'Code', count: initialRules.filter((r) => r.category === 'code').length },
+      { id: 'perf', name: 'Perf', count: initialRules.filter((r) => r.category === 'perf').length },
+      { id: 'mobile', name: 'Mobile', count: initialRules.filter((r) => r.category === 'mobile').length },
+      { id: 'a11y', name: 'A11y', count: initialRules.filter((r) => r.category === 'a11y').length },
+      { id: 'motion', name: 'Motion', count: initialRules.filter((r) => r.category === 'motion').length },
+      { id: 'three', name: '3D & WebGL', count: initialRules.filter((r) => r.category === 'three').length },
+    ],
+    [initialRules]
+  );
 
   const filteredRules = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
@@ -77,274 +127,277 @@ export function RulesClientLedger({
     });
   }, [initialRules, selectedCategory, searchQuery]);
 
-  const toggleExpand = (id: string) => {
-    setExpandedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
+  const activeRule = useMemo(() => {
+    return (
+      filteredRules.find((r) => r.id === selectedId) ||
+      filteredRules[0] ||
+      initialRules[0]
+    );
+  }, [filteredRules, selectedId, initialRules]);
 
-  const expandAll = () => {
-    setExpandedIds(new Set(filteredRules.map((r) => r.id)));
-  };
-
-  const collapseAll = () => {
-    setExpandedIds(new Set());
-  };
-
-  const copyPermalink = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (typeof window !== 'undefined') {
-      const url = `${window.location.origin}/rules#${id}`;
-      navigator.clipboard.writeText(url);
+  const copyPermalink = (id: string) => {
+    if (typeof window !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(`${window.location.origin}/rules#${id}`);
       setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
+      setTimeout(() => setCopiedId(null), 1800);
     }
   };
 
   return (
     <div className="space-y-6">
-      {/* Ruled Broadsheet Filter & Search Ledger (Zero Boxed Cards) */}
-      <div className="hairline-y py-4 px-2 sm:px-4 space-y-4">
-        {/* Search Input Row */}
-        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-          <div className="relative flex-1">
+      {/* Search & Category Controls */}
+      <div className="hairline bg-[var(--bg-surface)] p-4 sm:p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end justify-between">
+          <div className="flex-1 min-w-0 space-y-1.5">
+            <label
+              htmlFor="rules-search"
+              className="block font-mono text-xs uppercase tracking-wider text-[var(--text-dim)] font-semibold"
+            >
+              Search 72 Rules (Press / to focus)
+            </label>
             <input
               ref={searchInputRef}
+              id="rules-search"
+              name="q"
               type="search"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search 72 rules by title, keyword, ID (e.g. UI-001) or syntax..."
-              aria-label="Search rules catalog"
-              className="w-full pl-4 pr-16 py-2.5 hairline bg-[var(--bg-canvas)] text-[var(--text-main)] font-mono text-sm placeholder:text-[var(--text-dim)] focus-visible:outline-2 focus-visible:outline-[var(--accent-ember)] min-h-[44px]"
+              onChange={(e) => {
+                const nextQ = e.target.value;
+                setSearchQuery(nextQ);
+                syncUrl(selectedCategory, nextQ);
+              }}
+              placeholder="Filter by ID (UI-009), keyword, or class..."
+              className="w-full px-3.5 py-2.5 min-h-[44px] border border-[var(--border-control)] bg-[var(--bg-canvas)] text-[var(--text-main)] font-mono text-base placeholder:text-[var(--text-dim)]"
             />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-              <kbd className="px-2 py-0.5 font-mono text-[11px] text-[var(--text-dim)] bg-[var(--bg-surface)] hairline">
-                /
-              </kbd>
-            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="px-3 py-2 text-xs font-mono hairline bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] min-h-[44px] transition-colors"
-              >
-                Clear
-              </button>
-            )}
+          {searchQuery && (
             <button
               type="button"
-              onClick={expandAll}
-              className="px-3 py-2 text-xs font-mono hairline bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] min-h-[44px] transition-colors"
+              onClick={() => {
+                setSearchQuery('');
+                syncUrl(selectedCategory, '');
+              }}
+              className="btn text-xs font-mono shrink-0"
             >
-              Expand All
+              Clear Search
             </button>
-            <button
-              type="button"
-              onClick={collapseAll}
-              className="px-3 py-2 text-xs font-mono hairline bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] min-h-[44px] transition-colors"
-            >
-              Collapse
-            </button>
-          </div>
+          )}
         </div>
 
-        {/* Category Filter Ledger Rail */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-2 hairline-t border-[var(--border-line)]">
+        <div className="flex flex-wrap items-center gap-1.5 pt-2 hairline-t">
           {categories.map((c) => {
-            const isActive = selectedCategory === c.id;
+            const active = selectedCategory === c.id;
             return (
               <button
                 key={c.id}
                 type="button"
-                onClick={() => setSelectedCategory(c.id)}
-                className={`px-3 py-1.5 text-xs font-mono min-h-[44px] transition-colors inline-flex items-center gap-1.5 ${
-                  isActive
-                    ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold'
-                    : 'text-[var(--text-main)] hover:bg-[var(--bg-surface-elevated)] hairline'
+                onClick={() => {
+                  setSelectedCategory(c.id);
+                  syncUrl(c.id, searchQuery);
+                }}
+                aria-pressed={active}
+                className={`px-3 py-1.5 min-h-[44px] font-mono text-xs border transition-colors ${
+                  active
+                    ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] border-[var(--accent-ember)] font-bold'
+                    : 'bg-[var(--bg-canvas)] text-[var(--text-main)] border-[var(--border-line)] hover:bg-[var(--bg-surface-elevated)]'
                 }`}
               >
-                <span>{c.name}</span>
-                <span className="opacity-75 tabular-nums">({c.count})</span>
+                {c.name} <span className="opacity-80 tabular-nums">({c.count})</span>
               </button>
             );
           })}
         </div>
 
-        {/* Ledger Status Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-[var(--text-dim)] pt-1">
+        <div className="flex flex-wrap justify-between items-center gap-2 font-mono text-xs text-[var(--text-dim)]">
           <span>
-            Catalog Index: <strong className="text-[var(--text-main)]">{filteredRules.length}</strong> of {initialRules.length} rules matching
+            Showing <strong className="text-[var(--text-main)]">{filteredRules.length}</strong> of {initialRules.length} rules
           </span>
-          <div className="flex items-center gap-4">
-            <span className="hidden sm:inline">Press <kbd className="px-1 py-0.5 hairline bg-[var(--bg-surface)]">/</kbd> to search</span>
-            <span>Severity: <span className="text-[var(--accent-ember)] font-bold">High (Gate Fail)</span> • <span className="text-[var(--status-warn)] font-bold">Med (Warn)</span></span>
-          </div>
+          <span>Select any row to inspect Bad vs Good code diff</span>
         </div>
       </div>
 
-      {/* The Dense, Ruled Broadsheet Index Ledger (Zero Cards) */}
-      <div className="hairline-y divide-y divide-[var(--border-line)]">
-        {filteredRules.length === 0 ? (
-          <div className="p-12 text-center space-y-3 font-mono text-xs">
-            <span className="text-base font-serif text-[var(--text-main)] block">
-              No matching architectural rules found
-            </span>
-            <p className="text-[var(--text-dim)]">
-              Try adjusting your query or resetting category filter.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedCategory('all');
-                setSearchQuery('');
-              }}
-              className="btn primary text-xs"
-            >
-              Reset Filters
-            </button>
-          </div>
-        ) : (
-          filteredRules.map((r) => {
-            const isExpanded = expandedIds.has(r.id);
-            return (
-              <article
-                key={r.id}
-                id={r.id}
-                className="transition-colors hover:bg-[var(--bg-canvas)]/40 scroll-mt-20"
-              >
-                {/* Clickable Ledger Row Header with Semantic Buttons (Zero div onClick) */}
-                <div className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 select-none min-h-[44px]">
+      {/* Desktop 2-Pane Split: Left Rule Index + Right Sticky Spec Inspector */}
+      {filteredRules.length === 0 ? (
+        <div className="p-10 hairline bg-[var(--bg-surface)] space-y-3">
+          <h2 className="font-serif text-xl text-[var(--text-main)]">
+            No matching rules found
+          </h2>
+          <p className="text-sm text-[var(--text-dim)]">
+            Clear your search query or switch back to All categories.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedCategory('all');
+              setSearchQuery('');
+              syncUrl('all', '');
+            }}
+            className="btn primary text-xs font-mono"
+          >
+            Reset Filters
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left 7-col Rule List */}
+          <div className="lg:col-span-7 hairline bg-[var(--bg-surface)] divide-y divide-[var(--border-line)] min-w-0">
+            {filteredRules.map((r) => {
+              const isSelected = activeRule?.id === r.id;
+              const isMobileOpen = mobileExpandedId === r.id;
+
+              return (
+                <article
+                  key={r.id}
+                  id={r.id}
+                  className={`scroll-mt-24 transition-colors ${
+                    isSelected ? 'bg-[var(--bg-surface-elevated)]/70' : ''
+                  }`}
+                >
                   <button
                     type="button"
-                    onClick={() => toggleExpand(r.id)}
-                    className="flex-1 text-left flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-transparent border-0 cursor-pointer p-0 min-h-[44px]"
-                    aria-expanded={isExpanded}
+                    onClick={() => {
+                      setSelectedId(r.id);
+                      setMobileExpandedId(isMobileOpen ? null : r.id);
+                    }}
+                    aria-expanded={isMobileOpen}
+                    className="w-full text-left p-4 min-h-[44px] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[var(--bg-surface-elevated)]/50 transition-colors"
                   >
-                    {/* Left Columnar Identifiers */}
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="font-mono text-sm font-bold text-[var(--accent-ember)] min-w-[72px]">
-                        {r.id} //
-                      </span>
-                      <span className="text-[11px] font-mono uppercase px-2 py-0.5 hairline text-[var(--text-dim)] bg-[var(--bg-canvas)]">
-                        {r.category}
+                    <div className="flex flex-wrap items-center gap-2.5 min-w-0">
+                      <span className="font-mono text-xs font-bold text-[var(--accent-ember)] min-w-[82px]">
+                        {r.id}
                       </span>
                       <span
-                        className={`text-[11px] font-mono uppercase px-2 py-0.5 hairline font-semibold ${
+                        className={`font-mono text-[11px] uppercase px-2 py-0.5 font-semibold ${
                           r.severity === 'high'
-                            ? 'bg-[var(--accent-ember-soft)] text-[var(--accent-ember)] border-[var(--accent-ember)]/40'
-                            : 'bg-[var(--status-warn)]/10 text-[var(--status-warn)] border-[var(--status-warn)]/40'
+                            ? 'bg-[var(--accent-ember-soft)] text-[var(--accent-ember)]'
+                            : 'bg-[var(--bg-inset)] text-[var(--status-warn)]'
                         }`}
                       >
                         {r.severity}
                       </span>
-                      <span className="text-xs font-mono text-[var(--text-dim)] hidden sm:inline">
-                        Levels: [{r.levels.join(', ')}]
+                      <span className="font-serif text-base sm:text-lg text-[var(--text-main)]">
+                        {r.title}
                       </span>
                     </div>
 
-                    {/* Center Column: Title & Brief */}
-                    <div className="flex-1 lg:px-4">
-                      <h2 className="font-serif text-lg text-[var(--text-main)] inline">
-                        {r.title}
-                      </h2>
-                      {!isExpanded && (
-                        <span className="text-xs text-[var(--text-dim)] ml-2 hidden xl:inline line-clamp-1">
-                          — {r.why}
-                        </span>
-                      )}
-                    </div>
+                    <span className="font-mono text-xs text-[var(--text-dim)] shrink-0">
+                      L[{r.levels.join(',')}]
+                    </span>
                   </button>
 
-                  {/* Right Actions: Expand Toggle & Permalink */}
-                  <div className="flex items-center gap-2 font-mono text-xs text-[var(--text-dim)] self-start lg:self-auto">
-                    <button
-                      type="button"
-                      onClick={(e) => copyPermalink(e, r.id)}
-                      className="px-2.5 py-1.5 hairline hover:bg-[var(--bg-surface-elevated)] min-h-[44px] flex items-center transition-colors text-[11px]"
-                      title="Copy direct permalink"
-                    >
-                      {copiedId === r.id ? 'Copied' : '# Link'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => toggleExpand(r.id)}
-                      className="px-3 py-1.5 min-h-[44px] inline-flex items-center font-bold text-[var(--accent-ember)] hairline hover:bg-[var(--bg-surface-elevated)] transition-colors"
-                    >
-                      {isExpanded ? '[-] HIDE SPEC' : '[+] VIEW SPEC'}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Expanded Architectural Specification Ledger Pane */}
-                {isExpanded && (
-                  <div className="px-4 sm:px-6 pb-6 pt-2 space-y-4 hairline-t border-[var(--border-line)] bg-[var(--bg-canvas)]/30">
-                    <div className="space-y-1">
-                      <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--accent-ember)] font-bold block">
-                        ARCHITECTURAL SPECIFICATION &amp; DETECTION RATIONALE
-                      </span>
-                      <p className="text-sm text-[var(--text-dim)] leading-relaxed max-w-[75ch]">
+                  {/* Mobile Inline Spec Drawer */}
+                  {isMobileOpen && (
+                    <div className="lg:hidden px-4 pb-5 pt-2 space-y-4 hairline-t bg-[var(--bg-inset)]">
+                      <p className="text-sm text-[var(--text-dim)] leading-relaxed">
                         {r.why}
                       </p>
-                      <div className="text-xs font-mono text-[var(--text-dim)] pt-1">
-                        <span>Detection Mechanism: <code className="text-[var(--text-main)]">{r.detect}</code></span>
-                        <span> • Fix Class: <code className="text-[var(--text-main)]">{r.fix_class}</code></span>
-                      </div>
-                    </div>
-
-                    {/* Continuous Ruled Code Spec Comparison (Zero Boxed Subcards) */}
-                    <div className="hairline-y divide-y lg:divide-y-0 lg:divide-x divide-[var(--border-line)] grid grid-cols-1 lg:grid-cols-2">
-                      {/* Left: Anti-Pattern AI Fingerprint */}
-                      <div className="p-4 space-y-2">
-                        <div className="flex justify-between items-baseline font-mono text-xs">
-                          <span className="text-[var(--accent-ember)] font-bold uppercase">
-                            [CHAFF] AI Tell Fingerprint
+                      <div className="space-y-3">
+                        <div>
+                          <span className="font-mono text-xs font-bold text-[var(--accent-ember)] block mb-1">
+                            Anti-Pattern (Chaff)
                           </span>
-                          <span className="text-[10px] uppercase text-[var(--status-warn)] font-semibold">
-                            Banned Anti-Pattern
-                          </span>
+                          <pre className="p-3 bg-[var(--bg-surface)] hairline font-mono text-xs overflow-x-auto leading-relaxed">
+                            <code>{r.bad}</code>
+                          </pre>
                         </div>
-                        <pre className="text-xs font-mono text-[var(--text-main)] overflow-x-auto p-3 bg-[var(--bg-canvas)] hairline leading-relaxed">
-                          <code>{r.bad}</code>
-                        </pre>
-                      </div>
-
-                      {/* Right: Authentic Craft Solution */}
-                      <div className="p-4 space-y-2">
-                        <div className="flex justify-between items-baseline font-mono text-xs">
-                          <span className="text-[var(--status-sage)] font-bold uppercase">
-                            [GRAIN] Authentic Solution
+                        <div>
+                          <span className="font-mono text-xs font-bold text-[var(--status-sage)] block mb-1">
+                            Authored Solution (Grain)
                           </span>
-                          <span className="text-[10px] uppercase text-[var(--status-sage)] font-semibold">
-                            Human-Authored Standard
-                          </span>
+                          <pre className="p-3 bg-[var(--bg-surface)] hairline font-mono text-xs overflow-x-auto leading-relaxed">
+                            <code>{r.good}</code>
+                          </pre>
                         </div>
-                        <pre className="text-xs font-mono text-[var(--text-main)] overflow-x-auto p-3 bg-[var(--bg-canvas)] hairline leading-relaxed">
-                          <code>{r.good}</code>
-                        </pre>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => copyPermalink(r.id)}
+                        className="btn text-xs font-mono"
+                      >
+                        {copiedId === r.id ? 'Permalink Copied' : `Copy #${r.id} Link`}
+                      </button>
                     </div>
+                  )}
+                </article>
+              );
+            })}
+          </div>
 
-                    {r.exceptions && (
-                      <div className="text-xs font-mono text-[var(--text-dim)] pt-2">
-                        <strong className="text-[var(--text-main)]">Documented Brand Waiver Criteria:</strong> {r.exceptions}
-                      </div>
-                    )}
+          {/* Right 5-col Sticky Desktop Spec Inspector */}
+          {activeRule && (
+            <aside
+              aria-label="Rule inspection panel"
+              className="hidden lg:block lg:col-span-5 lg:sticky lg:top-24 hairline bg-[var(--bg-surface)] p-6 space-y-5 min-w-0"
+            >
+              <div className="flex items-start justify-between gap-3 pb-4 hairline-b">
+                <div className="space-y-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                    <span className="font-bold text-[var(--accent-ember)]">
+                      {activeRule.id}
+                    </span>
+                    <span className="text-[var(--text-dim)] uppercase">
+                      {activeRule.category}
+                    </span>
+                    <span className="text-[var(--text-dim)]">
+                      Detect: {activeRule.detect}
+                    </span>
                   </div>
-                )}
-              </article>
-            );
-          })
-        )}
-      </div>
+                  <h2 className="font-serif text-2xl text-[var(--text-main)]">
+                    {activeRule.title}
+                  </h2>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => copyPermalink(activeRule.id)}
+                  className="btn text-xs font-mono shrink-0"
+                >
+                  {copiedId === activeRule.id ? 'Copied' : '# Link'}
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                <span className="font-mono text-xs uppercase font-semibold text-[var(--text-dim)] block">
+                  Rationale
+                </span>
+                <p className="text-sm text-[var(--text-main)] leading-relaxed">
+                  {activeRule.why}
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <span className="font-mono text-xs font-bold uppercase text-[var(--accent-ember)] block">
+                    Bad · AI Fingerprint
+                  </span>
+                  <pre className="p-3 bg-[var(--bg-inset)] hairline font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
+                    <code>{activeRule.bad}</code>
+                  </pre>
+                </div>
+
+                <div className="space-y-1.5">
+                  <span className="font-mono text-xs font-bold uppercase text-[var(--status-sage)] block">
+                    Good · Authored Craft
+                  </span>
+                  <pre className="p-3 bg-[var(--bg-inset)] hairline font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
+                    <code>{activeRule.good}</code>
+                  </pre>
+                </div>
+              </div>
+
+              {activeRule.exceptions && (
+                <div className="pt-3 hairline-t text-xs font-mono text-[var(--text-dim)] leading-relaxed">
+                  <strong className="text-[var(--text-main)] block mb-0.5">
+                    Waiver Criteria:
+                  </strong>
+                  {activeRule.exceptions}
+                </div>
+              )}
+            </aside>
+          )}
+        </div>
+      )}
     </div>
   );
 }

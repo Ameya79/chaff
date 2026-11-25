@@ -1,0 +1,83 @@
+{
+  "$schema": "https://chaff.dev/schemas/identity.v1.json",
+  "version": "1.0.0",
+  "generatedAt": "2026-11-25T00:00:00.000Z",
+  "framework": "next",
+  "router": "app",
+  "styling": "tailwind",
+  "fonts": [
+    "Fraunces",
+    "GeistSans",
+    "GeistMono"
+  ],
+  "colors": {
+    "bg-canvas": "#FBF7EE",
+    "bg-surface": "#FFFFFF",
+    "text-main": "#16120E",
+    "accent-ember": "#9E3308",
+    "status-sage": "#354A21",
+    "kestrel-brand-violet": "#6D28D9"
+  },
+  "spacingRhythm": [
+    "4px",
+    "8px"
+  ],
+  "tokens": [
+    {
+      "name": "pitch-1-archival-palette",
+      "value": {
+        "canvas": "#FBF7EE",
+        "stage": "#FFFFFF",
+        "ink": "#16120E",
+        "ember": "#9E3308",
+        "sage": "#354A21"
+      },
+      "confidence": 0.96,
+      "locked": true,
+      "source": ".chaff/pitches/pitch-1.md"
+    },
+    {
+      "name": "typography-fraunces-geist",
+      "value": "Fraunces + GeistSans + GeistMono",
+      "confidence": 0.95,
+      "locked": true,
+      "source": "src/app/layout.tsx"
+    },
+    {
+      "name": "color-kestrel-violet",
+      "value": "#6D28D9",
+      "confidence": 0.98,
+      "locked": true,
+      "source": "src/components/HeroTransformationStage.tsx"
+    },
+    {
+      "name": "tailwind-config",
+      "value": "tailwind.config.ts",
+      "confidence": 0.95,
+      "locked": true,
+      "source": "tailwind.config.ts"
+    },
+    {
+      "name": "level-3-webgl2-engine",
+      "value": "Custom GLSL WebGL2 Winnowing Shader (~6KB)",
+      "confidence": 0.92,
+      "locked": true,
+      "source": "src/components/KestrelWebGLStage.tsx"
+    }
+  ],
+  "locked": [
+    "pitch-1-archival-palette",
+    "typography-fraunces-geist",
+    "color-kestrel-violet",
+    "tailwind-config",
+    "level-3-webgl2-engine"
+  ],
+  "waivers": [
+    {
+      "ruleId": "UI-004",
+      "token": "color-kestrel-violet",
+      "reason": "Kestrel showcase product primary brand identity (#6D28D9) locked intentionally and preserved across Before/After transformation.",
+      "approvedBy": "user"
+    }
+  ]
+}

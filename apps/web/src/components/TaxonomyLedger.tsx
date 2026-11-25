@@ -6,135 +6,109 @@ const CATEGORIES = [
     cat: 'ui',
     name: 'UI & Layout Hygiene',
     tag: 'UI-001..009',
-    count: 9,
-    description: 'Anti-template layouts, straw/bark palette, 4/8px spatial rhythm, and WCAG AA contrast.',
-    topTell: 'Bans purple/blue glow gradients and centered 3-card grids',
+    description: 'Asymmetric layouts, tinted neutrals, tabular numerals, and balanced display typography.',
+    bans: 'Purple glow orbs and 3-card boilerplate grids',
   },
   {
     cat: 'copy',
-    name: 'Copy Authenticity & Voice',
+    name: 'Copy Authenticity',
     tag: 'COPY-001..009',
-    count: 9,
-    description: 'Elimination of LLM buzzwords, hollow adjectives, and synthetic claims.',
-    topTell: 'Bans synthetic buzzwords, empty marketing claims, and unverified round numbers',
+    description: 'Domain-specific technical prose, verifiable measurements, and honest product copy.',
+    bans: 'LLM buzzword salads and unattributed round statistics',
   },
   {
     cat: 'code',
     name: 'React & Next.js Idioms',
     tag: 'CODE-001..009',
-    count: 9,
-    description: 'Semantic markup, hydration purity, Server Components default, zero-any types.',
-    topTell: 'Bans clickable divs and useEffect data fetching',
+    description: 'Server Components by default, semantic controls, next/image, and strict TypeScript.',
+    bans: 'Clickable divs, console logs, and premature use client',
   },
   {
     cat: 'perf',
-    name: 'Performance & Web Vitals',
+    name: 'Performance & Vitals',
     tag: 'PERF-001..009',
-    count: 9,
-    description: 'Self-hosted next/font, CLS under 0.10, LCP under 2.5s, route JS under 170 KB.',
-    topTell: 'Bans layout-shifting banners and unoptimized raw assets',
+    description: 'Self-hosted next/font with swap, zero CLS, and lean baseline JS budgets.',
+    bans: 'Layout-shifting media and monolithic client bundles',
   },
   {
     cat: 'mobile',
     name: 'Mobile Ergonomics',
     tag: 'MOBILE-001..009',
-    count: 9,
-    description: 'Dynamic viewport units (dvh), >=44px touch targets, zero 320px overflow.',
-    topTell: 'Bans static screen-height units and viewport user-scalable=no',
+    description: 'Dynamic viewport height (dvh), >= 44px touch targets, 16px form controls, 320px fit.',
+    bans: 'Horizontal overflow, sub-44px targets, and 100vh traps',
   },
   {
     cat: 'a11y',
     name: 'Strict Accessibility',
     tag: 'A11Y-001..009',
-    count: 9,
-    description: 'WCAG AA color contrast, visible focus rings, ARIA labels, keyboard navigability.',
-    topTell: 'Bans outline:none without visible fallback ring',
+    description: 'WCAG AA contrast >= 4.5:1, visible focus rings, landmarks, and labeled inputs.',
+    bans: 'Low-contrast gray labels and stripped focus outlines',
   },
   {
     cat: 'motion',
     name: 'Platform-Native Motion',
     tag: 'MOTION-001..009',
-    count: 9,
-    description: 'prefers-reduced-motion compliance, transform/opacity only, tactile springs.',
-    topTell: 'Bans animating layout properties (width, height, top, left)',
+    description: 'prefers-reduced-motion compliance and compositor-only transform/opacity transitions.',
+    bans: 'Layout property animation and stacked animation packages',
   },
   {
     cat: 'three',
     name: '3D, WebGL & Shaders',
     tag: 'THREE-001..009',
-    count: 9,
-    description: '5-part Fallback Contract, @chaff/tier governor, 1.5 DPR cap, memory disposal.',
-    topTell: 'Bans synchronous 3D imports blocking initial LCP',
+    description: '5-part Fallback Contract, @chaff/tier profiling, 1.5 DPR cap, and clean disposal.',
+    bans: 'Uncapped DPR, blocking 3D bundles, and zombie WebGL contexts',
   },
 ];
 
 export function TaxonomyLedger() {
   return (
     <section className="space-y-6">
-      {/* Broadsheet Masthead Header */}
-      <div className="flex items-center justify-between gap-4 hairline-b pb-3 font-mono text-xs text-[var(--text-dim)]">
-        <div className="flex items-center gap-2">
-          <span className="text-[var(--accent-ember)] font-bold">04 //</span>
-          <span className="uppercase tracking-widest text-[var(--text-main)] font-semibold">CORE TAXONOMY</span>
-        </div>
-        <div className="hidden sm:block">
-          72 AUTOMATED VERIFICATION RULES // 8 DOMAINS
-        </div>
-      </div>
-
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-2">
-        <div>
-          <h2 className="font-serif text-3xl text-[var(--text-main)]">
-            Architectural Category Ledger
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-4 hairline-b">
+        <div className="space-y-1.5">
+          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-ember)] font-semibold block">
+            72 Automated Rules
+          </span>
+          <h2 className="font-serif text-[var(--text-main)]">
+            Eight audit domains enforced in CI
           </h2>
-          <p className="text-[var(--text-dim)] mt-1 max-w-[65ch]">
-            Nine rules per category across eight domains. Each rule specifies verifiable detection logic and concrete craft solutions.
+          <p className="text-sm text-[var(--text-dim)] max-w-[60ch]">
+            Select any domain below to inspect canonical bad-vs-good code patterns, detection logic, and documented waiver criteria.
           </p>
         </div>
-        <Link href="/rules" className="btn text-xs font-mono">
-          Browse Full Rules Directory &rarr;
+
+        <Link href="/rules" className="btn text-xs font-mono shrink-0">
+          Open Full Rule Catalog
         </Link>
       </div>
 
-      {/* Continuous Ruled Broadsheet Ledger (Zero Cards) */}
-      <div className="hairline-y divide-y divide-[var(--border-line)]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[var(--border-line)] hairline-y">
         {CATEGORIES.map((c) => (
           <Link
             key={c.cat}
             href={`/rules?category=${c.cat}`}
-            className="group py-5 px-3 sm:px-4 transition-colors hover:bg-[var(--bg-surface)]/60 grid grid-cols-1 md:grid-cols-12 gap-4 items-baseline min-h-[44px]"
+            className="group p-5 bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] transition-colors flex flex-col justify-between gap-3 min-h-[44px] min-w-0"
           >
-            {/* Column 1: Code Tag & Rule Count */}
-            <div className="md:col-span-3 flex items-baseline justify-between md:justify-start gap-4">
-              <span className="font-mono text-sm font-bold text-[var(--accent-ember)]">
-                {c.tag}
-              </span>
-              <span className="font-mono text-[11px] text-[var(--text-dim)] uppercase">
-                [{c.count} Rules]
-              </span>
-            </div>
-
-            {/* Column 2: Category Name */}
-            <div className="md:col-span-3">
-              <h3 className="font-serif text-lg text-[var(--text-main)] group-hover:text-[var(--accent-ember)] transition-colors">
-                {c.name}
-              </h3>
-            </div>
-
-            {/* Column 3: Craft Description */}
-            <div className="md:col-span-4">
-              <p className="text-xs text-[var(--text-dim)] leading-relaxed">
+            <div className="space-y-2">
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="font-serif text-xl text-[var(--text-main)] group-hover:text-[var(--accent-ember)] transition-colors">
+                  {c.name}
+                </h3>
+                <span className="font-mono text-xs font-bold text-[var(--accent-ember)] shrink-0">
+                  {c.tag}
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-[var(--text-dim)] leading-relaxed">
                 {c.description}
               </p>
-              <div className="pt-1.5 font-mono text-[11px] text-[var(--status-warn)]">
-                <span className="font-semibold">Bans: </span>
-                <span>{c.topTell}</span>
-              </div>
             </div>
 
-            {/* Column 4: Action Indicator */}
-            <div className="md:col-span-2 flex justify-end items-center font-mono text-xs text-[var(--text-dim)] group-hover:text-[var(--accent-ember)] transition-colors">
-              <span>Inspect &rarr;</span>
+            <div className="pt-2 hairline-t flex items-center justify-between gap-2 font-mono text-xs">
+              <span className="text-[var(--status-warn)] truncate">
+                Flags: {c.bans}
+              </span>
+              <span className="text-[var(--text-main)] group-hover:text-[var(--accent-ember)] shrink-0 font-semibold">
+                Inspect
+              </span>
             </div>
           </Link>
         ))}

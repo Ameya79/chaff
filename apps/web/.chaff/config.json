@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "level": 3,
+  "agents": ["cursor", "claude", "windsurf", "antigravity"],
+  "thresholds": {
+    "visual": 85,
+    "copy": 85,
+    "code": 85,
+    "performance": 85
+  }
+}

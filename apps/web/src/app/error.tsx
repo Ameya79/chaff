@@ -15,27 +15,22 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-8 py-24 text-center space-y-6">
-      <div className="flex items-center justify-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] font-bold">
-        <span>ERROR //</span>
-        <span>GRAIN DISRUPTED</span>
+    <div className="max-w-3xl mx-auto px-4 sm:px-8 py-24 space-y-6">
+      <div className="font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] font-bold">
+        Runtime Fault · Grain Disrupted
       </div>
 
       <h1 className="text-3xl font-serif text-[var(--text-main)]">
-        The winnowing floor encountered an error.
+        The winnowing floor encountered an unexpected error.
       </h1>
 
-      <p className="text-sm text-[var(--text-dim)] max-w-lg mx-auto font-mono leading-relaxed">
-        {error.message || 'An unexpected runtime error occurred while processing this request.'}
+      <p className="text-sm text-[var(--text-dim)] max-w-lg font-mono leading-relaxed">
+        {error.message || 'An unexpected error occurred while rendering this route.'}
       </p>
 
-      <div className="flex items-center justify-center gap-4 pt-4">
-        <button
-          type="button"
-          onClick={() => reset()}
-          className="btn primary"
-        >
-          Try Again
+      <div className="flex flex-wrap items-center gap-3 pt-2">
+        <button type="button" onClick={() => reset()} className="btn primary">
+          Retry Route
         </button>
         <Link href="/" className="btn">
           Return Home

@@ -3,26 +3,30 @@
 @tailwind utilities;
 
 :root {
-  /* Winnowing Floor Straw Paper & Bark Ink Palette (Light Theme) */
-  --bg-canvas: #E9DFC4;
-  --bg-surface: #F4EEDA;
-  --bg-surface-elevated: #DFD4B5;
-  --text-main: #201A12;
-  --text-dim: #5C5040;
-  --border-line: #D5C9A9;
-  --accent-ember: #B8430E;
-  --accent-ember-soft: #F0DAC3;
-  --status-sage: #4B592B;
-  --status-sage-soft: #DCE4CC;
-  --status-warn: #964F0A;
-  --btn-primary-text: #F4EEDA;
+  /* Pitch 1: Archival Proof Sheet & Crisp Specimen Stage (Light Theme) */
+  --bg-canvas: #FBF7EE;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F2ECE0;
+  --bg-inset: #F6F0E3;
+  --text-main: #16120E;
+  --text-dim: #544B40;
+  --border-line: #DDD4C3;
+  --border-control: #857865;
+  --accent-ember: #9E3308;
+  --accent-ember-soft: #FBE9E0;
+  --status-sage: #354A21;
+  --status-sage-soft: #E6EFE0;
+  --status-warn: #7A3E00;
+  --brand-violet: #6D28D9;
+  --brand-violet-soft: #EDE9FE;
+  --btn-primary-text: #FBF7EE;
 
-  /* Typography Fallbacks */
-  --font-serif: 'Fraunces', ui-serif, Georgia, serif;
-  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
+  /* Resolve next/font CSS variables properly (never shadow --font-geist-* or --font-fraunces) */
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Spacing Rhythm */
+  /* 4px / 8px Spacing Rhythm */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -35,25 +39,37 @@
 
 [data-theme='dark'],
 .dark {
-  /* Ground & Ecru Palette (Designed Night Version, never raw invert) */
-  --bg-canvas: #17130D;
-  --bg-surface: #231D14;
-  --bg-surface-elevated: #2E271D;
-  --text-main: #E4DABF;
-  --text-dim: #A89E88;
-  --border-line: #362F24;
-  --accent-ember: #E0703A;
-  --accent-ember-soft: #3D2013;
-  --status-sage: #7E8F55;
-  --status-sage-soft: #252B1B;
-  --status-warn: #D98A32;
-  --btn-primary-text: #17130D;
+  /* High-Clarity Night Palette (Tuned contrast, never raw hex inversion) */
+  --bg-canvas: #110F0C;
+  --bg-surface: #191612;
+  --bg-surface-elevated: #24201A;
+  --bg-inset: #15120E;
+  --text-main: #EFE6D2;
+  --text-dim: #B5AA95;
+  --border-line: #302A22;
+  --border-control: #736858;
+  --accent-ember: #F59260;
+  --accent-ember-soft: #2C150C;
+  --status-sage: #8EB86B;
+  --status-sage-soft: #141D10;
+  --status-warn: #E8A849;
+  --brand-violet: #C4B5FD;
+  --brand-violet-soft: #24183D;
+  --btn-primary-text: #110F0C;
 }
 
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+}
+
+html {
+  scroll-padding-top: 84px;
+}
+
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
 }
 
 html,
@@ -63,8 +79,8 @@ body {
   color: var(--text-main);
   font-family: var(--font-sans);
   font-size: 16px;
-  line-height: 1.5;
-  overflow-x: hidden;
+  line-height: 1.55;
+  overflow-x: clip;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -74,43 +90,48 @@ a {
   text-decoration: none;
 }
 
-/* Restrained fine grain layer via inline SVG noise filter */
+/* Subtle archival paper grain texture */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.025;
   z-index: 9999;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainFilter)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainFilter)'/%3E%3C/svg%3E");
 }
 
-/* Editorial Typography Rules */
+/* Editorial Typography */
 h1, h2, h3, h4, .font-serif {
   font-family: var(--font-serif);
   font-weight: 500;
   text-wrap: balance;
-  line-height: 1.15;
+  line-height: 1.1;
+  font-variation-settings: 'SOFT' 35, 'opsz' 48;
 }
 
 h1 {
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-size: clamp(2.15rem, 4.6vw, 3.85rem);
   letter-spacing: -0.035em;
+  font-variation-settings: 'SOFT' 40, 'opsz' 96;
 }
 
 h2 {
-  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
   letter-spacing: -0.025em;
 }
 
 h3 {
-  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
   letter-spacing: -0.015em;
 }
 
 p, li {
   text-wrap: pretty;
-  max-width: 68ch;
+}
+
+.measure {
+  max-width: 65ch;
 }
 
 .mono, code, pre, .tabular-nums {
@@ -118,7 +139,7 @@ p, li {
   font-variant-numeric: tabular-nums;
 }
 
-/* Hairline borders & ledger rules */
+/* Hairlines & Editorial Dividers */
 .hairline {
   border: 1px solid var(--border-line);
 }
@@ -144,54 +165,55 @@ p, li {
   border-bottom: 1px solid var(--border-line);
 }
 
-.hairline-x {
-  border-left: 1px solid var(--border-line);
-  border-right: 1px solid var(--border-line);
-}
+/* Scoped Tactile Button Primitives inside @layer components so Tailwind utilities compose cleanly */
+@layer components {
+  .btn {
+    font-family: var(--font-sans);
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 3px;
+    border: 1px solid var(--border-control);
+    background: var(--bg-surface);
+    color: var(--text-main);
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.14s ease, border-color 0.14s ease;
+  }
 
-/* Ledger border with subtle double-rule feel */
-.ledger-border {
-  border: 1px solid var(--border-line);
-  box-shadow: 0 0 0 1px var(--bg-canvas), 0 0 0 2px var(--border-line);
-}
+  .btn:hover {
+    background: var(--bg-surface-elevated);
+  }
 
-/* Physical tactile focus and buttons (sharp editorial ledger styling) */
-button, a.btn {
-  font-family: var(--font-sans);
-  min-height: 44px;
-  min-width: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 2px;
-  border: 1px solid var(--border-line);
-  background: var(--bg-surface);
-  color: var(--text-main);
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.14s ease, border-color 0.14s ease;
-}
+  .btn:active {
+    transform: scale(0.98);
+  }
 
-button:hover, a.btn:hover {
-  background: var(--bg-surface-elevated);
-}
+  .btn.primary {
+    background: var(--accent-ember);
+    color: var(--btn-primary-text);
+    border-color: var(--accent-ember);
+  }
 
-button:active, a.btn:active {
-  transform: scale(0.98);
-}
+  .btn.primary:hover {
+    filter: brightness(0.92);
+  }
 
-button.primary, a.btn.primary {
-  background: var(--accent-ember);
-  color: var(--btn-primary-text);
-  border-color: var(--accent-ember);
-}
+  .btn.violet {
+    background: #6D28D9;
+    color: #FFFFFF;
+    border-color: #6D28D9;
+  }
 
-button.primary:hover, a.btn.primary:hover {
-  filter: brightness(0.94);
+  .btn.violet:hover {
+    filter: brightness(0.92);
+  }
 }
 
 :focus-visible {
@@ -199,27 +221,26 @@ button.primary:hover, a.btn.primary:hover {
   outline-offset: 2px;
 }
 
-/* Tactile Range input for WindControl */
+/* Tactile Range Slider */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
   background: var(--border-line);
   border-radius: 3px;
-  outline: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--accent-ember);
   cursor: pointer;
   border: 2px solid var(--bg-surface);
-  box-shadow: 0 1px 3px rgba(32, 26, 18, 0.25);
-  transition: transform 0.1s ease;
+  box-shadow: 0 1px 4px rgba(22, 18, 14, 0.3);
+  transition: transform 0.12s ease;
 }
 
 input[type="range"]::-webkit-slider-thumb:hover {
@@ -227,16 +248,101 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--accent-ember);
   cursor: pointer;
   border: 2px solid var(--bg-surface);
 }
 
+@layer components {
+  .slop-specimen-shell {
+    background: #0b1020;
+    color: #f1f5f9;
+    overflow: hidden;
+  }
+
+  .slop-orb-purple {
+    position: absolute;
+    top: -48px;
+    right: -40px;
+    width: 240px;
+    height: 240px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.38), rgba(59, 130, 246, 0.12) 55%, transparent 72%);
+    filter: blur(22px);
+    pointer-events: none;
+  }
+
+  .slop-orb-cyan {
+    position: absolute;
+    bottom: -60px;
+    left: -40px;
+    width: 220px;
+    height: 220px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.28), rgba(168, 85, 247, 0.1) 55%, transparent 72%);
+    filter: blur(22px);
+    pointer-events: none;
+  }
+
+  .slop-headline-gradient {
+    background-image: linear-gradient(92deg, #60a5fa 0%, #c084fc 52%, #f472b6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .slop-glass-tile {
+    background: rgba(15, 23, 42, 0.68);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    backdrop-filter: blur(12px);
+    border-radius: 10px;
+  }
+
+  .slop-cta-gradient {
+    background-image: linear-gradient(90deg, #9333ea, #2563eb);
+  }
+
+  .slop-pill-badge {
+    border: 1px solid rgba(192, 132, 252, 0.4);
+    background: rgba(168, 85, 247, 0.16);
+    color: #e9d5ff;
+  }
+}
+
+* {
+  scrollbar-color: var(--border-control) transparent;
+  scrollbar-width: thin;
+}
+
+/* Animated SVG Proof Marks */
+@keyframes proofDraw {
+  from {
+    stroke-dashoffset: 340;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.proof-ring-path {
+  stroke-dasharray: 340;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .proof-ring-animate {
+    animation: proofDraw 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
 /* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

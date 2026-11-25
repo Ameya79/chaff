@@ -2,16 +2,13 @@ import React from 'react';
 
 export default function Loading() {
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-8 py-24 flex flex-col items-center justify-center space-y-6 min-h-[50dvh]">
-      <div className="w-8 h-8 rounded-full border-2 border-[var(--border-line)] border-t-[var(--accent-ember)] animate-spin" />
-      <div className="space-y-1 text-center">
-        <span className="font-mono text-xs uppercase tracking-widest text-[var(--accent-ember)] block">
-          Winnowing in Progress
-        </span>
-        <p className="text-sm text-[var(--text-dim)] font-mono">
-          Loading grain specifications and audit ledgers...
-        </p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-20 space-y-6 min-h-[50dvh]">
+      <div className="space-y-3">
+        <div className="h-3 w-40 bg-[var(--bg-surface-elevated)] animate-pulse" />
+        <div className="h-10 w-80 max-w-full bg-[var(--bg-surface-elevated)] animate-pulse" />
+        <div className="h-4 w-96 max-w-full bg-[var(--bg-surface-elevated)] animate-pulse" />
       </div>
+      <div className="h-72 w-full hairline bg-[var(--bg-surface)] animate-pulse" />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 # Chaff Audit Report
 
-**Timestamp:** 2026-11-22T20:38:56.010Z  
-**Operating Level:** Level 2  
+**Timestamp:** 2026-11-25T13:44:35.441Z  
+**Operating Level:** Level 3  
 **Overall Chaff Score:** **100 / 100**
 
 ## Score Breakdown
@@ -17,7 +17,7 @@
 
 - **Detected Framework:** next
 - **Locked Design Tokens:** 5
-- **Approved Waivers:** 0
+- **Approved Waivers:** 1
 
 ## Findings (0 Open, 0 Waived)
 

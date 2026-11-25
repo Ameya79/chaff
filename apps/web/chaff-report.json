@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "timestamp": "2026-11-22T20:38:56.010Z",
+  "timestamp": "2026-11-25T13:44:35.441Z",
   "projectRoot": "C:\\Users\\vinay\\OneDrive\\Desktop\\chaff\\apps\\web",
   "summary": {
     "totalScore": 100,
@@ -16,12 +16,12 @@
       "fixed": 0,
       "total": 0
     },
-    "levelUsed": 2
+    "levelUsed": 3
   },
   "findings": [],
   "identitySummary": {
     "framework": "next",
     "lockedCount": 5,
-    "waiversCount": 0
+    "waiversCount": 1
   }
 }

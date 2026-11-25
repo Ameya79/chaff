@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { RuleLevel } from '@chaff/core';
 
 export interface BudgetResult {
@@ -15,6 +16,60 @@ export interface GateReport {
   passed: boolean;
   results: BudgetResult[];
   failuresCount: number;
+}
+
+async function readNextCompiledMetrics(projectRoot: string): Promise<{
+  baselineGzipKb: number | null;
+  lazy3dGzipKb: number | null;
+}> {
+  const nextDir = path.join(projectRoot, '.next');
+  let baselineGzipKb: number | null = null;
+  let lazy3dGzipKb: number | null = null;
+
+  try {
+    const appBuildRaw = await fs.readFile(path.join(nextDir, 'app-build-manifest.json'), 'utf-8');
+    const appBuild = JSON.parse(appBuildRaw) as { pages?: Record<string, string[]> };
+    const homeChunks = new Set<string>([
+      ...(appBuild.pages?.['/layout'] ?? []),
+      ...(appBuild.pages?.['/page'] ?? []),
+    ]);
+    const jsChunks = [...homeChunks].filter((f) => f.endsWith('.js'));
+    if (jsChunks.length > 0) {
+      let gzipBytes = 0;
+      for (const relChunk of jsChunks) {
+        const buf = await fs.readFile(path.join(nextDir, relChunk));
+        gzipBytes += zlib.gzipSync(buf).length;
+      }
+      baselineGzipKb = Math.round((gzipBytes / 1024) * 10) / 10;
+    }
+  } catch {
+    // .next/app-build-manifest.json unavailable before production build
+  }
+
+  try {
+    const loadableRaw = await fs.readFile(path.join(nextDir, 'react-loadable-manifest.json'), 'utf-8');
+    const loadable = JSON.parse(loadableRaw) as Record<string, { files?: string[] }>;
+    let lazyBytes = 0;
+    let found3dChunk = false;
+    for (const [key, entry] of Object.entries(loadable)) {
+      if (/(webgl|three|3d|scene|stage|canvas)/i.test(key) && Array.isArray(entry.files)) {
+        for (const relChunk of entry.files) {
+          if (relChunk.endsWith('.js')) {
+            const buf = await fs.readFile(path.join(nextDir, relChunk));
+            lazyBytes += zlib.gzipSync(buf).length;
+            found3dChunk = true;
+          }
+        }
+      }
+    }
+    if (found3dChunk) {
+      lazy3dGzipKb = Math.round((lazyBytes / 1024) * 10) / 10;
+    }
+  } catch {
+    // .next/react-loadable-manifest.json unavailable
+  }
+
+  return { baselineGzipKb, lazy3dGzipKb };
 }
 
 export async function checkRenderedBudgets(
@@ -134,22 +189,33 @@ export async function checkRenderedBudgets(
   });
 
   // --- Budget 5: First-load JavaScript Payload ---
-  let totalJsBytes = 0;
-  for (const f of allFiles) {
-    if (f.relPath.endsWith('.ts') || f.relPath.endsWith('.tsx') || f.relPath.endsWith('.js')) {
-      totalJsBytes += f.size;
+  const compiled = await readNextCompiledMetrics(projectRoot);
+  if (compiled.baselineGzipKb !== null) {
+    const baselinePassed = compiled.baselineGzipKb <= 170;
+    results.push({
+      metric: 'First-Load Baseline JS',
+      budget: '<= 170 KB gzip',
+      measured: `${compiled.baselineGzipKb} KB gzip (.next compiled)`,
+      status: baselinePassed ? 'pass' : 'fail',
+    });
+  } else {
+    let totalJsBytes = 0;
+    for (const f of allFiles) {
+      if (f.relPath.endsWith('.ts') || f.relPath.endsWith('.tsx') || f.relPath.endsWith('.js')) {
+        totalJsBytes += f.size;
+      }
     }
-  }
-  const totalJsKb = Math.round(totalJsBytes / 1024);
-  const maxJsKb = level === 3 ? 420 : 170; // 170 KB + 250 KB lazy 3D chunk for L3
-  const jsPassed = totalJsKb <= maxJsKb;
+    const totalJsKb = Math.round(totalJsBytes / 1024);
+    const maxJsKb = level === 3 ? 420 : 170;
+    const jsPassed = totalJsKb <= maxJsKb;
 
-  results.push({
-    metric: 'First-Load Baseline JS',
-    budget: `<= ${maxJsKb} KB`,
-    measured: `${totalJsKb} KB`,
-    status: jsPassed ? 'pass' : 'fail',
-  });
+    results.push({
+      metric: 'First-Load Baseline JS',
+      budget: `<= ${maxJsKb} KB`,
+      measured: `${totalJsKb} KB`,
+      status: jsPassed ? 'pass' : 'fail',
+    });
+  }
 
   // --- Level 3 Specific: Mandatory 5-part Fallback Contract ---
   if (level === 3) {
@@ -157,10 +223,17 @@ export async function checkRenderedBudgets(
     let hasDynamicImport = false;
     let hasPosterFallback = false;
     let hasTierProfiling = false;
-    let hasGovernorDprCap = false;
+    let hasDprCap = false;
+    let hasLifecyclePause = false;
+    let hasDisposal = false;
 
     for (const f of allFiles) {
-      if (f.content.includes("'three'") || f.content.includes('"three"') || f.content.includes('@react-three/fiber')) {
+      if (
+        /from\s+['"](three|@react-three\/fiber)['"]/.test(f.content) ||
+        /require\(['"]three['"]\)/.test(f.content) ||
+        /getContext\(['"]webgl2?['"]/.test(f.content) ||
+        f.content.includes('WEBGL_lose_context')
+      ) {
         hasThreeUsage = true;
       }
       if (f.content.includes('dynamic(') || f.content.includes('React.lazy(')) {
@@ -172,17 +245,41 @@ export async function checkRenderedBudgets(
       if (f.content.includes('@chaff/tier') || f.content.includes('tier(') || f.content.includes('getDeviceTier')) {
         hasTierProfiling = true;
       }
-      if (f.content.includes('governor(') || f.content.includes('maxPixelRatio') || f.content.includes('Math.min(window.devicePixelRatio, 1.5)')) {
-        hasGovernorDprCap = true;
+      if (
+        f.content.includes('governor(') ||
+        /maxPixelRatio\s*:\s*1\.5\b/.test(f.content) ||
+        f.content.includes('Math.min(window.devicePixelRatio, 1.5)')
+      ) {
+        hasDprCap = true;
+      }
+      if (
+        f.content.includes('governor(') ||
+        (f.content.includes('IntersectionObserver') && f.content.includes('document.hidden'))
+      ) {
+        hasLifecyclePause = true;
+      }
+      if (f.content.includes('dispose(') || f.content.includes('.dispose(')) {
+        hasDisposal = true;
       }
     }
 
     if (hasThreeUsage) {
+      if (compiled.lazy3dGzipKb !== null) {
+        results.push({
+          metric: 'Lazy 3D / WebGL Chunk Payload',
+          budget: '<= 250 KB gzip',
+          measured: `${compiled.lazy3dGzipKb} KB gzip (.next dynamic chunk)`,
+          status: compiled.lazy3dGzipKb <= 250 ? 'pass' : 'fail',
+        });
+      }
+
       const fallbackPassed =
         hasDynamicImport &&
         hasPosterFallback &&
         hasTierProfiling &&
-        hasGovernorDprCap;
+        hasDprCap &&
+        hasLifecyclePause &&
+        hasDisposal;
 
       results.push({
         metric: 'Level 3 Fallback Contract (5 Parts)',
@@ -190,7 +287,16 @@ export async function checkRenderedBudgets(
         measured: fallbackPassed ? '5 of 5 guarantees verified' : 'Incomplete fallback contract',
         status: fallbackPassed ? 'pass' : 'fail',
         detail: !fallbackPassed
-          ? `Missing: ${[!hasDynamicImport && 'Lazy loading', !hasPosterFallback && 'Static poster', !hasTierProfiling && 'Device tiering (@chaff/tier)', !hasGovernorDprCap && 'Frame governor & DPR cap'].filter(Boolean).join(', ')}`
+          ? `Missing: ${[
+              !hasDynamicImport && 'Lazy loading',
+              !hasPosterFallback && 'Static poster',
+              !hasTierProfiling && 'Device tiering (@chaff/tier)',
+              !hasDprCap && '1.5 DPR cap',
+              !hasLifecyclePause && 'IntersectionObserver + document.hidden pause',
+              !hasDisposal && 'GPU resource disposal',
+            ]
+              .filter(Boolean)
+              .join(', ')}`
           : undefined,
       });
     }

@@ -9,13 +9,37 @@ import { Footer } from '../components/Footer';
 const fraunces = Fraunces({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-serif',
+  axes: ['opsz', 'SOFT'],
+  style: ['normal', 'italic'],
+  variable: '--font-fraunces',
 });
 
 export const metadata: Metadata = {
-  title: 'Chaff — Design Audit & Level Enforcement Toolkit',
+  metadataBase: new URL('https://chaff.dev'),
+  title: {
+    default: 'Chaff — Design Audit & Level 3 Enforcement Toolkit',
+    template: '%s | Chaff',
+  },
   description:
-    'Chaff audits the page as it renders, locks what is yours, ships the runtime for risky 3D, and fails the pull request when the page gets slow.',
+    'Chaff audits rendered UI against 72 rules, locks intentional brand tokens, enforces three creative contracts, and fails the pull request when performance degrades.',
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32' },
+    ],
+  },
+  openGraph: {
+    title: 'Chaff — Keep the grain. Winnow the slop.',
+    description:
+      'Autonomous design audit and level enforcement toolkit preserving authored brand craft and strict Core Web Vitals budgets.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Chaff — Design Audit & Level 3 Enforcement Toolkit',
+    description:
+      'Audit rendered pages, preserve brand identity locks, and gate CI on 320px overflow and WebGL performance budgets.',
+  },
 };
 
 export default function RootLayout({
@@ -37,8 +61,14 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-dvh flex flex-col font-sans bg-[var(--bg-canvas)] text-[var(--text-main)] selection:bg-[var(--accent-ember)] selection:text-[var(--btn-primary-text)]">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] btn primary text-xs"
+        >
+          Skip to main content
+        </a>
         <Header />
-        <main id="main-content" className="flex-1">
+        <main id="main-content" className="flex-1 min-w-0">
           {children}
         </main>
         <Footer />

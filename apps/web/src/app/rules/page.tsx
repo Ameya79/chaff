@@ -1,59 +1,60 @@
-import React from 'react';
-import path from 'node:path';
-import fs from 'node:fs';
-import { loadAllRules } from '@chaff/core';
-import { RulesClientLedger } from '../../components/RulesClientLedger';
+import React, { Suspense } from 'react';
+import type { Metadata } from 'next';
+import { getCachedRules } from '../../lib/rules-loader';
+import { RulesClientLedger, RulePublicDto } from '../../components/RulesClientLedger';
 
-export const metadata = {
-  title: 'Chaff Rules Index — 72 Architectural Rules',
+export const metadata: Metadata = {
+  title: '72 Architectural Rules Directory',
   description:
-    'Complete directory of 72 automated detection and remediation rules across 8 architectural categories.',
+    'Search and inspect all 72 Chaff design, accessibility, mobile, motion, and Level 3 WebGL rules with canonical bad-vs-good patterns.',
 };
 
-function getRulesDir(): string {
-  let cur = path.resolve(process.cwd());
-  while (cur !== path.dirname(cur)) {
-    const candidate = path.join(cur, 'rules');
-    if (fs.existsSync(candidate)) {
-      return candidate;
-    }
-    cur = path.dirname(cur);
-  }
-  return path.resolve(process.cwd(), 'rules');
-}
+export default async function RulesPage() {
+  const fullRules = await getCachedRules();
 
-export default async function RulesPage({
-  searchParams,
-}: {
-  searchParams?: { category?: string; query?: string };
-}) {
-  const rules = await loadAllRules(getRulesDir());
+  // Strip local filesystem paths (filePath) and rawContent before RSC serialization
+  const publicRules: RulePublicDto[] = fullRules.map((r) => ({
+    id: r.id,
+    title: r.title,
+    category: r.category,
+    severity: r.severity,
+    levels: r.levels,
+    detect: r.detect,
+    fix_class: r.fix_class,
+    bad: r.bad,
+    good: r.good,
+    why: r.why,
+    exceptions: r.exceptions,
+    detectionLogic: r.detectionLogic,
+    remediationSteps: r.remediationSteps,
+  }));
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-10">
-      {/* Header Register */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between gap-4 hairline-b pb-3 font-mono text-xs text-[var(--text-dim)]">
-          <div className="flex items-center gap-2">
-            <span className="text-[var(--accent-ember)] font-bold">SPEC //</span>
-            <span className="uppercase tracking-widest text-[var(--text-main)] font-semibold">ARCHITECTURAL TAXONOMY</span>
-          </div>
-          <div>72 ENFORCEMENT RULES</div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-8">
+      <header className="space-y-3 pb-6 hairline-b">
+        <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-[var(--text-dim)]">
+          <span className="uppercase tracking-[0.16em] text-[var(--accent-ember)] font-semibold">
+            Canonical Specification
+          </span>
+          <span>72 Rules Across 8 Domains</span>
         </div>
-        <h1 className="tracking-tight text-[var(--text-main)] font-serif">
-          The Rules Directory
+        <h1 className="font-serif text-[var(--text-main)]">
+          Architectural Rules Index
         </h1>
-        <p className="text-[var(--text-dim)] text-lg max-w-[68ch]">
-          Every rule provides AST and rendered-page detection logic, reproducible AI tell anti-patterns, craft-authored solutions, and documented exception criteria.
+        <p className="text-base sm:text-lg text-[var(--text-dim)] max-w-[65ch] leading-relaxed">
+          Every Chaff rule pairs reproducible AI tell anti-patterns with concrete craft remediations, detection heuristics, and explicit brand waiver criteria.
         </p>
-      </div>
+      </header>
 
-      {/* Interactive Rules Catalog Ledger */}
-      <RulesClientLedger
-        initialRules={rules}
-        initialCategory={searchParams?.category || 'all'}
-        initialQuery={searchParams?.query || ''}
-      />
+      <Suspense
+        fallback={
+          <div className="p-8 hairline bg-[var(--bg-surface)] font-mono text-xs text-[var(--text-dim)]">
+            Loading 72 canonical rules...
+          </div>
+        }
+      >
+        <RulesClientLedger initialRules={publicRules} />
+      </Suspense>
     </div>
   );
 }

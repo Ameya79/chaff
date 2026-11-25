@@ -165,14 +165,18 @@ export async function handleWaive(ctx: McpContext, args: { ruleId: string; reaso
   let identity = await loadIdentity(ctx.projectRoot);
   if (!identity) identity = await buildIdentity(ctx.projectRoot);
 
-  identity.waivers.push({
-    ruleId: args.ruleId,
-    token: args.token,
-    reason: args.reason,
-    approvedBy: 'mcp-user',
-  });
-
-  await saveIdentity(ctx.projectRoot, identity);
+  const alreadyExists = identity.waivers.some(
+    (w) => w.ruleId === args.ruleId && w.reason === args.reason
+  );
+  if (!alreadyExists) {
+    identity.waivers.push({
+      ruleId: args.ruleId,
+      token: args.token,
+      reason: args.reason,
+      approvedBy: 'mcp-user',
+    });
+    await saveIdentity(ctx.projectRoot, identity);
+  }
 
   return {
     content: [

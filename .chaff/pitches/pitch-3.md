@@ -1,15 +1,8 @@
-# Concept Pitch Direction C: Physical Tactility — Spring Physics & Spatial Canvas
+# Concept Pitch Direction C: Kinetic Foundry Specimen
 
-- **Operating Level:** Level 2
-- **Theme:** Editorial Workspace
-- **Type Hierarchy:** Geometric modernist display paired with dense tabular numeric data grids
-- **Layout Architecture:** Modular fluid cards on a rigid 8px spatial rhythm with tactile draggable surfaces
-- **Motion Model:** Spring physics micro-interactions via CSS transforms and spring-timed damping
-- **Signature Interaction:** Physical momentum scrolling on data cards with subtle inertia snaps
-- **Risk & Performance Assessment:** Low-to-medium risk. Pure CSS springs ensure 60fps main thread responsiveness.
-
-## Human Decision Gate
-Review this direction against project goals. Select Direction C by running:
-```bash
-npx chaff plan --choose C
-```
+- **Status:** Alternative Considered
+- **Operating Level:** Level 3
+- **Palette:** Dark-first obsidian kiln canvas (`#0E0D0B`) with warm ivory type (`#F2ECE0`) and sunlit amber/ember accents (`#F59E0B` / `#EA6B35`).
+- **Type Hierarchy:** `Fraunces` soft/wonk variable axis paired with `Plus Jakarta Sans` and `JetBrains Mono`.
+- **Layout Architecture:** Scroll-driven 3-chapter refinery story flow (`Raw AI Output` -> `Identity Lock` -> `Level 3 Authored Specimen`).
+- **Signature Moment:** Scroll-linked WebGL2 shader peeling excess DOM layers off a working product console.

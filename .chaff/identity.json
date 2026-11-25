@@ -1,118 +1,53 @@
 {
   "$schema": "https://chaff.dev/schemas/identity.v1.json",
   "version": "1.0.0",
-  "generatedAt": "2026-11-22T11:28:31.224Z",
-  "framework": "unknown",
-  "router": "unknown",
-  "styling": "css",
-  "fonts": [],
-  "colors": {},
+  "generatedAt": "2026-11-25T00:00:00.000Z",
+  "framework": "next",
+  "router": "app",
+  "styling": "tailwind",
+  "fonts": [
+    "Fraunces",
+    "GeistSans",
+    "GeistMono"
+  ],
+  "colors": {
+    "bg-canvas": "#FBF7EE",
+    "bg-surface": "#FFFFFF",
+    "text-main": "#16120E",
+    "accent-ember": "#9E3308",
+    "status-sage": "#354A21",
+    "kestrel-brand-violet": "#6D28D9"
+  },
   "spacingRhythm": [
     "4px",
     "8px"
   ],
-  "tokens": [],
-  "locked": [],
+  "tokens": [
+    {
+      "name": "pitch-1-archival-palette",
+      "value": "#FBF7EE / #FFFFFF / #16120E / #9E3308 / #354A21",
+      "confidence": 0.96,
+      "locked": true,
+      "source": "apps/web/src/app/globals.css"
+    },
+    {
+      "name": "color-kestrel-violet",
+      "value": "#6D28D9",
+      "confidence": 0.98,
+      "locked": true,
+      "source": "apps/web/src/components/HeroTransformationStage.tsx"
+    }
+  ],
+  "locked": [
+    "pitch-1-archival-palette",
+    "color-kestrel-violet"
+  ],
   "waivers": [
     {
       "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
-    },
-    {
-      "ruleId": "UI-004",
-      "reason": "Client corporate color palette is purple",
-      "approvedBy": "mcp-user"
+      "token": "color-kestrel-violet",
+      "reason": "Kestrel showcase product primary brand identity (#6D28D9) locked intentionally and preserved across Before/After transformation.",
+      "approvedBy": "user"
     }
   ]
 }
