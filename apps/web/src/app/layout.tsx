@@ -1,44 +1,45 @@
 import type { Metadata } from 'next';
-import { Fraunces } from 'next/font/google';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
+import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 
-const fraunces = Fraunces({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
-  axes: ['opsz', 'SOFT'],
-  style: ['normal', 'italic'],
-  variable: '--font-fraunces',
+  variable: '--font-jakarta',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-jetbrains',
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chaff.dev'),
   title: {
-    default: 'Chaff — Winnow the slop. Keep the grain.',
-    template: '%s | Chaff',
+    default: 'Chaff — Paste the repo. Keep what is yours.',
+    template: '%s · Chaff',
   },
   description:
-    'Design audit engine, identity lock, and Level 3 WebGL performance gate.',
-  icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: '32x32' },
-    ],
-  },
+    'Paste the Chaff repo link in chat alongside your prompt. Your agent inspects your codebase, asks tailored Level 1–3 craft questions, locks identity, and passes strict gates.',
   openGraph: {
-    title: 'Chaff — Winnow the slop. Keep the grain.',
-    description:
-      '72 architectural rules, locked brand identity, and Level 3 WebGL gates.',
     type: 'website',
+    locale: 'en_US',
+    url: 'https://chaff.dev',
+    siteName: 'Chaff',
+    title: 'Chaff — Paste the repo. Keep what is yours.',
+    description:
+      'Zero-setup chat workflow for UI craft: tailored Level 1–3 questions around your own project, Identity Lock, and WebGL performance gates.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chaff — Winnow the slop. Keep the grain.',
+    title: 'Chaff — Paste the repo. Keep what is yours.',
     description:
-      'Audit rendered pages, preserve brand identity locks, and gate CI on 320px overflow and WebGL performance budgets.',
+      'Share the Chaff repo in chat: project-tailored craft audits, Identity Lock, and performance gates.',
   },
 };
 
@@ -50,28 +51,31 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="dark"
+      data-theme="light"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${GeistSans.variable} ${GeistMono.variable} dark`}
+      className={`${plusJakarta.variable} ${jetbrainsMono.variable}`}
     >
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('chaff-theme')||'dark';document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.toggle('dark',t==='dark');}catch(e){}`,
+            __html: `(function(){try{var s=localStorage.getItem('chaff-theme');var t=s==='dark'?'dark':'light';document.documentElement.setAttribute('data-theme',t);if(t==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();`,
           }}
         />
       </head>
-      <body className="min-h-dvh flex flex-col font-sans bg-[var(--bg-canvas)] text-[var(--text-main)] selection:bg-[var(--accent-ember)] selection:text-[var(--btn-primary-text)]">
+      <body className="min-h-dvh flex flex-col font-sans bg-[var(--bg-canvas)] text-[var(--text-main)] selection:bg-[var(--accent)] selection:text-[var(--btn-accent-text)]">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] btn primary text-xs"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-[var(--accent)] focus:text-[var(--btn-accent-text)] focus:rounded-[4px] font-mono text-xs"
         >
           Skip to main content
         </a>
+
         <Header />
-        <main id="main-content" className="flex-1 min-w-0">
+
+        <main id="main-content" className="flex-1 w-full min-w-0">
           {children}
         </main>
+
         <Footer />
       </body>
     </html>

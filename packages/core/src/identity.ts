@@ -11,10 +11,10 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
   const spacingRhythm: string[] = ['4px', '8px'];
 
   let framework = 'unknown';
-  let router: 'app' | 'pages' | 'vite' | 'astro' | 'remix' | 'unknown' = 'unknown';
+  let router: IdentityLock['router'] = 'unknown';
   let styling = 'css';
 
-  // 1. Inspect package.json
+  // 1. Inspect package.json across major frontend ecosystems
   const pkgPath = path.join(projectRoot, 'package.json');
   try {
     const pkgRaw = await fs.readFile(pkgPath, 'utf-8');
@@ -23,7 +23,6 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
 
     if (deps.next) {
       framework = 'next';
-      // Check router type
       try {
         await fs.access(path.join(projectRoot, 'app'));
         router = 'app';
@@ -35,28 +34,66 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
           router = 'pages';
         }
       }
-    } else if (deps.vite) {
-      framework = 'vite';
-      router = 'vite';
+    } else if (deps['@solidjs/start']) {
+      framework = 'solid-start';
+      router = 'solid-start';
+    } else if (deps['solid-js']) {
+      framework = 'solid';
+      router = deps.vite ? 'vite' : 'solid-start';
+    } else if (deps['@angular/core']) {
+      framework = 'angular';
+      router = 'angular';
+    } else if (deps['@sveltejs/kit']) {
+      framework = 'sveltekit';
+      router = 'sveltekit';
+    } else if (deps.svelte) {
+      framework = 'svelte';
+      router = deps.vite ? 'vite' : 'unknown';
+    } else if (deps.nuxt) {
+      framework = 'nuxt';
+      router = 'nuxt';
+    } else if (deps.vue) {
+      framework = 'vue';
+      router = deps.vite ? 'vite' : 'vue';
+    } else if (deps['@builder.io/qwik']) {
+      framework = 'qwik';
+      router = 'qwik';
     } else if (deps.astro) {
       framework = 'astro';
       router = 'astro';
     } else if (deps.remix || deps['@remix-run/react']) {
       framework = 'remix';
       router = 'remix';
+    } else if (deps.preact) {
+      framework = 'preact';
+      router = deps.vite ? 'vite' : 'unknown';
+    } else if (deps.vite) {
+      framework = 'vite';
+      router = 'vite';
     } else if (deps.react) {
       framework = 'react';
     }
 
-    if (deps.tailwindcss) styling = 'tailwind';
-    else if (deps['styled-components']) styling = 'styled-components';
-    else if (deps['@emotion/react']) styling = 'emotion';
+    if (deps.tailwindcss || deps['@tailwindcss/vite'] || deps['@tailwindcss/postcss']) {
+      styling = 'tailwind';
+    } else if (deps['styled-components']) {
+      styling = 'styled-components';
+    } else if (deps['@emotion/react']) {
+      styling = 'emotion';
+    } else if (deps.sass || deps['sass-embedded']) {
+      styling = 'scss';
+    }
   } catch {
     // No package.json found
   }
 
   // 2. Scan Tailwind configs
-  const twConfigs = ['tailwind.config.js', 'tailwind.config.ts', 'tailwind.config.mjs'];
+  const twConfigs = [
+    'tailwind.config.js',
+    'tailwind.config.ts',
+    'tailwind.config.mjs',
+    'tailwind.config.cjs',
+  ];
   for (const cfg of twConfigs) {
     try {
       const content = await fs.readFile(path.join(projectRoot, cfg), 'utf-8');
@@ -68,8 +105,9 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
         source: cfg,
       });
 
-      // Extract explicit custom colors
-      const colorMatches = content.matchAll(/(['"][a-zA-Z0-9_-]+['"])\s*:\s*(['"]#[0-9a-fA-F]{3,8}['"])/g);
+      const colorMatches = content.matchAll(
+        /(['"][a-zA-Z0-9_-]+['"])\s*:\s*(['"]#[0-9a-fA-F]{3,8}['"])/g
+      );
       for (const m of colorMatches) {
         const key = m[1].replace(/['"]/g, '');
         const val = m[2].replace(/['"]/g, '');
@@ -77,7 +115,7 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
         tokens.push({
           name: `color-${key}`,
           value: val,
-          confidence: 0.90,
+          confidence: 0.9,
           locked: true,
           source: cfg,
         });
@@ -88,16 +126,36 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
     }
   }
 
-  // 3. Scan CSS files for variables and themes
-  const cssCandidates = ['app/globals.css', 'src/app/globals.css', 'styles/globals.css', 'src/index.css'];
+  // 3. Scan CSS/SCSS entrypoints (Next, Vite, Solid, SvelteKit, Angular, Vue/Nuxt, Astro)
+  const cssCandidates = [
+    'app/globals.css',
+    'src/app/globals.css',
+    'styles/globals.css',
+    'src/index.css',
+    'src/app.css',
+    'src/styles.css',
+    'src/styles.scss',
+    'src/styles/global.css',
+    'src/routes/styles.css',
+    'src/assets/main.css',
+    'assets/css/main.css',
+    'app/assets/css/main.css',
+    'app/app.css',
+  ];
   for (const cand of cssCandidates) {
     try {
       const cssContent = await fs.readFile(path.join(projectRoot, cand), 'utf-8');
+      if (cand.endsWith('.scss') && styling === 'css') {
+        styling = 'scss';
+      }
       const varMatches = cssContent.matchAll(/--([a-zA-Z0-9_-]+)\s*:\s*([^;]+);/g);
       for (const vm of varMatches) {
         const varName = vm[1];
         const varVal = vm[2].trim();
-        if (varName.includes('color') || varName.includes('primary') || varName.includes('bg')) {
+        const isColorValue = /^(#[0-9a-fA-F]{3,8}|(?:rgb|hsl|oklch|oklab)\()/i.test(varVal);
+        const isSemanticName =
+          /(color|primary|secondary|accent|brand|bg|surface|ink|paper|canvas|text)/i.test(varName);
+        if (isColorValue || isSemanticName) {
           colors[varName] = varVal;
           tokens.push({
             name: `--${varName}`,
@@ -107,6 +165,10 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
             source: cand,
           });
         }
+      }
+      const fontMatch = cssContent.match(/font-family\s*:\s*['"]?([a-zA-Z0-9\s-]+?)['"]?(?:,|\s*;)/i);
+      if (fontMatch && !fonts.includes(fontMatch[1].trim())) {
+        fonts.push(fontMatch[1].trim());
       }
       break;
     } catch {
@@ -126,8 +188,10 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
         locked: true,
         source: doc,
       });
-      // Look for explicit waiver mentions in DESIGN.md (e.g. "We deliberately use purple for our brand")
-      if (/deliberately\s+use\s+purple/i.test(docContent) || /brand\s+color\s+is\s+purple/i.test(docContent)) {
+      if (
+        /deliberately\s+use\s+purple/i.test(docContent) ||
+        /brand\s+color\s+is\s+purple/i.test(docContent)
+      ) {
         waivers.push({
           ruleId: 'UI-004',
           token: 'color-purple',
@@ -142,7 +206,7 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
 
   // 5. Build locked list from high confidence tokens (confidence > 0.80)
   for (const t of tokens) {
-    if (t.confidence > 0.80) {
+    if (t.confidence > 0.8) {
       t.locked = true;
       if (!locked.includes(t.name)) {
         locked.push(t.name);

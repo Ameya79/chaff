@@ -20,6 +20,11 @@ const DEFAULT_EXCLUDES = [
   'node_modules',
   '.git',
   '.next',
+  '.svelte-kit',
+  '.angular',
+  '.nuxt',
+  '.output',
+  '.astro',
   'dist',
   'build',
   'out',
@@ -34,7 +39,20 @@ const DEFAULT_EXCLUDES = [
   '.claude',
 ];
 
-const AUDITABLE_EXTENSIONS = ['.tsx', '.jsx', '.ts', '.js', '.css', '.scss', '.html'];
+const AUDITABLE_EXTENSIONS = [
+  '.tsx',
+  '.jsx',
+  '.ts',
+  '.js',
+  '.mts',
+  '.svelte',
+  '.vue',
+  '.astro',
+  '.mdx',
+  '.css',
+  '.scss',
+  '.html',
+];
 
 export async function runSourceChecks(
   projectRoot: string,

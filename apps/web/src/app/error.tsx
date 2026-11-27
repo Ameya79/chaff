@@ -16,11 +16,11 @@ export default function ErrorPage({
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-8 py-24 space-y-6">
-      <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-ember)] block">
+      <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--status-fail)] block">
         Runtime Fault
       </span>
 
-      <h1 className="text-4xl font-serif text-[var(--text-main)]">
+      <h1 className="text-4xl font-display text-[var(--text-main)]">
         Route interrupted.
       </h1>
 

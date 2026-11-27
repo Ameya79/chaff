@@ -1,505 +1,480 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import {
-  WebGLRenderer,
-  Scene,
-  PerspectiveCamera,
-  AmbientLight,
-  PointLight,
-  DirectionalLight,
-  InstancedMesh,
-  IcosahedronGeometry,
-  OctahedronGeometry,
-  MeshStandardMaterial,
-  Object3D,
-  Color,
-} from 'three';
-import { governor, dispose, DeviceTier } from '@chaff/tier';
+import { tier, governor, dispose, DeviceTier } from '@chaff/tier';
 
 export interface WinnowThreeSceneProps {
-  deviceTier: Exclude<DeviceTier, 'poster'>;
-  windKnots: number;
-  theme: 'dark' | 'light';
-  onWebGLUnavailable?: () => void;
+  tierOverride?: DeviceTier;
+  rippleEnergy?: number;
+  themeMode?: 'light' | 'dark';
+  onTierResolved?: (resolved: DeviceTier) => void;
+  onFallbackToPoster?: () => void;
 }
 
-interface GrainSeed {
-  isRing: boolean;
-  ringTilt: number;
-  radius: number;
-  dirX: number;
-  dirY: number;
-  dirZ: number;
-  angle: number;
-  speed: number;
-  scale: number;
-  phase: number;
+const QUAD_VS = `#version 300 es
+precision highp float;
+
+in vec2 a_pos;
+out vec2 v_ndc;
+
+void main() {
+  v_ndc = a_pos;
+  gl_Position = vec4(a_pos, 0.0, 1.0);
+}
+`;
+
+const ARTIFACT_FS = `#version 300 es
+precision highp float;
+
+in vec2 v_ndc;
+
+uniform float u_time;
+uniform float u_aspect;
+uniform float u_tiltX;
+uniform float u_tiltY;
+uniform float u_ripple;
+uniform float u_theme;
+uniform float u_lite;
+
+out vec4 outColor;
+
+mat2 rot2(float a) {
+  float c = cos(a), s = sin(a);
+  return mat2(c, -s, s, c);
 }
 
-interface HuskSeed {
-  lane: number;
-  radial: number;
-  angle: number;
-  speed: number;
-  spinX: number;
-  spinY: number;
-  sx: number;
-  sy: number;
-  sz: number;
-  phase: number;
+float sdTorus(vec3 p, vec2 t) {
+  vec2 q = vec2(length(p.xz) - t.x, p.y);
+  return length(q) - t.y;
 }
 
-/**
- * Full-bleed Three.js 3D Winnowing Sculpture & Curl-Wind Field.
- * Strictly obeys all 5 parts of Chaff's Level 3 Fallback Contract:
- * lazy-imported with ssr:false, @chaff/tier profiling, 1.5 DPR cap,
- * IntersectionObserver + document.hidden pause, and recursive GPU disposal.
- */
+float sdOctahedron(vec3 p, float s) {
+  p = abs(p);
+  float m = p.x + p.y + p.z - s;
+  vec3 q;
+  if (3.0 * p.x < m) q = p.xyz;
+  else if (3.0 * p.y < m) q = p.yzx;
+  else if (3.0 * p.z < m) q = p.zxy;
+  else return m * 0.57735027;
+  float k = clamp(0.5 * (q.z - q.y + s), 0.0, s);
+  return length(vec3(q.x, q.y - s + k, q.z - k));
+}
+
+// Returns vec2(signedDistance, materialId)
+// matId: 1.0 = Center Botanical Quartz Crystal, 2.0 = Inner Sage Astrolabe Ring & Nodes, 3.0 = Outer Hairline Calibration Rings
+vec2 mapScene(vec3 p) {
+  float t = u_time;
+  float alignFactor = u_ripple * 0.35;
+
+  // Global gentle optical gimbal tilt from pointer
+  vec3 gp = p;
+  gp.yz *= rot2(0.24 + u_tiltY * 0.36);
+  gp.xz *= rot2(-0.32 + u_tiltX * 0.44);
+
+  // 1. Sleek Elongated Botanical Quartz Obelisk Core
+  vec3 cp = gp;
+  cp.xz *= rot2(t * 0.28 + u_ripple * 1.4);
+  cp.xy *= rot2(0.14 * sin(t * 0.38));
+  float coreD = sdOctahedron(vec3(cp.x * 1.24, cp.y * 0.56, cp.z * 1.24), 0.33) - 0.0085;
+  vec2 res = vec2(coreD, 1.0);
+
+  // Subtle waist caliper collar around crystal equator
+  float collarD = sdTorus(cp, vec2(0.295, 0.0048));
+  if (collarD < res.x) res = vec2(collarD, 2.0);
+
+  // 2. Inner Sage Astrolabe Ring + Two Orbital Index Beads
+  vec3 r1 = gp;
+  r1.xy *= rot2(0.76 - 0.22 * sin(t * 0.35) - alignFactor);
+  r1.yz *= rot2(0.46 + t * 0.24);
+  float dRing1 = sdTorus(r1, vec2(0.55, 0.0068));
+  float beadA = length(r1 - vec3(0.55, 0.0, 0.0)) - 0.022;
+  float beadB = length(r1 + vec3(0.55, 0.0, 0.0)) - 0.022;
+  float dRing1All = min(dRing1, min(beadA, beadB));
+  if (dRing1All < res.x) res = vec2(dRing1All, 2.0);
+
+  // 3. Middle Hairline Titanium Ring
+  vec3 r2 = gp;
+  r2.yz *= rot2(-0.60 + t * 0.17 + alignFactor);
+  r2.xz *= rot2(0.52);
+  float dRing2 = sdTorus(r2, vec2(0.73, 0.0056));
+  if (dRing2 < res.x) res = vec2(dRing2, 3.0);
+
+  // 4. Outer Wide Hairline Meridian Ring
+  vec3 r3 = gp;
+  r3.xy *= rot2(-0.44 + t * 0.11);
+  r3.xz *= rot2(-0.46 - 0.16 * cos(t * 0.28));
+  float dRing3 = sdTorus(r3, vec2(0.91, 0.0048));
+  if (dRing3 < res.x) res = vec2(dRing3, 3.0);
+
+  return res;
+}
+
+vec3 calcNormal(vec3 p) {
+  const vec2 e = vec2(0.0010, 0.0);
+  return normalize(vec3(
+    mapScene(p + e.xyy).x - mapScene(p - e.xyy).x,
+    mapScene(p + e.yxy).x - mapScene(p - e.yxy).x,
+    mapScene(p + e.yyx).x - mapScene(p - e.yyx).x
+  ));
+}
+
+float calcAO(vec3 pos, vec3 nor) {
+  float occ = 0.0;
+  float sca = 1.0;
+  for (int i = 0; i < 4; i++) {
+    float h = 0.018 + 0.055 * float(i);
+    float d = mapScene(pos + h * nor).x;
+    occ += (h - d) * sca;
+    sca *= 0.74;
+  }
+  return clamp(1.0 - 1.9 * occ, 0.22, 1.0);
+}
+
+void main() {
+  // Fit sculpture centered with generous breathing room inside bounding sphere
+  vec2 uv = v_ndc * 0.5;
+  uv.x *= u_aspect;
+  float zoom = u_aspect < 1.05 ? 1.15 / max(u_aspect, 0.65) : 1.04;
+  vec3 ro = vec3(0.0, 0.0, 2.52 * zoom);
+  vec3 rd = normalize(vec3(uv, -1.35));
+
+  // Analytical bounding-sphere early exit (radius 1.04)
+  float b = dot(ro, rd);
+  float c = dot(ro, ro) - 1.04 * 1.04;
+  float disc = b * b - c;
+  if (disc < 0.0) {
+    outColor = vec4(0.0);
+    return;
+  }
+
+  float t = max(0.0, -b - sqrt(disc));
+  float tMax = -b + sqrt(disc);
+
+  int maxSteps = u_lite > 0.5 ? 28 : 50;
+  float hitD = 1e5;
+  float matId = 0.0;
+  float minD = 1e5;
+
+  for (int i = 0; i < 52; i++) {
+    if (i >= maxSteps) break;
+    vec3 p = ro + rd * t;
+    vec2 h = mapScene(p);
+    hitD = h.x;
+    matId = h.y;
+    minD = min(minD, hitD);
+    if (hitD < 0.0008 || t > tMax) break;
+    t += hitD * 0.88;
+  }
+
+  // Sharp hairline silhouette anti-aliasing so thin rings never fade out or blob
+  float edgeMask = 1.0 - smoothstep(0.0008, 0.0055, minD);
+  if (edgeMask <= 0.002) {
+    outColor = vec4(0.0);
+    return;
+  }
+
+  vec3 pos = ro + rd * t;
+  vec3 N = calcNormal(pos);
+  vec3 V = -rd;
+  vec3 R = reflect(-V, N);
+
+  vec3 L1 = normalize(vec3(-0.62, 0.86, 0.72));
+  vec3 L2 = normalize(vec3(0.76, -0.34, 0.58));
+  vec3 H1 = normalize(L1 + V);
+  vec3 H2 = normalize(L2 + V);
+
+  float wrap = clamp(dot(N, L1) * 0.5 + 0.5, 0.0, 1.0);
+  float diff2 = max(dot(N, L2), 0.0);
+  float specSharp = pow(max(dot(N, H1), 0.0), 136.0);
+  float specBroad = pow(max(dot(N, H2), 0.0), 28.0);
+  float fresnel = pow(1.0 - clamp(dot(N, V), 0.0, 1.0), 2.5);
+  float ao = u_lite > 0.5 ? 0.90 : calcAO(pos, N);
+  float horizon = smoothstep(-0.12, 0.14, R.y) * (1.0 - smoothstep(0.32, 0.76, R.y));
+  float innerScatter = pow(1.0 - abs(dot(N, V)), 1.9);
+
+  // Light Mode Palette (Translucent Botanical Quartz + Anodized Sage/Graphite Rings on Warm Off-White)
+  vec3 colLight;
+  if (matId < 1.5) {
+    vec3 sageDeep = vec3(0.08, 0.23, 0.15);
+    vec3 sageBody = vec3(0.20, 0.46, 0.32);
+    vec3 sageQuartz = vec3(0.60, 0.84, 0.70);
+    colLight = mix(sageDeep, sageBody, smoothstep(0.12, 0.74, wrap));
+    colLight = mix(colLight, sageQuartz, horizon * 0.42 + innerScatter * 0.34 + specBroad * 0.32);
+    colLight += vec3(0.90, 0.97, 0.92) * fresnel * 0.54;
+    colLight += vec3(1.0) * specSharp * 1.05;
+  } else if (matId < 2.5) {
+    vec3 ringDeep = vec3(0.12, 0.30, 0.20);
+    vec3 ringMid  = vec3(0.28, 0.56, 0.40);
+    colLight = mix(ringDeep, ringMid, wrap);
+    colLight += vec3(0.95, 0.99, 0.96) * (specSharp * 0.92 + fresnel * 0.28);
+  } else {
+    vec3 titDeep = vec3(0.24, 0.28, 0.25);
+    vec3 titCrest = vec3(0.68, 0.72, 0.68);
+    colLight = mix(titDeep, titCrest, smoothstep(0.12, 0.88, wrap));
+    colLight += vec3(0.30, 0.55, 0.42) * (fresnel * 0.26 + diff2 * 0.08);
+    colLight += vec3(1.0) * (specSharp * 0.88 + specBroad * 0.18);
+  }
+  colLight *= ao;
+
+  // Dark Mode Palette (Luminous Emerald Quartz + Obsidian/Sage Instrument Rings)
+  vec3 colDark;
+  if (matId < 1.5) {
+    vec3 dDeep = vec3(0.07, 0.19, 0.13);
+    vec3 dMid  = vec3(0.23, 0.51, 0.36);
+    vec3 dMint = vec3(0.66, 0.90, 0.75);
+    colDark = mix(dDeep, dMid, smoothstep(0.12, 0.76, wrap));
+    colDark = mix(colDark, dMint, horizon * 0.48 + innerScatter * 0.36 + fresnel * 0.45);
+    colDark += vec3(0.96, 1.0, 0.98) * specSharp * 1.05;
+  } else if (matId < 2.5) {
+    colDark = mix(vec3(0.15, 0.34, 0.24), vec3(0.54, 0.82, 0.66), wrap);
+    colDark += vec3(0.94, 0.99, 0.96) * (specSharp * 0.88 + fresnel * 0.36);
+  } else {
+    colDark = mix(vec3(0.18, 0.22, 0.19), vec3(0.56, 0.64, 0.59), smoothstep(0.12, 0.85, wrap));
+    colDark += vec3(0.46, 0.72, 0.57) * fresnel * 0.42;
+    colDark += vec3(0.98) * specSharp * 0.85;
+  }
+  colDark *= mix(1.0, ao, 0.85);
+
+  vec3 finalCol = mix(colLight, colDark, u_theme);
+  outColor = vec4(finalCol, edgeMask);
+}
+`;
+
+function compileShader(
+  gl: WebGL2RenderingContext,
+  type: number,
+  source: string
+): WebGLShader {
+  const shader = gl.createShader(type);
+  if (!shader) throw new Error('Shader creation failed');
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    const info = gl.getShaderInfoLog(shader) || 'Compile failed';
+    gl.deleteShader(shader);
+    throw new Error(info);
+  }
+  return shader;
+}
+
+function linkProgram(
+  gl: WebGL2RenderingContext,
+  vsSrc: string,
+  fsSrc: string
+): WebGLProgram {
+  const vs = compileShader(gl, gl.VERTEX_SHADER, vsSrc);
+  const fs = compileShader(gl, gl.FRAGMENT_SHADER, fsSrc);
+  const program = gl.createProgram();
+  if (!program) throw new Error('Program creation failed');
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  gl.deleteShader(vs);
+  gl.deleteShader(fs);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    const info = gl.getProgramInfoLog(program) || 'Link failed';
+    gl.deleteProgram(program);
+    throw new Error(info);
+  }
+  return program;
+}
+
 export default function WinnowThreeScene({
-  deviceTier,
-  windKnots,
-  theme,
-  onWebGLUnavailable,
+  tierOverride,
+  rippleEnergy = 0,
+  themeMode = 'light',
+  onTierResolved,
+  onFallbackToPoster,
 }: WinnowThreeSceneProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const windRef = useRef<number>(windKnots);
-  const themeRef = useRef<'dark' | 'light'>(theme);
-  const pointerRef = useRef<{ x: number; y: number; tx: number; ty: number }>({
-    x: 0,
-    y: 0,
-    tx: 0,
-    ty: 0,
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const stateRef = useRef<{
+    targetX: number;
+    targetY: number;
+    currX: number;
+    currY: number;
+    ripplePulse: number;
+    themeTarget: number;
+    themeCurr: number;
+    isLite: number;
+  }>({
+    targetX: 0,
+    targetY: 0,
+    currX: 0,
+    currY: 0,
+    ripplePulse: 0,
+    themeTarget: themeMode === 'dark' ? 1 : 0,
+    themeCurr: themeMode === 'dark' ? 1 : 0,
+    isLite: 0,
   });
 
-  const sceneRefs = useRef<{
-    grainMat?: MeshStandardMaterial;
-    huskMat?: MeshStandardMaterial;
-    emberLight?: PointLight;
-    rimLight?: PointLight;
-    keyLight?: DirectionalLight;
-    ambient?: AmbientLight;
-    grainMesh?: InstancedMesh;
-    huskMesh?: InstancedMesh;
-    grainCount?: number;
-    huskCount?: number;
-  }>({});
+  useEffect(() => {
+    stateRef.current.themeTarget = themeMode === 'dark' ? 1 : 0;
+  }, [themeMode]);
 
   useEffect(() => {
-    windRef.current = windKnots;
-  }, [windKnots]);
+    if (rippleEnergy > 0) {
+      stateRef.current.ripplePulse = 1.0;
+    }
+  }, [rippleEnergy]);
 
   useEffect(() => {
-    themeRef.current = theme;
-    const refs = sceneRefs.current;
-    if (!refs.grainMat || !refs.huskMat || !refs.grainMesh || !refs.huskMesh) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    const isDark = theme === 'dark';
-    refs.grainMat.roughness = isDark ? 0.2 : 0.26;
-    refs.grainMat.metalness = isDark ? 0.84 : 0.72;
-    refs.huskMat.roughness = isDark ? 0.55 : 0.68;
-    if (refs.ambient) refs.ambient.intensity = isDark ? 0.75 : 1.15;
-    if (refs.emberLight) refs.emberLight.intensity = isDark ? 28 : 20;
-    if (refs.rimLight) refs.rimLight.intensity = isDark ? 16 : 10;
+    const detected = tier();
+    const effective: DeviceTier = tierOverride ?? detected;
+    stateRef.current.isLite = effective === 'lite' ? 1 : 0;
+    onTierResolved?.(effective);
 
-    const c = new Color();
-    const gCount = refs.grainCount ?? 0;
-    for (let i = 0; i < gCount; i++) {
-      if (isDark) {
-        c.setHex(i % 4 === 0 ? 0xf7d78a : i % 2 === 0 ? 0xf2b84b : 0xe38a35);
-      } else {
-        c.setHex(i % 4 === 0 ? 0xc97c18 : i % 2 === 0 ? 0xa65e0e : 0x8a4b08);
-      }
-      refs.grainMesh.setColorAt(i, c);
-    }
-    if (refs.grainMesh.instanceColor) {
-      refs.grainMesh.instanceColor.needsUpdate = true;
-    }
-
-    const hCount = refs.huskCount ?? 0;
-    for (let i = 0; i < hCount; i++) {
-      if (isDark) {
-        c.setHex(i % 5 === 0 ? 0x4c3a6e : i % 3 === 0 ? 0x2c2c36 : 0x1a1a22);
-      } else {
-        c.setHex(i % 5 === 0 ? 0x6d28d9 : i % 3 === 0 ? 0x45413a : 0x292622);
-      }
-      refs.huskMesh.setColorAt(i, c);
-    }
-    if (refs.huskMesh.instanceColor) {
-      refs.huskMesh.instanceColor.needsUpdate = true;
-    }
-  }, [theme]);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const canvas = document.createElement('canvas');
-    canvas.setAttribute('aria-hidden', 'true');
-    canvas.className = 'w-full h-full block';
-    container.appendChild(canvas);
-
-    let renderer: WebGLRenderer;
-    try {
-      renderer = new WebGLRenderer({
-        canvas,
-        alpha: true,
-        antialias: deviceTier === 'full',
-        powerPreference: 'high-performance',
-      });
-    } catch {
-      canvas.remove();
-      onWebGLUnavailable?.();
+    if (effective === 'poster') {
+      onFallbackToPoster?.();
       return;
     }
 
-    const gl = renderer.getContext();
+    const gl = canvas.getContext('webgl2', {
+      alpha: true,
+      antialias: false,
+      premultipliedAlpha: false,
+      powerPreference: 'high-performance',
+    });
+
     if (!gl) {
-      dispose(renderer);
-      canvas.remove();
-      onWebGLUnavailable?.();
+      onFallbackToPoster?.();
       return;
     }
 
-    const grainCount = deviceTier === 'full' ? 140 : 35;
-    const huskCount = deviceTier === 'full' ? 220 : 55;
+    let program: WebGLProgram;
+    try {
+      program = linkProgram(gl, QUAD_VS, ARTIFACT_FS);
+    } catch {
+      onFallbackToPoster?.();
+      return;
+    }
 
-    let grainMesh: InstancedMesh | null = null;
-    let huskMesh: InstancedMesh | null = null;
+    const quadVerts = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+    const quadBuf = gl.createBuffer();
+    if (!quadBuf) {
+      dispose({ dispose: () => gl.deleteProgram(program) });
+      onFallbackToPoster?.();
+      return;
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, quadVerts, gl.STATIC_DRAW);
+
+    const aPosLoc = gl.getAttribLocation(program, 'a_pos');
+    const uTimeLoc = gl.getUniformLocation(program, 'u_time');
+    const uAspectLoc = gl.getUniformLocation(program, 'u_aspect');
+    const uTiltXLoc = gl.getUniformLocation(program, 'u_tiltX');
+    const uTiltYLoc = gl.getUniformLocation(program, 'u_tiltY');
+    const uRippleLoc = gl.getUniformLocation(program, 'u_ripple');
+    const uThemeLoc = gl.getUniformLocation(program, 'u_theme');
+    const uLiteLoc = gl.getUniformLocation(program, 'u_lite');
 
     const gov = governor({
-      level: deviceTier,
+      level: effective,
       maxPixelRatio: 1.5,
       targetFps: 60,
       onDegrade: () => {
-        if (grainMesh && huskMesh) {
-          grainMesh.count = Math.max(24, Math.floor(grainCount * 0.45));
-          huskMesh.count = Math.max(36, Math.floor(huskCount * 0.45));
-        }
+        stateRef.current.isLite = 1;
       },
     });
 
-    const scene = new Scene();
-    const camera = new PerspectiveCamera(42, 16 / 9, 0.1, 60);
-    camera.position.set(0, 0.08, 8.8);
-
-    const isDark = themeRef.current === 'dark';
-    const ambient = new AmbientLight(0xffffff, isDark ? 0.75 : 1.15);
-    const keyLight = new DirectionalLight(0xf4f1ea, 2.6);
-    keyLight.position.set(-3.2, 5.2, 5.8);
-    const emberLight = new PointLight(0xf2713a, isDark ? 28 : 20, 28);
-    emberLight.position.set(0.8, 1.4, 3.8);
-    const rimLight = new PointLight(0xa78bfa, isDark ? 16 : 10, 26);
-    rimLight.position.set(4.8, -1.6, -2.2);
-    scene.add(ambient, keyLight, emberLight, rimLight);
-
-    const grainGeo = new IcosahedronGeometry(0.088, 0);
-    const grainMat = new MeshStandardMaterial({
-      metalness: isDark ? 0.84 : 0.72,
-      roughness: isDark ? 0.2 : 0.26,
-      flatShading: true,
-    });
-    grainMesh = new InstancedMesh(grainGeo, grainMat, grainCount);
-
-    const huskGeo = new OctahedronGeometry(0.115, 0);
-    const huskMat = new MeshStandardMaterial({
-      metalness: 0.45,
-      roughness: isDark ? 0.55 : 0.68,
-      flatShading: true,
-    });
-    huskMesh = new InstancedMesh(huskGeo, huskMat, huskCount);
-
-    sceneRefs.current = {
-      grainMat,
-      huskMat,
-      emberLight,
-      rimLight,
-      keyLight,
-      ambient,
-      grainMesh,
-      huskMesh,
-      grainCount,
-      huskCount,
-    };
-
-    const grainSeeds: GrainSeed[] = [];
-    const tmpColor = new Color();
-    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-    const coreCount = Math.floor(grainCount * 0.62);
-
-    for (let i = 0; i < grainCount; i++) {
-      const isRing = i >= coreCount;
-      if (!isRing) {
-        // Fibonacci geodesic shell
-        const t = (i + 0.5) / coreCount;
-        const y = 1 - 2 * t;
-        const radialAtY = Math.sqrt(Math.max(0, 1 - y * y));
-        const phi = i * goldenAngle;
-        const shellLayer = (i % 3) * 0.28;
-        grainSeeds.push({
-          isRing: false,
-          ringTilt: 0,
-          radius: 0.62 + shellLayer + (i % 5) * 0.05,
-          dirX: Math.cos(phi) * radialAtY,
-          dirY: y,
-          dirZ: Math.sin(phi) * radialAtY,
-          angle: phi,
-          speed: 0.16 + (i % 5) * 0.025,
-          scale: 0.72 + (1 - (i % 3) * 0.18) * 0.45,
-          phase: i * 0.37,
-        });
-      } else {
-        // Dual inclined Keplerian orbital rings
-        const ringIdx = i - coreCount;
-        const ringFrac = ringIdx / Math.max(1, grainCount - coreCount);
-        const isSecondRing = ringIdx % 2 === 1;
-        grainSeeds.push({
-          isRing: true,
-          ringTilt: isSecondRing ? -0.46 : 0.42,
-          radius: (isSecondRing ? 1.88 : 1.56) + (ringIdx % 3) * 0.09,
-          dirX: 0,
-          dirY: 0,
-          dirZ: 0,
-          angle: ringFrac * Math.PI * 2,
-          speed: isSecondRing ? -0.26 : 0.31,
-          scale: 0.56 + (ringIdx % 4) * 0.11,
-          phase: ringIdx * 0.51,
-        });
-      }
-
-      if (isDark) {
-        tmpColor.setHex(i % 4 === 0 ? 0xf7d78a : i % 2 === 0 ? 0xf2b84b : 0xe38a35);
-      } else {
-        tmpColor.setHex(i % 4 === 0 ? 0xc97c18 : i % 2 === 0 ? 0xa65e0e : 0x8a4b08);
-      }
-      grainMesh.setColorAt(i, tmpColor);
-    }
-    if (grainMesh.instanceColor) grainMesh.instanceColor.needsUpdate = true;
-
-    const huskSeeds: HuskSeed[] = [];
-    for (let i = 0; i < huskCount; i++) {
-      // Deterministic pseudo-random distribution for consistent balanced silhouette
-      const seedA = Math.sin(i * 12.9898) * 43758.5453;
-      const r1 = seedA - Math.floor(seedA);
-      const seedB = Math.sin(i * 78.233 + 1.7) * 24634.6345;
-      const r2 = seedB - Math.floor(seedB);
-      const seedC = Math.sin(i * 39.425 + 3.1) * 19283.4123;
-      const r3 = seedC - Math.floor(seedC);
-
-      huskSeeds.push({
-        lane: (i % 19) / 19,
-        radial: 0.7 + r1 * 1.45,
-        angle: r2 * Math.PI * 2,
-        speed: 0.36 + r3 * 0.62,
-        spinX: 0.9 + r1 * 2.1,
-        spinY: 0.7 + r2 * 1.8,
-        sx: 1.55 + r3 * 0.85,
-        sy: 0.16 + r1 * 0.14,
-        sz: 0.4 + r2 * 0.28,
-        phase: r1 * Math.PI * 2,
-      });
-      if (isDark) {
-        tmpColor.setHex(i % 5 === 0 ? 0x4c3a6e : i % 3 === 0 ? 0x2c2c36 : 0x1a1a22);
-      } else {
-        tmpColor.setHex(i % 5 === 0 ? 0x6d28d9 : i % 3 === 0 ? 0x45413a : 0x292622);
-      }
-      huskMesh.setColorAt(i, tmpColor);
-    }
-    if (huskMesh.instanceColor) huskMesh.instanceColor.needsUpdate = true;
-
-    scene.add(grainMesh, huskMesh);
-
-    const viewState = {
-      isWide: container.clientWidth >= 1024,
-      halfW: 5.5,
-      halfH: 3.3,
-    };
-
-    const syncSize = () => {
-      const rect = container.getBoundingClientRect();
-      const w = Math.max(1, Math.floor(rect.width));
-      const h = Math.max(1, Math.floor(rect.height));
-      const aspect = w / h;
-      const isWide = w >= 1024;
-      const camZ = isWide ? 8.8 : 9.4 + Math.max(0, 1 - aspect) * 4.4;
-
-      camera.aspect = aspect;
-      camera.position.set(0, 0.08, camZ);
-      camera.updateProjectionMatrix();
-
-      const halfH = Math.tan((42 * Math.PI) / 360) * camZ;
-      viewState.isWide = isWide;
-      viewState.halfH = halfH;
-      viewState.halfW = halfH * aspect;
-
-      renderer.setPixelRatio(gov.getEffectivePixelRatio());
-      renderer.setSize(w, h, false);
-    };
-
-    syncSize();
-    const resizeObserver =
-      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(syncSize) : null;
-    resizeObserver?.observe(container);
-
-    const onPointerMove = (e: PointerEvent) => {
-      const rect = container.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-      pointerRef.current.tx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      pointerRef.current.ty = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
-    };
-    window.addEventListener('pointermove', onPointerMove, { passive: true });
-
-    const onContextLost = (e: Event) => {
+    const handleContextLost = (e: Event) => {
       e.preventDefault();
-      onWebGLUnavailable?.();
+      onFallbackToPoster?.();
     };
-    canvas.addEventListener('webglcontextlost', onContextLost);
+    canvas.addEventListener('webglcontextlost', handleContextLost);
 
-    const dummy = new Object3D();
-    const startTime = performance.now();
+    const handlePointerMove = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+      stateRef.current.targetX = Math.max(-1, Math.min(1, nx));
+      stateRef.current.targetY = Math.max(-1, Math.min(1, ny));
+    };
 
-    const controller = gov.attach(canvas, (now) => {
-      if (!grainMesh || !huskMesh) return;
-      const elapsed = (now - startTime) * 0.001;
-      const windNorm = Math.max(0, Math.min(1, windRef.current / 100));
+    const handlePointerLeave = () => {
+      stateRef.current.targetX = 0;
+      stateRef.current.targetY = 0;
+    };
 
-      const ptr = pointerRef.current;
-      ptr.x += (ptr.tx - ptr.x) * 0.075;
-      ptr.y += (ptr.ty - ptr.y) * 0.075;
+    canvas.addEventListener('pointermove', handlePointerMove, { passive: true });
+    canvas.addEventListener('pointerleave', handlePointerLeave);
 
-      const { isWide, halfW, halfH } = viewState;
-      const sculptureScale = isWide ? 1.0 : 0.72;
-      const anchorX = isWide ? Math.min(2.35, halfW * 0.44) : halfW * 0.24;
-      const anchorY = isWide ? 0.04 : halfH * 0.34;
-
-      const cursorWorldX = ptr.x * halfW;
-      const cursorWorldY = ptr.y * halfH;
-
-      // Population A: Geodesic Golden Grain Core & Keplerian Orbital Rings
-      for (let i = 0; i < grainMesh.count; i++) {
-        const g = grainSeeds[i];
-        const tightness = 1 - windNorm * 0.16;
-        let lx: number;
-        let ly: number;
-        let lz: number;
-
-        if (!g.isRing) {
-          const rotY = elapsed * g.speed;
-          const cosY = Math.cos(rotY);
-          const sinY = Math.sin(rotY);
-          const breath = g.radius * tightness + Math.sin(elapsed * 1.15 + g.phase) * 0.05;
-          const rx = g.dirX * cosY - g.dirZ * sinY;
-          const rz = g.dirX * sinY + g.dirZ * cosY;
-          lx = rx * breath * sculptureScale;
-          ly = g.dirY * breath * sculptureScale;
-          lz = rz * breath * sculptureScale;
-        } else {
-          const theta = g.angle + elapsed * g.speed;
-          const r = g.radius * tightness * sculptureScale;
-          const ox = Math.cos(theta) * r;
-          const oz = Math.sin(theta) * r;
-          const cosT = Math.cos(g.ringTilt);
-          const sinT = Math.sin(g.ringTilt);
-          lx = ox;
-          ly = oz * sinT + Math.sin(elapsed * 1.4 + g.phase) * 0.04;
-          lz = oz * cosT;
-        }
-
-        let x = anchorX + lx;
-        let y = anchorY + ly;
-        const z = lz;
-
-        const dx = x - cursorWorldX;
-        const dy = y - cursorWorldY;
-        const distSq = dx * dx + dy * dy;
-        if (distSq < 2.25 && distSq > 0.001) {
-          const dist = Math.sqrt(distSq);
-          const force = (1.5 - dist) * 0.34;
-          x += (dx / dist) * force;
-          y += (dy / dist) * force;
-        }
-
-        dummy.position.set(x, y, z);
-        dummy.rotation.set(
-          elapsed * 0.42 + g.phase,
-          elapsed * 0.58 + g.angle,
-          g.phase * 0.4
-        );
-        dummy.scale.setScalar(g.scale * sculptureScale);
-        dummy.updateMatrix();
-        grainMesh.setMatrixAt(i, dummy.matrix);
+    const syncCanvasSize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = gov.getEffectivePixelRatio();
+      const w = Math.max(1, Math.floor(rect.width * dpr));
+      const h = Math.max(1, Math.floor(rect.height * dpr));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
       }
-      grainMesh.instanceMatrix.needsUpdate = true;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
 
-      // Population B: Fractured Obsidian & Violet Husk Shards peeling into curl-wind ribbon
-      const windSpeed = 0.24 + windNorm * 1.65;
-      const windSpread = (isWide ? 1.15 : 0.6) + windNorm * (isWide ? 2.45 : 1.25);
+    syncCanvasSize();
+    const ro = new ResizeObserver(syncCanvasSize);
+    ro.observe(canvas);
 
-      for (let i = 0; i < huskMesh.count; i++) {
-        const h = huskSeeds[i];
-        const cycle = (elapsed * h.speed * windSpeed * 0.34 + h.lane) % 1;
-        const sweep = cycle * (1.2 + windSpread);
-        const curlAngle = h.angle + cycle * (2.4 + windNorm * 2.8) + elapsed * 0.25;
+    let elapsedSec = 0;
+    let lastTs = performance.now();
 
-        let x =
-          anchorX +
-          Math.cos(curlAngle) * (h.radial * sculptureScale * 0.72) +
-          sweep * (isWide ? 1.18 : 0.48);
-        let y =
-          anchorY +
-          Math.sin(curlAngle * 1.35 + elapsed * 1.25 + h.phase) *
-            (0.42 + windNorm * 0.75) *
-            sculptureScale +
-          cycle * (0.4 + windNorm * 0.9) * sculptureScale;
-        const z = Math.sin(curlAngle) * h.radial * 0.75 * sculptureScale - cycle * 0.9;
+    const loopHandle = gov.attach(canvas, (now: number) => {
+      const dt = Math.min(0.05, Math.max(0.001, (now - lastTs) / 1000));
+      lastTs = now;
+      elapsedSec += dt;
 
-        const dx = x - cursorWorldX;
-        const dy = y - cursorWorldY;
-        const distSq = dx * dx + dy * dy;
-        if (distSq < 3.6 && distSq > 0.001) {
-          const dist = Math.sqrt(distSq);
-          const push = (1.9 - dist) * (0.55 + windNorm * 0.5);
-          // Tangential curl swirl + radial repulsion
-          x += (dx / dist) * push - (dy / dist) * push * 0.42;
-          y += (dy / dist) * push + (dx / dist) * push * 0.42;
-        }
+      const s = stateRef.current;
+      s.currX += (s.targetX - s.currX) * Math.min(1, dt * 6.0);
+      s.currY += (s.targetY - s.currY) * Math.min(1, dt * 6.0);
+      s.ripplePulse *= Math.pow(0.2, dt);
+      s.themeCurr += (s.themeTarget - s.themeCurr) * Math.min(1, dt * 10.0);
 
-        const fadeScale = Math.sin(cycle * Math.PI);
-        const s = (0.3 + fadeScale * 0.85) * sculptureScale;
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-        dummy.position.set(x, y, z);
-        dummy.rotation.set(
-          elapsed * h.spinX * (0.6 + windNorm),
-          elapsed * h.spinY * (0.6 + windNorm),
-          h.phase + cycle * 4.2
-        );
-        dummy.scale.set(h.sx * s, h.sy * s, h.sz * s);
-        dummy.updateMatrix();
-        huskMesh.setMatrixAt(i, dummy.matrix);
-      }
-      huskMesh.instanceMatrix.needsUpdate = true;
+      gl.useProgram(program);
+      gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+      gl.enableVertexAttribArray(aPosLoc);
+      gl.vertexAttribPointer(aPosLoc, 2, gl.FLOAT, false, 0, 0);
 
-      renderer.render(scene, camera);
+      const aspect = canvas.width / Math.max(1, canvas.height);
+      gl.uniform1f(uTimeLoc, elapsedSec);
+      gl.uniform1f(uAspectLoc, aspect);
+      gl.uniform1f(uTiltXLoc, s.currX);
+      gl.uniform1f(uTiltYLoc, s.currY);
+      gl.uniform1f(uRippleLoc, s.ripplePulse);
+      gl.uniform1f(uThemeLoc, s.themeCurr);
+      gl.uniform1f(uLiteLoc, s.isLite);
+
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     });
 
     return () => {
-      controller.detach();
-      resizeObserver?.disconnect();
-      window.removeEventListener('pointermove', onPointerMove);
-      canvas.removeEventListener('webglcontextlost', onContextLost);
-      grainMesh?.dispose();
-      huskMesh?.dispose();
-      dispose(scene);
-      dispose(renderer);
-      canvas.remove();
-      sceneRefs.current = {};
+      loopHandle.detach();
+      ro.disconnect();
+      canvas.removeEventListener('pointermove', handlePointerMove);
+      canvas.removeEventListener('pointerleave', handlePointerLeave);
+      canvas.removeEventListener('webglcontextlost', handleContextLost);
+      dispose({
+        dispose: () => {
+          gl.deleteBuffer(quadBuf);
+          gl.deleteProgram(program);
+        },
+      });
     };
-  }, [deviceTier, onWebGLUnavailable]);
+  }, [tierOverride, onTierResolved, onFallbackToPoster]);
 
   return (
-    <div
-      ref={containerRef}
-      className="pointer-events-none absolute inset-0 w-full h-full overflow-hidden"
+    <canvas
+      ref={canvasRef}
+      aria-label="Botanical sage crystal core inside concentric calibration rings"
+      className="w-full h-full block touch-pan-y cursor-grab active:cursor-grabbing"
     />
   );
 }

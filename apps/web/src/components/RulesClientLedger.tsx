@@ -15,8 +15,6 @@ export interface RulePublicDto {
   good: string;
   why: string;
   exceptions: string;
-  detectionLogic: string;
-  remediationSteps: string;
 }
 
 interface RulesClientLedgerProps {
@@ -141,8 +139,8 @@ export function RulesClientLedger({
   };
 
   return (
-    <div className="space-y-8">
-      {/* Borderless Search & Category Bar */}
+    <div className="space-y-8 sheet-in" style={{ '--d': '120ms' } as React.CSSProperties}>
+      {/* Rectilinear Search & Category Tab Bar */}
       <div className="space-y-5">
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
           <div className="flex-1 min-w-0">
@@ -161,7 +159,7 @@ export function RulesClientLedger({
                 syncUrl(selectedCategory, nextQ);
               }}
               placeholder="Filter rules by ID, keyword, or pattern (press /)..."
-              className="w-full px-4 py-3 min-h-[44px] rounded-xl bg-[var(--bg-surface)] text-[var(--text-main)] font-mono text-base placeholder:text-[var(--text-dim)]"
+              className="w-full px-4 py-3 min-h-[44px] rounded-[2px] bg-[var(--bg-surface)] hairline-box text-[var(--text-main)] font-mono text-base placeholder:text-[var(--text-dim)]"
             />
           </div>
 
@@ -179,8 +177,8 @@ export function RulesClientLedger({
           )}
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center justify-between gap-4 hairline-b pb-3">
+          <div className="flex flex-wrap items-center gap-1">
             {categories.map((c) => {
               const active = selectedCategory === c.id;
               return (
@@ -192,13 +190,13 @@ export function RulesClientLedger({
                     syncUrl(c.id, searchQuery);
                   }}
                   aria-pressed={active}
-                  className={`px-3.5 py-2 rounded-full min-h-[44px] min-w-[44px] font-mono text-xs transition-colors ${
+                  className={`px-3 py-2 rounded-[6px] min-h-[44px] min-w-[44px] font-mono text-xs transition-colors duration-200 border-b-2 ${
                     active
-                      ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold'
-                      : 'bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-main)]'
+                      ? 'border-[var(--accent)] bg-[var(--bg-surface)] text-[var(--text-main)] font-medium'
+                      : 'border-transparent text-[var(--text-dim)] hover:text-[var(--text-main)]'
                   }`}
                 >
-                  {c.name} <span className="opacity-75 tabular-nums">{c.count}</span>
+                  {c.name} <span className="opacity-70 tabular-nums">{c.count}</span>
                 </button>
               );
             })}
@@ -212,8 +210,8 @@ export function RulesClientLedger({
 
       {/* Split Index + Sticky Spec */}
       {filteredRules.length === 0 ? (
-        <div className="py-16 space-y-4 hairline-t">
-          <h2 className="font-serif text-2xl text-[var(--text-main)]">
+        <div className="py-16 space-y-4">
+          <h2 className="font-display text-2xl text-[var(--text-main)]">
             No matching rules
           </h2>
           <button
@@ -229,7 +227,7 @@ export function RulesClientLedger({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start hairline-t pt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start pt-2">
           <div className="lg:col-span-7 divide-y divide-[var(--border-line)] min-w-0">
             {filteredRules.map((r) => {
               const isSelected = activeRule?.id === r.id;
@@ -239,8 +237,8 @@ export function RulesClientLedger({
                 <article
                   key={r.id}
                   id={r.id}
-                  className={`scroll-mt-24 transition-colors ${
-                    isSelected ? 'bg-[var(--bg-surface-active)] rounded-xl' : ''
+                  className={`scroll-mt-24 transition-colors duration-200 ${
+                    isSelected ? 'bg-[var(--bg-surface-active)]' : ''
                   }`}
                 >
                   <button
@@ -250,13 +248,13 @@ export function RulesClientLedger({
                       setMobileExpandedId(isMobileOpen ? null : r.id);
                     }}
                     aria-expanded={isMobileOpen}
-                    className="w-full text-left px-3 py-4 min-h-[44px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[var(--bg-surface-hover)] rounded-xl transition-colors"
+                    className="w-full text-left px-3 py-4 min-h-[44px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[var(--bg-surface-hover)] transition-colors duration-200"
                   >
                     <div className="flex flex-wrap items-center gap-3 min-w-0">
-                      <span className="font-mono text-xs font-semibold text-[var(--accent-ember)] min-w-[76px]">
+                      <span className="font-mono text-xs font-medium text-[var(--accent)] min-w-[76px]">
                         {r.id}
                       </span>
-                      <span className="font-serif text-base sm:text-lg text-[var(--text-main)]">
+                      <span className="font-medium text-base text-[var(--text-main)]">
                         {r.title}
                       </span>
                     </div>
@@ -265,7 +263,7 @@ export function RulesClientLedger({
                       <span
                         className={
                           r.severity === 'high'
-                            ? 'text-[var(--accent-ember)]'
+                            ? 'text-[var(--status-fail)]'
                             : 'text-[var(--status-warn)]'
                         }
                       >
@@ -278,24 +276,24 @@ export function RulesClientLedger({
                   </button>
 
                   {isMobileOpen && (
-                    <div className="lg:hidden px-3 pb-6 pt-2 space-y-4">
+                    <div className="lg:hidden px-3 pb-6 pt-2 space-y-4 panel-enter">
                       <p className="text-sm text-[var(--text-dim)] leading-relaxed">
                         {r.why}
                       </p>
                       <div className="space-y-3">
                         <div>
-                          <span className="font-mono text-xs text-[var(--accent-ember)] block mb-1.5">
+                          <span className="font-mono text-xs text-[var(--status-fail)] block mb-1.5">
                             Before
                           </span>
-                          <pre className="p-3.5 rounded-xl bg-[var(--bg-surface)] font-mono text-xs overflow-x-auto leading-relaxed">
+                          <pre className="p-3.5 rounded-[6px] bg-[var(--bg-surface)] hairline-box font-mono text-xs overflow-x-auto leading-relaxed">
                             <code>{r.bad}</code>
                           </pre>
                         </div>
                         <div>
-                          <span className="font-mono text-xs text-[var(--status-sage)] block mb-1.5">
+                          <span className="font-mono text-xs text-[var(--status-pass)] block mb-1.5">
                             After
                           </span>
-                          <pre className="p-3.5 rounded-xl bg-[var(--bg-surface)] font-mono text-xs overflow-x-auto leading-relaxed">
+                          <pre className="p-3.5 rounded-[6px] bg-[var(--bg-surface)] hairline-box font-mono text-xs overflow-x-auto leading-relaxed">
                             <code>{r.good}</code>
                           </pre>
                         </div>
@@ -316,13 +314,14 @@ export function RulesClientLedger({
 
           {activeRule && (
             <aside
+              key={activeRule.id}
               aria-label="Rule inspection panel"
-              className="hidden lg:block lg:col-span-5 lg:sticky lg:top-24 rounded-2xl bg-[var(--bg-surface)] p-6 sm:p-8 space-y-6 min-w-0"
+              className="hidden lg:block lg:col-span-5 lg:sticky lg:top-24 rounded-[10px] bg-[var(--bg-surface)] hairline-box p-6 sm:p-8 space-y-6 min-w-0 panel-enter"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1.5 min-w-0">
                   <div className="flex flex-wrap items-center gap-2.5 font-mono text-xs text-[var(--text-dim)]">
-                    <span className="font-semibold text-[var(--accent-ember)]">
+                    <span className="font-medium text-[var(--accent)]">
                       {activeRule.id}
                     </span>
                     <span aria-hidden="true">·</span>
@@ -330,7 +329,7 @@ export function RulesClientLedger({
                     <span aria-hidden="true">·</span>
                     <span>{activeRule.detect}</span>
                   </div>
-                  <h2 className="font-serif text-2xl text-[var(--text-main)]">
+                  <h2 className="font-display text-2xl text-[var(--text-main)]">
                     {activeRule.title}
                   </h2>
                 </div>
@@ -350,19 +349,19 @@ export function RulesClientLedger({
 
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <span className="font-mono text-xs text-[var(--accent-ember)] block">
+                  <span className="font-mono text-xs text-[var(--status-fail)] block">
                     Bad
                   </span>
-                  <pre className="p-4 rounded-xl bg-[var(--bg-surface-elevated)] font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
+                  <pre className="p-4 rounded-[6px] bg-[var(--bg-surface-elevated)] font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
                     <code>{activeRule.bad}</code>
                   </pre>
                 </div>
 
                 <div className="space-y-1.5">
-                  <span className="font-mono text-xs text-[var(--status-sage)] block">
+                  <span className="font-mono text-xs text-[var(--status-pass)] block">
                     Good
                   </span>
-                  <pre className="p-4 rounded-xl bg-[var(--bg-surface-elevated)] font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
+                  <pre className="p-4 rounded-[6px] bg-[var(--bg-surface-elevated)] font-mono text-xs text-[var(--text-main)] overflow-x-auto max-h-44 leading-relaxed">
                     <code>{activeRule.good}</code>
                   </pre>
                 </div>

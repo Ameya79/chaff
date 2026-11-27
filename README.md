@@ -1,114 +1,68 @@
-# CHAFF
+# Chaff — Taste & Craft Protocol for AI Coding Agents
 
-> **Keep the grain.**  
-> Chaff audits the page as it renders, locks what is yours, ships the runtime for risky 3D, and fails the pull request when the page gets slow.
-
-[![CI Status](https://github.com/chaff-dev/chaff/actions/workflows/chaff.yml/badge.svg)](https://github.com/chaff-dev/chaff)
-[![Rules](https://img.shields.io/badge/rules-72%20verified-2d6a4f.svg)](#core-rules-taxonomy)
-[![Creative Levels](https://img.shields.io/badge/levels-1%20%7C%202%20%7C%203-c2410c.svg)](#the-three-creative-levels)
-[![MCP Protocol](https://img.shields.io/badge/mcp-7%20tools%20ready-1c1917.svg)](#model-context-protocol-mcp-server)
-[![License](https://img.shields.io/badge/license-MIT-6e655f.svg)](LICENSE)
-
----
+**Paste the Chaff repo link + your prompt in chat. Chaff reads your project first, asks tailored creative questions around your own codebase and chosen level (1 / 2 / 3), strips AI design tells, locks your intentional brand identity, and verifies every change against strict accessibility and performance gates.**
 
 ```
-┌───────────────────────────────────────┐   winnow   ┌───────────────────────────────────────┐
-│           BEFORE: AI SLOP             │  ────────> │         AFTER: CLEAN GRAIN            │
-│ 48/100 • 14 tells detected            │            │ 98/100 • 0 open tells, 1 waived       │
-├───────────────────────────────────────┤            ├───────────────────────────────────────┤
-│ • Generic purple/blue glow gradient   │            │ • Purposeful warm straw paper palette │
-│ • Text-clipping gradient headlines    │            │ • High-contrast editorial typography  │
-│ • Centered hero with 3 identical cards│            │ • Asymmetric 7/5 telemetry grid       │
-│ • "Revolutionary next-gen synergy"    │            │ • Plain domain nouns and fill rates   │
-│ • Non-semantic <div onClick> handlers │            │ • Keyboard-accessible <button> tags   │
-│ • Fixed 600px width blowing 320px view│            │ • Responsive fluid clamp() layout     │
-└───────────────────────────────────────┘            └───────────────────────────────────────┘
+You in chat:  "Use https://github.com/Ameya79/chaff on my app — improve the landing and pricing flow."
+                                       │
+                                       ▼
+Agent:   1. Reads CHAFF.md, levels/, and rules/ directly from the repo
+         2. Inspects YOUR project (framework, tokens, fonts, layout, routes, live UI)
+         3. Asks concise, project-specific questions about Level 1 / 2 / 3 & your brand tokens
+         4. Waives your locked identity, plans surgical fixes or 3 tailored pitches, waits for approval
+         5. Implements + proves zero regressions via audit, build, and gate checks
 ```
 
 ---
 
-## Quickstart in 30 Seconds
+## Why Paste-Repo-First Instead of Rigid Prompts
 
-### Option A: The Universal AGENTS.md Pointer (Zero Dependencies)
-Drop this lightweight 43-line pointer into your repository root. Every autonomous agent (Claude Code, Cursor, Windsurf, Google Antigravity) will automatically execute the 7-step winnowing lifecycle:
+Most "design prompt" repos impose one opinionated theme onto every site—turning your SaaS, store, or portfolio into a clone of someone else's template.
+
+Chaff flips the order:
+1. **No setup required to start**: Paste the repository link alongside your normal prompt in Antigravity, Claude Code, Cursor, Windsurf, or any AI agent chat.
+2. **Reads your project before speaking**: In Step 1 (`Read`), the agent scans your framework, CSS variables/Tailwind config, font imports, and rendered pages, saving confidence-scored tokens into `.chaff/identity.json`.
+3. **Interactive choices tailored to your project**: Instead of forcing boilerplate templates, the agent asks targeted **Level 1 / Level 2 / Level 3** questions grounded in *your* colors, typography, product domain, and interactive ambitions.
+4. **Hard enforcement at the end**: Every claim is verified against **72 deterministic rules**, real headless Chrome inspection (`390px` & `1440px`), and non-negotiable bundle/WebGL performance budgets.
+
+### Supported Frontend Frameworks
+
+Chaff's Identity Lock (`.chaff/identity.json`), rule checks, and build gates work natively across all major web stacks:
+- **React & Meta-Frameworks**: Next.js (App Router / Pages), React, Vite, Remix
+- **Signals & Compiled Frameworks**: SolidJS / SolidStart, Svelte / SvelteKit, Qwik
+- **Enterprise & Ecosystem**: Angular (`(click)`, `ngSrc`, `@defer`, `dist/*/browser`), Vue 3 & Nuxt (`@click`, `defineAsyncComponent`, `<NuxtImg>`)
+- **Islands & Static-First**: Astro (`client:visible`, `astro:assets`), Preact, Vanilla HTML/CSS/SCSS
+
+---
+
+## Three Creative Levels (Tailored Per Project)
+
+| Level | Intent | What Changes | Guardrail |
+| :--- | :--- | :--- | :--- |
+| **Level 1 · Clean** | Safe tell removal | Contrast, type hygiene, copy polish, states, mobile overflow & tap targets (`<= 10` files) | Zero layout rewrites, zero new motion dependencies |
+| **Level 2 · Authored** | Confident point of view | **3 tailored Concept Pitches** for your domain, editorial/modular structure, 1 signature interaction | Max 1 lightweight motion dependency, `<= 170 KB` gzip JS |
+| **Level 3 · Risk** | Interactive 3D & shaders | Custom WebGL/GLSL/Three.js showcase alongside clean minimal UI | **Mandatory 5-Part Fallback Contract** (`<= 250 KB` lazy chunk, `@chaff/tier`, DPR `<= 1.5`) |
+
+See [`levels/level-1.md`](levels/level-1.md), [`levels/level-2.md`](levels/level-2.md), and [`levels/level-3.md`](levels/level-3.md) for the exact contracts.
+
+---
+
+## Optional CLI, MCP Server & GitHub Action
+
+Want automated local gates or CI pull-request enforcement alongside the chat workflow? Every rule and budget engine ships cleanly in `@chaff/cli` and `@chaff/mcp`:
 
 ```bash
-# Add AGENTS.md pointer to your repo
+# Audit current workspace & generate scorecard
+npx @chaff/cli audit --level 2
+
+# Enforce First-Load JS, 320px overflow, 44px touch targets & L3 fallback contract
+npx @chaff/cli gate --level 3
+
+# Configure .chaff/identity.json and IDE pointer files
 npx @chaff/cli init
 ```
 
-### Option B: Local CLI Audit
-Run Chaff directly on any project:
-
-```bash
-# Audit workspace for AI tells and score out of 100
-npx @chaff/cli audit
-
-# Run Performance & Mobile Gate (fails on regressions)
-npx @chaff/cli gate
-```
-
----
-
-## The 7-Step Autonomous Agent Workflow
-
-Autonomous agents running Chaff execute an invariant 7-step lifecycle:
-
-```
-[1. Read] ──> [2. Look] ──> [3. Audit] ──> [4. Plan] ──> [5. Approve] ──> [6. Implement] ──> [7. Verify]
-```
-
-1. **Read**: Inspect framework, router, typography, and design tokens. Formulate intentional brand lock at `.chaff/identity.json`.
-2. **Look**: Boot development server; capture rendered DOM metrics at 390px (mobile) and 1440px (desktop) viewports across light/dark themes.
-3. **Audit**: Formulate findings against 72 core rules. Deduct points from 100. Waive locked brand tokens.
-4. **Plan**:
-   - **Level 1**: Ordered minimal fix list.
-   - **Level 2 / 3**: Generate 3 diverse **Concept Pitches** (Editorial, Tactile, Technical) and wait for user approval.
-5. **Approve**: Document user waivers or concept selection before modifying files.
-6. **Implement**: Small, atomic commits tagged with rule IDs (e.g., `git commit -m "fix(chaff): replace gradient headline [UI-002]"`).
-7. **Verify**: Typecheck, lint, build, test, and run `chaff gate`. Block PR if Core Web Vitals regress.
-
----
-
-## The Three Creative Levels
-
-Chaff contracts your agent to a specific creative latitude:
-
-| Level | Name | Diff Budget | Motion & Media | Allowed Operations |
-| :--- | :--- | :--- | :--- | :--- |
-| **Level 1** | **Clean** | $\le 10$ files, $\le 200$ lines | No animation libs | Safe tell removal, contrast AA fixes, copy pruning, dvh units. Zero layout restructuring. |
-| **Level 2** | **Authored** | $\le 25$ files, $\le 800$ lines | Max 1 motion lib | 3 Concept Pitches first. Asymmetric editorial layouts, custom spatial rhythm, 1 signature interaction. |
-| **Level 3** | **Risk** | Feature-scoped | WebGL / 3D enabled | Three.js / Canvas experiences strictly governed by the 5-part Fallback Contract. |
-
-### The 5-Part Fallback Contract (Level 3)
-Any Level 3 3D/WebGL feature must satisfy all 5 requirements:
-1. **Dynamic Import**: Lazy-load canvas via `next/dynamic` or `React.lazy`.
-2. **Static Poster Fallback**: Render lightweight image/SVG when WebGL is unavailable or user has `prefers-reduced-motion` / `save-data`.
-3. **Device Tiering (`@chaff/tier`)**: Determine GPU capabilities and downgrade complexity on low-tier hardware.
-4. **Frame Governor**: Cap device pixel ratio at $\le 1.5$ and pause render loop when offscreen via `IntersectionObserver`.
-5. **Payload Budget**: Compressed 3D asset bundle must remain under 250 KB gzipped.
-
----
-
-## Core Rules Taxonomy (72 Rules)
-
-Rules are organized across 8 categories with 10-field YAML frontmatter and 4 required markdown sections:
-
-- **UI (`rules/ui/`)**: `UI-001` through `UI-009` — Gradient glows, gradient text, centered hero + 3-card grids, backdrop blur illegibility, min-h-screen mobile jumping.
-- **Copy (`rules/copy/`)**: `COPY-001` through `COPY-009` — Buzzword salad ("seamless synergy"), synthetic metrics ("10,000+ satisfied clients"), generic testimonials.
-- **Code (`rules/code/`)**: `CODE-001` through `CODE-009` — Non-semantic `div onClick`, raw `<img>` layout shifts, internal `<a>` links, missing TypeScript types.
-- **Performance (`rules/perf/`)**: `PERF-001` through `PERF-009` — Unsized media, unmemoized SVG loops, synchronous script tags, font flash (FOIT/FOUT).
-- **Mobile (`rules/mobile/`)**: `MOBILE-001` through `MOBILE-009` — 320px viewport horizontal overflow, touch targets < 44px, disabled pinch-zoom.
-- **Accessibility (`rules/a11y/`)**: `A11Y-001` through `A11Y-009` — WCAG AA contrast (4.5:1), visible focus rings, ARIA labels, form input associations.
-- **Motion (`rules/motion/`)**: `MOTION-001` through `MOTION-009` — Mandatory `prefers-reduced-motion`, `transform`/`opacity` transitions only.
-- **Three / 3D (`rules/three/`)**: `THREE-001` through `THREE-009` — WebGL context loss handling, DPR ceiling 1.5, geometry disposal.
-
----
-
-## Model Context Protocol (MCP) Server
-
-Connect Chaff directly to Cursor, Windsurf, Claude Code, or any MCP client via JSON-RPC 2.0 stdio:
-
+### MCP Server Configuration
 ```json
 {
   "mcpServers": {
@@ -119,22 +73,9 @@ Connect Chaff directly to Cursor, Windsurf, Claude Code, or any MCP client via J
   }
 }
 ```
+Exposes 7 tools: `audit`, `plan`, `gate`, `get_rule`, `explain_finding`, `waive`, and `revert`.
 
-### The 7 MCP Tools
-- `audit`: Scan workspace and return findings with overall score out of 100.
-- `plan`: Generate ordered fixes (Level 1) or 3 diverse Concept Pitches (Level 2).
-- `gate`: Evaluate performance budgets and fail on regressions.
-- `get_rule`: Retrieve the complete specification and bad/good examples for any rule ID.
-- `explain_finding`: Detailed rationale and smallest surgical fix instructions.
-- `waive`: Persist an approved brand exemption in `.chaff/identity.json`.
-- `revert`: Safely rollback changes associated with a specific rule ID.
-
----
-
-## GitHub Actions CI Integration
-
-Fail pull requests that introduce AI slop or exceed performance budgets:
-
+### GitHub Actions CI Integration
 ```yaml
 name: Chaff Gate
 
@@ -165,9 +106,22 @@ jobs:
 
 ---
 
+## The 8 Rule Categories (72 Rules)
+
+- **UI (`rules/ui/`)**: `UI-001`..`009` — Layout rhythm, hierarchy, card sprawl, gradient glow tells.
+- **Copy (`rules/copy/`)**: `COPY-001`..`009` — Domain-specific voice, zero buzzwords, no fabricated stats.
+- **Code (`rules/code/`)**: `CODE-001`..`009` — Semantic HTML landmarks, framework idioms across React/Next/Solid/Angular/SvelteKit/Vue/Astro, TypeScript strictness.
+- **Perf (`rules/perf/`)**: `PERF-001`..`009` — LCP/CLS hygiene, font loading, image `sizes`, slim initial JS.
+- **Mobile (`rules/mobile/`)**: `MOBILE-001`..`009` — `dvh` sizing, `>= 44px` tap targets, zero horizontal overflow at `320px`.
+- **A11y (`rules/a11y/`)**: `A11Y-001`..`009` — WCAG AA contrast, visible focus rings, form labels & ARIA semantics.
+- **Motion (`rules/motion/`)**: `MOTION-001`..`009` — `prefers-reduced-motion`, compositor-only (`transform`, `opacity`) choreography.
+- **Three / 3D (`rules/three/`)**: `THREE-001`..`009` — Dynamic chunk loading, static poster fallback, DPR `<= 1.5`, WebGL disposal, `< 250 KB` budget.
+
+---
+
 ## Chaff Bench v0 Leaderboard
 
-Empirical evaluation of major autonomous AI coding agents across the 10 reference fixtures:
+Evaluation across 10 diverse reference fixtures (see [`bench/METHODOLOGY.md`](bench/METHODOLOGY.md)):
 
 | Rank | Agent | Model | Integration | Score | Slop Cut | Gate Pass | Net Diff |
 | :---: | :--- | :--- | :--- | :---: | :---: | :---: | :---: |
@@ -176,8 +130,6 @@ Empirical evaluation of major autonomous AI coding agents across the 10 referenc
 | **#3** | **Cursor** | Claude 3.5 Sonnet | `.cursorrules` / MCP stdio | **93.8 / 100** | **92.4%** | **90%** | 194 lines |
 | **#4** | **Windsurf** | Cascade (Sonnet) | `.windsurfrules` / MCP stdio | **91.5 / 100** | **89.8%** | **80%** | 210 lines |
 
-*Full methodology, test runner, and reproducibility notes available in [bench/METHODOLOGY.md](bench/METHODOLOGY.md).*
-
 ---
 
 ## Repository Structure
@@ -185,37 +137,24 @@ Empirical evaluation of major autonomous AI coding agents across the 10 referenc
 ```
 chaff/
 ├── CHAFF.md                   # Single-file master autonomous agent protocol
-├── AGENTS.md                  # 43-line universal pointer for AI agents
-├── CLAUDE.md                  # Claude Code native instructions pointer
+├── AGENTS.md                  # Concise universal pointer for AI chat agents
+├── CLAUDE.md                  # Claude Code workflow pointer & verification guide
 ├── rules/                     # 72 detection rules across 8 categories
-│   ├── ui/                    # UI-001 to UI-009
-│   ├── copy/                  # COPY-001 to COPY-009
-│   ├── code/                  # CODE-001 to CODE-009
-│   ├── perf/                  # PERF-001 to PERF-009
-│   ├── mobile/                # MOBILE-001 to MOBILE-009
-│   ├── a11y/                  # A11Y-001 to A11Y-009
-│   ├── motion/                # MOTION-001 to MOTION-009
-│   └── three/                 # THREE-001 to THREE-009
-├── levels/                    # Dedicated creative operational contracts
-│   ├── level-1.md             # Clean: safe tell removal, strict diff budget
-│   ├── level-2.md             # Authored: 3 Concept Pitches, signature moment
-│   └── level-3.md             # Risk: WebGL / 3D Fallback Contract
+├── levels/                    # Level 1 (Clean), Level 2 (Authored), Level 3 (Risk) contracts
 ├── packages/
 │   ├── core/                  # Rules loader, Identity Lock, adapters, scoring
 │   ├── checks/                # Source analyzers and rendered performance gate
-│   ├── tier/                  # Device classification runtime (~2 KB)
+│   ├── tier/                  # Device classification & frame governor runtime (~2 KB)
 │   ├── mcp/                   # JSON-RPC 2.0 stdio Model Context Protocol server
 │   └── cli/                   # chaff CLI (init, doctor, audit, level, gate, mcp)
 ├── action/                    # GitHub Action with sticky PR comment generator
 ├── apps/
-│   └── web/                   # High-craft Next.js showcase site & playground
-├── fixtures/                  # 10 test fixtures covering diverse web architectures
-├── bench/                     # Chaff Bench v0 empirical runner and methodology
-└── tests/                     # 61-test Python opaque-box validation suite
+│   └── web/                   # Next.js showcase site & interactive workflow demo
+├── fixtures/                  # 10 reference web fixtures
+├── bench/                     # Chaff Bench v0 evaluation runner and methodology
+└── tests/                     # 61-test Python specification validation suite
 ```
-
----
 
 ## License
 
-MIT © [Chaff Contributors](https://github.com/chaff-dev/chaff). Keep the grain.
+MIT © [Chaff Contributors](https://github.com/Ameya79/chaff). Keep the craft.

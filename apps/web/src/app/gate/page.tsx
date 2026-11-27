@@ -6,6 +6,7 @@ import path from 'node:path';
 import zlib from 'node:zlib';
 import { checkRenderedBudgets } from '@chaff/checks';
 import { GateClientSimulator } from '../../components/GateClientSimulator';
+import { PageHeader } from '../../components/PageHeader';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,7 +36,7 @@ async function readCompiledBundleTelemetry(webRoot: string): Promise<{
   const nextDir = path.join(webRoot, '.next');
   let baselineGzipKb: number | null = null;
   let webglGzipKb: number | null = null;
-  let webglSourceLabel = '.next lazy Three.js chunk';
+  let webglSourceLabel = '.next lazy WebGL2 chunk';
 
   try {
     const appBuildRaw = await fs.readFile(path.join(nextDir, 'app-build-manifest.json'), 'utf-8');
@@ -116,25 +117,23 @@ export default async function GatePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-14 sm:py-20 space-y-16">
-      <header className="space-y-3">
-        <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-ember)] block">
-          chaff gate --level 3
-        </span>
-        <h1 className="font-serif text-[var(--text-main)]">
-          Performance Gate
-        </h1>
-        <p className="text-base text-[var(--text-dim)] max-w-[46ch]">
-          Live <code className="mono">.next</code> bundle chunks and Level 3 budget telemetry.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="chaff gate --level 3"
+        title="Performance Gate"
+        lead={
+          <>
+            Live <code className="mono">.next</code> bundle chunks and Level 3 budget telemetry.
+          </>
+        }
+      />
 
       {/* Open Monumental KPI Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-8 hairline-y">
-        <div className="space-y-1 min-w-0">
+        <div className="space-y-1 min-w-0 sheet-in" style={{ '--d': '120ms' } as React.CSSProperties}>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
             Gate (L3)
           </span>
-          <div className="font-serif text-4xl sm:text-5xl text-[var(--status-sage)]">
+          <div className="font-display text-4xl sm:text-5xl text-[var(--status-pass)] tracking-tight">
             {gateReport.passed ? 'PASS' : 'FAIL'}
           </div>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
@@ -142,11 +141,11 @@ export default async function GatePage() {
           </span>
         </div>
 
-        <div className="space-y-1 min-w-0">
+        <div className="space-y-1 min-w-0 sheet-in" style={{ '--d': '175ms' } as React.CSSProperties}>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
             Audit Score
           </span>
-          <div className="font-serif text-4xl sm:text-5xl text-[var(--status-sage)] tabular-nums">
+          <div className="font-display text-4xl sm:text-5xl text-[var(--status-pass)] tabular-nums tracking-tight">
             {auditScore}
           </div>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
@@ -154,11 +153,11 @@ export default async function GatePage() {
           </span>
         </div>
 
-        <div className="space-y-1 min-w-0">
+        <div className="space-y-1 min-w-0 sheet-in" style={{ '--d': '230ms' } as React.CSSProperties}>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
             Lazy 3D Chunk
           </span>
-          <div className="font-serif text-4xl sm:text-5xl text-[var(--status-sage)] tabular-nums">
+          <div className="font-display text-4xl sm:text-5xl text-[var(--status-pass)] tabular-nums tracking-tight">
             {bundleTelemetry.webglGzipKb} KB
           </div>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
@@ -166,11 +165,11 @@ export default async function GatePage() {
           </span>
         </div>
 
-        <div className="space-y-1 min-w-0">
+        <div className="space-y-1 min-w-0 sheet-in" style={{ '--d': '285ms' } as React.CSSProperties}>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
             Home Baseline JS
           </span>
-          <div className="font-serif text-4xl sm:text-5xl text-[var(--status-sage)] tabular-nums">
+          <div className="font-display text-4xl sm:text-5xl text-[var(--status-pass)] tabular-nums tracking-tight">
             {bundleTelemetry.baselineGzipKb !== null ? `${bundleTelemetry.baselineGzipKb} KB` : '0px'}
           </div>
           <span className="font-mono text-xs text-[var(--text-dim)] block">
@@ -180,12 +179,12 @@ export default async function GatePage() {
       </div>
 
       {/* Live Gate Table */}
-      <section className="space-y-6 min-w-0">
+      <section className="space-y-6 min-w-0 sheet-in" style={{ '--d': '240ms' } as React.CSSProperties}>
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="font-serif text-3xl text-[var(--text-main)]">
+          <h2 className="font-display text-3xl text-[var(--text-main)]">
             Measured Budgets
           </h2>
-          <span className="font-mono text-xs text-[var(--status-sage)]">
+          <span className="font-mono text-xs text-[var(--status-pass)]">
             {gateReport.passed ? 'All Passing' : `${gateReport.failuresCount} Failed`}
           </span>
         </div>
@@ -202,8 +201,8 @@ export default async function GatePage() {
             </thead>
             <tbody className="divide-y divide-[var(--border-line)]">
               {gateReport.results.map((r) => (
-                <tr key={r.metric} className="hover:bg-[var(--bg-surface-hover)] transition-colors">
-                  <td className="py-4 pr-4 font-semibold text-[var(--text-main)] whitespace-nowrap">
+                <tr key={r.metric} className="hover:bg-[var(--bg-surface-hover)] transition-colors duration-200">
+                  <td className="py-4 pr-4 font-medium text-[var(--text-main)] whitespace-nowrap">
                     {r.metric}
                   </td>
                   <td className="py-4 px-3 text-[var(--text-dim)] whitespace-nowrap">
@@ -214,10 +213,10 @@ export default async function GatePage() {
                   </td>
                   <td className="py-4 pl-3 text-right whitespace-nowrap">
                     <span
-                      className={`px-2.5 py-0.5 rounded-full uppercase ${
+                      className={`px-2.5 py-0.5 rounded-[4px] uppercase ${
                         r.status === 'pass'
-                          ? 'bg-[var(--status-sage-soft)] text-[var(--status-sage)]'
-                          : 'bg-[var(--accent-ember-soft)] text-[var(--accent-ember)]'
+                          ? 'bg-[var(--status-pass-soft)] text-[var(--status-pass)]'
+                          : 'bg-[var(--status-fail-soft)] text-[var(--status-fail)]'
                       }`}
                     >
                       {r.status}

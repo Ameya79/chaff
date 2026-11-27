@@ -24,7 +24,7 @@ export async function generateAdapters(
     const target = path.join(cursorDir, 'chaff.mdc');
     const content = `---
 description: Chaff design audit and level enforcement
-globs: ["**/*.{tsx,jsx,ts,js,css}"]
+globs: ["**/*.{tsx,jsx,ts,js,svelte,vue,astro,html,css,scss}"]
 alwaysApply: true
 ---
 

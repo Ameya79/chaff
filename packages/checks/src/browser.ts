@@ -69,12 +69,12 @@ const ENGINE_TO_CANONICAL: Record<string, { canonical: string; fixHint: string; 
   },
   'CODE-003': {
     canonical: 'CODE-001',
-    fixHint: 'Prefer next/image with explicit dimensions and sizes instead of raw <img> tags.',
+    fixHint: 'Prefer framework image optimization (next/image, ngSrc, @sveltejs/enhanced-img, NuxtImg) or explicit width/height.',
     deduction: 4,
   },
   'CODE-005': {
     canonical: 'CODE-003',
-    fixHint: 'Move data fetching to Server Components instead of useEffect fetch calls.',
+    fixHint: 'Move data fetching to route loaders, Server Components, createResource, or TanStack Query.',
     deduction: 8,
   },
   'CODE-007': {
@@ -114,7 +114,7 @@ const ENGINE_TO_CANONICAL: Record<string, { canonical: string; fixHint: string; 
   },
   'PERF-001': {
     canonical: 'PERF-001',
-    fixHint: 'Load fonts via next/font with display: "swap".',
+    fixHint: 'Self-host fonts locally (next/font or @font-face) with font-display: swap.',
     deduction: 6,
   },
   'PERF-003': {
@@ -134,7 +134,7 @@ const ENGINE_TO_CANONICAL: Record<string, { canonical: string; fixHint: string; 
   },
   'THREE-001': {
     canonical: 'THREE-001',
-    fixHint: 'Lazy-load 3D/WebGL scenes with next/dynamic({ ssr: false }) and render a static SVG poster fallback.',
+    fixHint: 'Lazy-load 3D/WebGL scenes via dynamic()/lazy()/defineAsyncComponent/@defer/import() with a static SVG poster fallback.',
     deduction: 10,
   },
   'THREE-004': {
@@ -193,7 +193,7 @@ export function runBrowserStaticAudit(
         fixClass: 'color_hygiene',
         status: 'open',
         deduction: 6,
-        fixHint: 'Render headings in solid high-contrast ink (--text-main) using display serif typography.',
+        fixHint: 'Render headings in solid high-contrast ink (--text-main) using display typography.',
       });
     }
 
@@ -276,7 +276,7 @@ export function runBrowserStaticAudit(
         fixClass: 'focus_ring',
         status: 'open',
         deduction: 6,
-        fixHint: 'Keep visible focus-visible:outline-2 focus-visible:outline-[var(--accent-ember)] styling.',
+        fixHint: 'Keep visible focus-visible:outline-2 focus-visible:outline-[var(--accent)] styling.',
       });
     }
 
@@ -406,11 +406,18 @@ export function runBrowserStaticAudit(
     });
   }
 
-  // Catch THREE-001 static 3D import without dynamic() / @chaff/tier
+  // Catch THREE-001 static 3D import without lazy boundary / @chaff/tier
   if (
-    (/from\s+['"](three|@react-three\/fiber)['"]/i.test(content)) &&
+    /\bfrom\s+['"](three|@react-three\/fiber|@threlte\/core|@tresjs\/core|solid-three|angular-three)['"]/i.test(
+      content
+    ) &&
     !content.includes('dynamic(') &&
     !content.includes('React.lazy(') &&
+    !/\blazy\s*\(/.test(content) &&
+    !content.includes('defineAsyncComponent(') &&
+    !content.includes('@defer') &&
+    !/\bimport\s*\(/.test(content) &&
+    !/client:(visible|idle|only)/i.test(content) &&
     !mapped.some((f) => f.canonicalRuleId === 'THREE-001')
   ) {
     mapped.push({
@@ -420,20 +427,24 @@ export function runBrowserStaticAudit(
       canonicalRuleId: 'THREE-001',
       category: 'three',
       severity: 'high',
-      message: 'Synchronous 3D import blocks LCP; must use next/dynamic({ ssr: false }) and @chaff/tier poster fallback',
+      message:
+        'Synchronous 3D import blocks LCP; lazy-load via dynamic()/lazy()/defineAsyncComponent/@defer/import() with @chaff/tier poster fallback',
       file: filePath,
       line: 1,
-      evidence: 'Direct static import of Three.js / React Three Fiber',
+      evidence: 'Direct static import of Three.js / WebGL framework adapter',
       fixClass: 'lazy_loading',
       status: 'open',
       deduction: 10,
-      fixHint: 'Lazy-load canvas via next/dynamic(..., { ssr: false }), add SVG poster fallback, and check tier().',
+      fixHint:
+        'Lazy-load canvas via dynamic()/lazy()/defineAsyncComponent/@defer/import(), add SVG poster fallback, and check tier().',
     });
   }
 
   // Catch THREE-002 missing static poster fallback for WebGL/3D components
   if (
-    (/<Canvas\b|from\s+['"](three|@react-three\/fiber)['"]/i.test(content)) &&
+    (/<(Canvas|TresCanvas)\b|\bfrom\s+['"](three|@react-three\/fiber|@threlte\/core|@tresjs\/core|solid-three|angular-three)['"]/i.test(
+      content
+    )) &&
     !/(Poster|poster|<picture>)/i.test(content) &&
     !mapped.some((f) => f.canonicalRuleId === 'THREE-002')
   ) {

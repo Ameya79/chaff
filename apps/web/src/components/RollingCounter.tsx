@@ -65,12 +65,12 @@ export function RollingCounter({
 
   return (
     <span
-      className={`font-mono tabular-nums inline-flex items-baseline font-bold tracking-tight ${className}`}
+      className={`font-mono tabular-nums inline-flex items-baseline font-semibold tracking-tight whitespace-pre ${className}`}
       aria-label={`${prefix}${value}${suffix}`}
     >
-      {prefix}
+      {prefix ? <span>{prefix}</span> : null}
       <span>{displayValue}</span>
-      {suffix}
+      {suffix ? <span>{suffix}</span> : null}
     </span>
   );
 }

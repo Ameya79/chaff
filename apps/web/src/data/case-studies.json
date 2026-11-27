@@ -28,7 +28,7 @@
       "beforeTitle": "fixtures/saas-landing/app/page.tsx (Before)",
       "beforeCode": "<main className=\"min-h-screen bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex flex-col items-center justify-center p-8 hero\">\n  <h1 className=\"text-5xl font-bold text-center\">\n    Delve into our cutting-edge revolutionary platform\n  </h1>\n  <p className=\"text-xl mt-4 text-center\">\n    Streamline and supercharge your team with 99.9% uptime and 10,000+ happy teams.\n  </p>\n  <div className=\"grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-5xl\">\n    <div className=\"p-6 bg-white/10 rounded-lg\">Card 1</div>\n    <div className=\"p-6 bg-white/10 rounded-lg\">Card 2</div>\n    <div className=\"p-6 bg-white/10 rounded-lg\">Card 3</div>\n  </div>\n</main>",
       "afterTitle": "After Chaff Level 2 Authored",
-      "afterCode": "<main className=\"min-h-dvh bg-[#09090B] text-[#F4F1EA] py-16 px-4 sm:px-8 max-w-7xl mx-auto\">\n  <div className=\"grid grid-cols-1 lg:grid-cols-12 gap-10 items-start\">\n    <div className=\"lg:col-span-7 space-y-5\">\n      <span className=\"font-mono text-xs uppercase tracking-widest text-[#F2713A]\">Kestrel Router</span>\n      <h1 className=\"font-serif text-5xl tracking-tight leading-[1.08]\">\n        Route spot orders across 14 venues in 11.8 ms.\n      </h1>\n      <p className=\"text-base text-[#9D968B] max-w-[58ch] leading-relaxed\">\n        Deterministic clearing engine with pre-trade margin checks and venue latency logs.\n      </p>\n      <button type=\"button\" className=\"min-h-[44px] px-5 py-2.5 bg-[#6D28D9] text-white rounded-full\">\n        Deploy Route\n      </button>\n    </div>\n    <aside className=\"lg:col-span-5 p-6 bg-[#111114] rounded-2xl font-mono text-xs space-y-3\">\n      <div className=\"flex justify-between\"><span>Median Hop</span><strong>11.8 ms</strong></div>\n      <div className=\"flex justify-between\"><span>Fill Rate</span><strong className=\"text-[#7DC885]\">99.94%</strong></div>\n    </aside>\n  </div>\n</main>"
+      "afterCode": "<main className=\"min-h-dvh bg-[#F1F2EC] text-[#141A15] py-16 px-4 sm:px-8 max-w-7xl mx-auto\">\n  <div className=\"grid grid-cols-1 lg:grid-cols-12 gap-10 items-start\">\n    <div className=\"lg:col-span-7 space-y-5\">\n      <span className=\"font-mono text-xs uppercase tracking-widest text-[#2E6648]\">Kestrel Router</span>\n      <h1 className=\"font-display text-5xl tracking-tight leading-[1.04]\">\n        Route spot orders across 14 venues in 11.8 ms.\n      </h1>\n      <p className=\"text-base text-[#4F5A51] max-w-[58ch] leading-relaxed\">\n        Deterministic clearing engine with pre-trade margin checks and venue latency logs.\n      </p>\n      <button type=\"button\" className=\"min-h-[44px] px-5 py-2.5 bg-[#6D28D9] text-white rounded-md\">\n        Deploy Route\n      </button>\n    </div>\n    <aside className=\"lg:col-span-5 p-6 bg-[#FBFBF7] border border-[#D8DCD3] rounded-lg font-mono text-xs space-y-3\">\n      <div className=\"flex justify-between\"><span>Median Hop</span><strong>11.8 ms</strong></div>\n      <div className=\"flex justify-between\"><span>Fill Rate</span><strong className=\"text-[#1F6843]\">99.94%</strong></div>\n    </aside>\n  </div>\n</main>"
     }
   },
   {
@@ -51,13 +51,13 @@
       { "rule": "CODE-004", "name": "Development Console Logs", "impact": "Stripped two residual console.log calls from render and click paths." }
     ],
     "preservedTokens": [
-      { "token": "Geist Mono (Tabular)", "reason": "Preserved numeric column alignment across financial tables." }
+      { "token": "IBM Plex Mono (Tabular)", "reason": "Preserved numeric column alignment across financial tables." }
     ],
     "codeDiff": {
       "beforeTitle": "fixtures/dashboard/app/page.tsx (Before)",
       "beforeCode": "console.log('Rendering Dashboard');\nreturn (\n  <div className=\"p-8\">\n    <h2>Analytics Summary</h2>\n    <div\n      className=\"cursor-pointer bg-blue-500 text-white px-4 py-2\"\n      onClick={() => console.log('Export data clicked')}\n    >\n      Export CSV\n    </div>\n    <table className=\"mt-4\">\n      <tbody><tr><td>Q1 Sales</td><td>$1,234,567.89</td></tr></tbody>\n    </table>\n  </div>\n);",
       "afterTitle": "After Chaff Level 2 Authored",
-      "afterCode": "return (\n  <section className=\"p-6 sm:p-8 space-y-6 bg-[#111114] text-[#F4F1EA]\">\n    <div className=\"flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4\">\n      <h1 className=\"font-serif text-3xl\">Analytics Summary</h1>\n      <button\n        type=\"button\"\n        onClick={handleExportCsv}\n        className=\"min-h-[44px] px-5 py-2 rounded-full bg-[#F2713A] text-[#09090B] font-mono text-xs font-semibold\"\n      >\n        Export CSV\n      </button>\n    </div>\n    <table className=\"w-full font-mono text-sm tabular-nums\">\n      <tbody><tr className=\"border-b border-white/10\"><td className=\"py-3\">Q1 Sales</td><td className=\"py-3 text-right font-bold text-[#7DC885]\">$1,234,567.89</td></tr></tbody>\n    </table>\n  </section>\n);"
+      "afterCode": "return (\n  <section className=\"p-6 sm:p-8 space-y-6 bg-[#FFFFFF] border border-[#E4E2DC] text-[#121215]\">\n    <div className=\"flex flex-wrap items-center justify-between gap-4 border-b border-[#E4E2DC] pb-4\">\n      <h1 className=\"font-display text-3xl\">Analytics Summary</h1>\n      <button\n        type=\"button\"\n        onClick={handleExportCsv}\n        className=\"min-h-[44px] px-5 py-2 rounded-md bg-[#121215] text-[#FAFAF8] font-mono text-xs font-semibold\"\n      >\n        Export CSV\n      </button>\n    </div>\n    <table className=\"w-full font-mono text-sm tabular-nums\">\n      <tbody><tr className=\"border-b border-[#E4E2DC]\"><td className=\"py-3\">Q1 Sales</td><td className=\"py-3 text-right font-bold text-[#1D6636]\">$1,234,567.89</td></tr></tbody>\n    </table>\n  </section>\n);"
     }
   },
   {
@@ -84,7 +84,7 @@
       "beforeTitle": "fixtures/portfolio/src/App.tsx (Before — Gate FAIL)",
       "beforeCode": "<div>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" />\n  <div style={{ width: '600px' }} className=\"portfolio-gallery\">\n    <h1>Creative Showcase</h1>\n    <p>A broad portfolio layout spanning fixed desktop width.</p>\n  </div>\n</div>",
       "afterTitle": "After Chaff Level 2 Authored (Gate PASS)",
-      "afterCode": "<main className=\"max-w-5xl mx-auto px-4 sm:px-8 py-12 space-y-6 bg-[#09090B] text-[#F4F1EA]\">\n  <header className=\"border-b border-white/10 pb-4\">\n    <h1 className=\"font-serif text-4xl\">Monograph Showcase</h1>\n  </header>\n  <div className=\"grid grid-cols-1 md:grid-cols-12 gap-8\">\n    <p className=\"md:col-span-7 text-base text-[#9D968B] leading-relaxed\">\n      Mass-timber civic installations engineered for zero horizontal overflow at 320px.\n    </p>\n  </div>\n</main>"
+      "afterCode": "<main className=\"max-w-5xl mx-auto px-4 sm:px-8 py-12 space-y-6 bg-[#FAFAF8] text-[#121215]\">\n  <header className=\"border-b border-[#E4E2DC] pb-4\">\n    <h1 className=\"font-display text-4xl\">Monograph Showcase</h1>\n  </header>\n  <div className=\"grid grid-cols-1 md:grid-cols-12 gap-8\">\n    <p className=\"md:col-span-7 text-base text-[#54545C] leading-relaxed\">\n      Mass-timber civic installations engineered for zero horizontal overflow at 320px.\n    </p>\n  </div>\n</main>"
     }
   },
   {
@@ -115,7 +115,7 @@
       "beforeTitle": "fixtures/blog/app/post/page.tsx (Before — Gate FAIL)",
       "beforeCode": "<article className=\"prose\">\n  <h1>Understanding Modern Web Typography</h1>\n  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>\n  <img src=\"/article-cover.jpg\" />\n</article>",
       "afterTitle": "After Chaff Level 1 Clean (Gate PASS)",
-      "afterCode": "<article className=\"max-w-[68ch] mx-auto px-4 py-10 space-y-6 text-[#F4F1EA]\">\n  <h1 className=\"font-serif text-4xl leading-tight\">\n    Understanding Modern Web Typography\n  </h1>\n  <div className=\"relative aspect-[16/9] w-full overflow-hidden rounded-xl\">\n    <Image src=\"/article-cover.jpg\" alt=\"Serif specimen sheet\" fill sizes=\"(max-width: 768px) 100vw, 680px\" />\n  </div>\n  <p className=\"text-base text-[#9D968B] leading-relaxed\">\n    Optical sizing adjusts stroke contrast and letterspacing across display and caption scales.\n  </p>\n</article>"
+      "afterCode": "<article className=\"max-w-[68ch] mx-auto px-4 py-10 space-y-6 text-[#121215]\">\n  <h1 className=\"font-display text-4xl leading-tight\">\n    Understanding Modern Web Typography\n  </h1>\n  <div className=\"relative aspect-[16/9] w-full overflow-hidden rounded-lg\">\n    <Image src=\"/article-cover.jpg\" alt=\"Type specimen sheet\" fill sizes=\"(max-width: 768px) 100vw, 680px\" />\n  </div>\n  <p className=\"text-base text-[#54545C] leading-relaxed\">\n    Optical sizing adjusts stroke contrast and letterspacing across display and caption scales.\n  </p>\n</article>"
     }
   },
   {
@@ -135,16 +135,16 @@
     "summary": "Uncapped Three.js DPR 3.0 governed by @chaff/tier 1.5 cap, lazy boundary, and GPU disposal.",
     "tellsList": [
       { "rule": "THREE-005", "name": "Uncapped Device Pixel Ratio", "impact": "Clamped DPR at 1.5 ceiling via @chaff/tier governor, cutting mobile fragment load 56%." },
-      { "rule": "THREE-001", "name": "Eager 3D Initialization", "impact": "Wrapped WebGL scene in lazy boundary with static SVG poster and unmount dispose()." }
+      { "rule": "THREE-001", "name": "Eager 3D Initialization", "impact": "Wrapped WebGL2 scene in lazy boundary with static SVG poster and unmount dispose()." }
     ],
     "preservedTokens": [
-      { "token": "#C49A45 (Kernel Gold)", "reason": "Locked particle highlight accent in identity configuration." }
+      { "token": "#2E6648 (Botanical Sage)", "reason": "Locked sculptural crystal core and calibration ring accent in identity configuration." }
     ],
     "codeDiff": {
       "beforeTitle": "fixtures/vite-react/src/App.tsx (Before)",
       "beforeCode": "import * as THREE from 'three';\n\nexport default function App() {\n  function init() {\n    const renderer = new THREE.WebGLRenderer();\n    renderer.setPixelRatio(window.devicePixelRatio);\n  }\n  return <div>Vite 3D Canvas Application</div>;\n}",
       "afterTitle": "After Chaff Level 3 Risk",
-      "afterCode": "import { tier, governor, dispose } from '@chaff/tier';\n\nconst activeTier = tier();\nif (activeTier === 'poster') return <StaticScenePoster />;\nconst gov = governor({ level: activeTier, maxPixelRatio: 1.5 });\nconst ctrl = gov.attach(canvas, renderFrame);\nreturn () => { ctrl.detach(); dispose(scene); };"
+      "afterCode": "import { tier, governor, dispose } from '@chaff/tier';\n\nconst activeTier = tier();\nif (activeTier === 'poster') return <StaticScenePoster />;\nconst gov = governor({ level: activeTier, maxPixelRatio: 1.5 });\nconst ctrl = gov.attach(canvas, renderFrame);\nreturn () => { ctrl.detach(); dispose({ forceContextLoss }); };"
     }
   }
 ]

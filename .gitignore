@@ -20,6 +20,7 @@ build/
 out/
 .next/
 .turbo/
+*.tsbuildinfo
 
 # Python & Pytest Cache
 __pycache__/

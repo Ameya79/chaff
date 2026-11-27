@@ -6,6 +6,7 @@ import {
   AgentBenchmarkDto,
   FixtureBenchmarkDto,
 } from '../../components/BenchClientTable';
+import { PageHeader } from '../../components/PageHeader';
 
 export const metadata: Metadata = {
   title: 'Bench',
@@ -23,17 +24,11 @@ export default function BenchPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-14 sm:py-20 space-y-12">
-      <header className="space-y-3">
-        <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-ember)] block">
-          Telemetry · 10 Fixtures
-        </span>
-        <h1 className="font-serif text-[var(--text-main)]">
-          Chaff Bench
-        </h1>
-        <p className="text-base text-[var(--text-dim)] max-w-[46ch]">
-          Measured fixture scores, slop indices, and harness comparison baselines.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="Telemetry · 10 Fixtures"
+        title="Chaff Bench"
+        lead="Measured fixture scores, slop indices, and harness comparison baselines."
+      />
 
       <BenchClientTable
         agents={benchData.leaderboard as AgentBenchmarkDto[]}

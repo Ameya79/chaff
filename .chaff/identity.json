@@ -1,21 +1,20 @@
 {
   "$schema": "https://chaff.dev/schemas/identity.v1.json",
   "version": "1.0.0",
-  "generatedAt": "2026-11-25T00:00:00.000Z",
+  "generatedAt": "2026-11-27T17:00:00.000Z",
   "framework": "next",
   "router": "app",
   "styling": "tailwind",
   "fonts": [
-    "Fraunces",
-    "GeistSans",
-    "GeistMono"
+    "Plus Jakarta Sans",
+    "JetBrains Mono"
   ],
   "colors": {
-    "bg-canvas": "#FBF7EE",
-    "bg-surface": "#FFFFFF",
-    "text-main": "#16120E",
-    "accent-ember": "#9E3308",
-    "status-sage": "#354A21",
+    "bg-canvas": "#F1F2EC",
+    "bg-surface": "#FBFBF7",
+    "text-main": "#141A15",
+    "accent": "#2E6648",
+    "status-pass": "#1F6843",
     "kestrel-brand-violet": "#6D28D9"
   },
   "spacingRhythm": [
@@ -24,9 +23,9 @@
   ],
   "tokens": [
     {
-      "name": "pitch-1-archival-palette",
-      "value": "#FBF7EE / #FFFFFF / #16120E / #9E3308 / #354A21",
-      "confidence": 0.96,
+      "name": "mineral-alabaster-sage-palette",
+      "value": "#F1F2EC / #FBFBF7 / #141A15 / #2E6648 / #1F6843",
+      "confidence": 0.99,
       "locked": true,
       "source": "apps/web/src/app/globals.css"
     },
@@ -35,18 +34,18 @@
       "value": "#6D28D9",
       "confidence": 0.98,
       "locked": true,
-      "source": "apps/web/src/components/HeroTransformationStage.tsx"
+      "source": "apps/web/src/data/stage-projects.json"
     }
   ],
   "locked": [
-    "pitch-1-archival-palette",
+    "mineral-alabaster-sage-palette",
     "color-kestrel-violet"
   ],
   "waivers": [
     {
       "ruleId": "UI-004",
       "token": "color-kestrel-violet",
-      "reason": "Kestrel showcase product primary brand identity (#6D28D9) locked intentionally and preserved across Before/After transformation.",
+      "reason": "Kestrel demo product primary brand identity (#6D28D9) locked intentionally across Before/After transformation.",
       "approvedBy": "user"
     }
   ]

@@ -27,9 +27,10 @@ const config: Config = {
         'brand-violet-soft': 'var(--brand-violet-soft)',
       },
       fontFamily: {
-        serif: ['var(--font-serif)', 'ui-serif', 'Georgia', 'serif'],
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-mono)', 'monospace'],
+        display: ['var(--font-display)', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['var(--font-display)', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['var(--font-sans)', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
     },
   },

@@ -32,10 +32,10 @@ function applyHeuristicRemediations(source: string): string {
     .replace(/['"]100vh['"]/g, "'100dvh'")
     .replace(/['"]100vw['"]/g, "'100%'")
     .replace(/\b(w|min-w)-\[([4-9]\d{2}|\d{4,})px\]/g, 'w-full max-w-5xl')
-    .replace(/\boutline-none\b/g, 'focus-visible:outline-2 focus-visible:outline-[var(--accent-ember)]')
-    .replace(/\btext-(gray|slate|zinc)-(300|400)\b/g, 'text-[#9D968B]')
-    .replace(/\bbg-clip-text\s+text-transparent\b/g, 'text-[#F4F1EA]')
-    .replace(/\btext-transparent\s+bg-clip-text\b/g, 'text-[#F4F1EA]')
+    .replace(/\boutline-none\b/g, 'focus-visible:outline-2 focus-visible:outline-[var(--accent)]')
+    .replace(/\btext-(gray|slate|zinc)-(300|400)\b/g, 'text-[#52525B]')
+    .replace(/\bbg-clip-text\s+text-transparent\b/g, 'text-[#111113]')
+    .replace(/\btext-transparent\s+bg-clip-text\b/g, 'text-[#111113]')
     .replace(/\b(from|via|to)-(purple|indigo|blue|pink)-\d{3}\b/g, '')
     .replace(/\bbg-gradient-to-[a-z]+\b/g, '')
     .replace(/\bgrid-cols-1\s+md:grid-cols-3\b/g, 'grid-cols-1 lg:grid-cols-12')
@@ -45,7 +45,6 @@ function applyHeuristicRemediations(source: string): string {
     .replace(/dpr=\{\[\s*1\s*,\s*[2-9]\s*\]\}/g, 'dpr={[1, 1.5]}')
     .replace(/^\s*console\.log\(.*\);\s*$/gm, '');
 
-  // Convert clickable <div>...</div> to balanced <button type="button">...</button>
   const divOnClickOpen = /<div\b([^>]*\bonClick\b[^>]*)>/gi;
   let match: RegExpExecArray | null;
   const openOffsets: number[] = [];
@@ -141,10 +140,10 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
   const isSpecimenClean = score >= 85;
 
   return (
-    <div className="space-y-10">
-      {/* Borderless Preset & Fix Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-2">
+    <div className="space-y-10 sheet-in" style={{ '--d': '120ms' } as React.CSSProperties}>
+      {/* Rectilinear Preset & Fix Bar */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 hairline-b pb-3">
+        <div className="flex flex-wrap items-center gap-1">
           {PRESETS.map((p) => {
             const active = selectedPresetId === p.id;
             return (
@@ -153,10 +152,10 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
                 type="button"
                 onClick={() => selectPreset(p)}
                 aria-pressed={active}
-                className={`px-4 py-2 rounded-full min-h-[44px] min-w-[44px] font-mono text-xs transition-colors ${
+                className={`px-3.5 py-2 rounded-[6px] border-b-2 min-h-[44px] min-w-[44px] font-mono text-xs transition-colors duration-200 ${
                   active
-                    ? 'bg-[var(--text-main)] text-[var(--bg-canvas)] font-semibold'
-                    : 'bg-[var(--bg-surface)] text-[var(--text-dim)] hover:text-[var(--text-main)]'
+                    ? 'border-[var(--accent)] bg-[var(--bg-surface)] text-[var(--text-main)] font-medium'
+                    : 'border-transparent text-[var(--text-dim)] hover:text-[var(--text-main)]'
                 }`}
               >
                 {p.name}
@@ -197,7 +196,7 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
             }}
             rows={13}
             spellCheck={false}
-            className="w-full p-5 rounded-2xl bg-[var(--bg-surface)] text-[var(--text-main)] font-mono text-base leading-relaxed resize-y"
+            className="w-full p-5 rounded-[2px] bg-[var(--bg-surface)] hairline-box text-[var(--text-main)] font-mono text-base leading-relaxed resize-y"
           />
 
           <div className="flex justify-end">
@@ -214,7 +213,7 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
           </div>
         </div>
 
-        <div className="lg:col-span-5 rounded-2xl bg-[var(--bg-surface)] p-6 sm:p-7 space-y-6 min-w-0">
+        <div className="lg:col-span-5 rounded-[2px] bg-[var(--bg-surface)] hairline-box p-6 sm:p-7 space-y-6 min-w-0">
           <div className="flex items-baseline justify-between gap-4">
             <div>
               <span className="font-mono text-xs text-[var(--text-dim)] block">
@@ -223,10 +222,10 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
               <div className="flex items-baseline gap-2 mt-1">
                 <RollingCounter
                   value={score}
-                  className={`font-serif text-5xl ${
+                  className={`font-display text-5xl font-normal ${
                     isSpecimenClean
-                      ? 'text-[var(--status-sage)]'
-                      : 'text-[var(--accent-ember)]'
+                      ? 'text-[var(--status-pass)]'
+                      : 'text-[var(--status-fail)]'
                   }`}
                 />
                 <span className="font-mono text-xs text-[var(--text-dim)]">/ 100</span>
@@ -234,10 +233,10 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
             </div>
 
             <span
-              className={`font-mono text-xs px-3 py-1 rounded-full ${
+              className={`font-mono text-xs px-3 py-1 rounded-[4px] ${
                 isSpecimenClean
-                  ? 'bg-[var(--status-sage-soft)] text-[var(--status-sage)]'
-                  : 'bg-[var(--accent-ember-soft)] text-[var(--accent-ember)]'
+                  ? 'bg-[var(--status-pass-soft)] text-[var(--status-pass)]'
+                  : 'bg-[var(--status-fail-soft)] text-[var(--status-fail)]'
               }`}
             >
               {isSpecimenClean ? 'PASS' : `${findings.length} Tells`}
@@ -245,8 +244,8 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
           </div>
 
           {findings.length === 0 ? (
-            <p className="text-sm text-[var(--status-sage)] font-mono leading-relaxed">
-              Zero tells detected. Clean grain verified.
+            <p className="text-sm text-[var(--status-pass)] font-mono leading-relaxed panel-enter">
+              Zero tells detected. Clean craft verified.
             </p>
           ) : (
             <div className="divide-y divide-[var(--border-line)] max-h-[380px] overflow-y-auto pr-1">
@@ -258,7 +257,7 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/rules#${f.canonicalRuleId}`}
-                          className="text-[var(--accent-ember)] underline inline-flex items-center min-h-[44px] min-w-[44px]"
+                          className="text-[var(--accent)] underline inline-flex items-center min-h-[44px] min-w-[44px]"
                         >
                           {f.canonicalRuleId}
                         </Link>
@@ -266,9 +265,9 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
                           <span className="text-[var(--text-dim)]">x{f.count}</span>
                         )}
                       </div>
-                      <span className="text-[var(--accent-ember)]">-{f.deduction}</span>
+                      <span className="text-[var(--status-fail)]">-{f.deduction}</span>
                     </div>
-                    <h3 className="font-serif text-base text-[var(--text-main)]">
+                    <h3 className="font-medium text-sm text-[var(--text-main)]">
                       {canonical?.title || f.message}
                     </h3>
                     <p className="text-xs text-[var(--text-dim)]">{f.fixHint}</p>
@@ -281,114 +280,116 @@ export function PlaygroundWorkbench({ rulesMap }: PlaygroundWorkbenchProps) {
       </div>
 
       {/* Rendered Specimen Preview */}
-      <section className="space-y-4">
+      <div className="scroll-sheet space-y-4">
         <div className="flex items-center justify-between font-mono text-xs">
           <span className="text-[var(--text-dim)]">
             Preview · {isSpecimenClean ? 'Craft' : 'Raw Slop'}
           </span>
-          <span className={isSpecimenClean ? 'text-[var(--status-sage)]' : 'text-[var(--accent-ember)]'}>
+          <span className={isSpecimenClean ? 'text-[var(--status-pass)]' : 'text-[var(--status-fail)]'}>
             {isSpecimenClean ? 'PASS' : 'FAIL'}
           </span>
         </div>
 
-        {previewVariant === 'landing' && !isSpecimenClean && (
-          <div className="slop-specimen-shell relative rounded-2xl p-8 text-center space-y-4">
-            <div className="slop-orb-purple" aria-hidden="true" />
-            <div className="slop-headline-gradient font-sans text-2xl sm:text-3xl font-extrabold">
-              Generic Gradient Headline
+        <div key={`${previewVariant}-${isSpecimenClean ? 'clean' : 'slop'}`} className="panel-enter">
+          {previewVariant === 'landing' && !isSpecimenClean && (
+            <div className="slop-specimen-shell relative rounded-[8px] p-8 text-center space-y-4">
+              <div className="slop-orb-purple" aria-hidden="true" />
+              <div className="slop-headline-gradient font-sans text-2xl sm:text-3xl font-extrabold">
+                Generic Gradient Headline
+              </div>
+              <p className="text-sm text-slate-300 max-w-md mx-auto">
+                Centered template prose paired with three uniform glass cards and fixed overflow width.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+                {['Fast Automation', 'Cloud Platform', 'Global Scale'].map((label) => (
+                  <div key={label} className="slop-glass-tile p-3 text-xs font-semibold text-white">
+                    {label}
+                  </div>
+                ))}
+              </div>
             </div>
-            <p className="text-sm text-slate-300 max-w-md mx-auto">
-              Centered template prose paired with three uniform glass cards and fixed overflow width.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
-              {['Fast Automation', 'Cloud Platform', 'Global Scale'].map((label) => (
-                <div key={label} className="slop-glass-tile p-3 text-xs font-semibold text-white">
-                  {label}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+          )}
 
-        {previewVariant === 'landing' && isSpecimenClean && (
-          <div className="rounded-2xl p-8 bg-[var(--bg-surface)] text-[var(--text-main)] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-4">
-              <span className="font-mono text-xs text-[var(--accent-ember)] block">
-                Order Router v2.4
-              </span>
-              <h3 className="font-serif text-3xl text-[var(--text-main)]">
-                Route multi-venue spot orders in 11.8 ms.
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                <span className="inline-flex items-center min-h-[44px] px-5 py-2 rounded-full bg-[#6D28D9] text-white font-mono text-xs">
-                  Deploy (#6D28D9 Locked)
+          {previewVariant === 'landing' && isSpecimenClean && (
+            <div className="rounded-[8px] p-8 bg-[var(--bg-surface)] hairline-box text-[var(--text-main)] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-7 space-y-4">
+                <span className="font-mono text-xs text-[var(--accent)] block">
+                  Order Router v2.4
                 </span>
-              </div>
-            </div>
-            <div className="lg:col-span-5 lg:pl-6 border-t border-[var(--border-line)] lg:border-t-0 pt-4 lg:pt-0 space-y-1">
-              <span className="font-mono text-xs text-[var(--text-dim)] block">Fill Rate</span>
-              <div className="font-serif text-4xl text-[var(--status-sage)] tabular-nums">
-                99.94%
-              </div>
-            </div>
-          </div>
-        )}
-
-        {previewVariant === 'feed' && (
-          <div
-            className={`rounded-2xl p-6 space-y-3 ${
-              isSpecimenClean
-                ? 'bg-[var(--bg-surface)] text-[var(--text-main)]'
-                : 'bg-white text-slate-900'
-            }`}
-          >
-            <div className="font-serif text-lg">Telemetry Feed</div>
-            <div className="divide-y divide-[var(--border-line)]">
-              {[
-                { label: 'Order Route #1089', val: '12.4 ms' },
-                { label: 'Order Route #1090', val: '14.1 ms' },
-              ].map((row) => (
-                <div
-                  key={row.label}
-                  className={`flex justify-between items-center py-3 min-h-[44px] ${
-                    isSpecimenClean ? 'text-[var(--text-main)]' : 'text-gray-400'
-                  }`}
-                >
-                  <span className="text-sm">{row.label}</span>
-                  <span
-                    className={`font-mono text-sm tabular-nums ${
-                      isSpecimenClean ? 'font-semibold text-[var(--status-sage)]' : 'text-gray-300'
-                    }`}
-                  >
-                    {row.val}
+                <h3 className="font-display text-3xl text-[var(--text-main)] font-normal">
+                  Route multi-venue spot orders in 11.8 ms.
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  <span className="inline-flex items-center min-h-[44px] px-5 py-2 rounded-[6px] bg-[#6D28D9] text-white font-mono text-xs">
+                    Deploy (#6D28D9 Locked)
                   </span>
                 </div>
-              ))}
+              </div>
+              <div className="lg:col-span-5 lg:pl-6 border-t border-[var(--border-line)] lg:border-t-0 lg:border-l pt-4 lg:pt-0 space-y-1">
+                <span className="font-mono text-xs text-[var(--text-dim)] block">Fill Rate</span>
+                <div className="font-display text-4xl text-[var(--status-pass)] tabular-nums">
+                  99.94%
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {previewVariant === 'webgl' && (
-          <div className="rounded-2xl p-6 bg-[var(--bg-surface)] text-[var(--text-main)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <span
-                className="font-mono text-xs block"
-                style={{ color: isSpecimenClean ? 'var(--status-sage)' : 'var(--accent-ember)' }}
-              >
-                {isSpecimenClean ? 'Level 3 Fallback Contract Verified' : 'Uncapped Synchronous WebGL'}
-              </span>
-              <p className="text-sm text-[var(--text-dim)]">
-                {isSpecimenClean
-                  ? 'Lazy dynamic import, DPR <= 1.5, offscreen pause, static poster.'
-                  : 'Blocking import, DPR 3.0, 100vw overflow.'}
-              </p>
+          {previewVariant === 'feed' && (
+            <div
+              className={`rounded-[8px] p-6 space-y-3 ${
+                isSpecimenClean
+                  ? 'bg-[var(--bg-surface)] hairline-box text-[var(--text-main)]'
+                  : 'bg-white border border-slate-200 text-slate-900'
+              }`}
+            >
+              <div className="font-semibold text-lg">Telemetry Feed</div>
+              <div className="divide-y divide-[var(--border-line)]">
+                {[
+                  { label: 'Order Route #1089', val: '12.4 ms' },
+                  { label: 'Order Route #1090', val: '14.1 ms' },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className={`flex justify-between items-center py-3 min-h-[44px] ${
+                      isSpecimenClean ? 'text-[var(--text-main)]' : 'text-gray-400'
+                    }`}
+                  >
+                    <span className="text-sm">{row.label}</span>
+                    <span
+                      className={`font-mono text-sm tabular-nums ${
+                        isSpecimenClean ? 'font-semibold text-[var(--status-pass)]' : 'text-gray-300'
+                      }`}
+                    >
+                      {row.val}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <span className="font-mono text-xs px-3.5 py-1.5 rounded-full bg-[var(--bg-surface-elevated)] shrink-0">
-              {isSpecimenClean ? 'DPR <= 1.5' : 'DPR 3.0'}
-            </span>
-          </div>
-        )}
-      </section>
+          )}
+
+          {previewVariant === 'webgl' && (
+            <div className="rounded-[8px] p-6 bg-[var(--bg-surface)] hairline-box text-[var(--text-main)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <span
+                  className="font-mono text-xs block"
+                  style={{ color: isSpecimenClean ? 'var(--status-pass)' : 'var(--status-fail)' }}
+                >
+                  {isSpecimenClean ? 'Level 3 Fallback Contract Verified' : 'Uncapped Synchronous WebGL'}
+                </span>
+                <p className="text-sm text-[var(--text-dim)]">
+                  {isSpecimenClean
+                    ? 'Lazy dynamic import, DPR <= 1.5, offscreen pause, static poster.'
+                    : 'Blocking import, DPR 3.0, 100vw overflow.'}
+                </p>
+              </div>
+              <span className="font-mono text-xs px-3.5 py-1.5 rounded-[2px] bg-[var(--bg-surface-elevated)] shrink-0">
+                {isSpecimenClean ? 'DPR <= 1.5' : 'DPR 3.0'}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

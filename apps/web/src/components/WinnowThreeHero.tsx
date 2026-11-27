@@ -1,183 +1,185 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { tier, DeviceTier } from '@chaff/tier';
+import type { DeviceTier } from '@chaff/tier';
 import { WinnowScenePoster } from './WinnowScenePoster';
 
 const WinnowThreeScene = dynamic(() => import('./WinnowThreeScene'), {
   ssr: false,
-  loading: () => (
-    <WinnowScenePoster reason="Hydrating Three.js winnowing sculpture" />
-  ),
+  loading: () => <WinnowScenePoster />,
 });
 
+const REPO_CHAT_PROMPT =
+  'Audit my app using https://github.com/Ameya79/chaff and ask me Level 1–3 design questions tailored to my project.';
+
 export function WinnowThreeHero() {
-  const [deviceTier, setDeviceTier] = useState<DeviceTier>('poster');
-  const [webglFailed, setWebglFailed] = useState<boolean>(false);
-  const [windKnots, setWindKnots] = useState<number>(42);
-  const [copiedCmd, setCopiedCmd] = useState<boolean>(false);
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [, setResolvedTier] = useState<DeviceTier>('full');
+  const [rippleEnergy, setRippleEnergy] = useState<number>(0);
+  const [usePosterFallback, setUsePosterFallback] = useState<boolean>(false);
+  const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
+  const [copiedPrompt, setCopiedPrompt] = useState<boolean>(false);
 
   useEffect(() => {
-    setDeviceTier(tier());
-
-    const readTheme = () => {
+    const syncTheme = () => {
       const current = document.documentElement.getAttribute('data-theme');
-      setTheme(current === 'light' ? 'light' : 'dark');
+      setThemeMode(current === 'dark' ? 'dark' : 'light');
     };
-    readTheme();
+    syncTheme();
 
-    const observer = new MutationObserver(readTheme);
-    observer.observe(document.documentElement, {
+    const mo = new MutationObserver(syncTheme);
+    mo.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme'],
     });
 
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const onMotionChange = () => setDeviceTier(tier());
-    mq.addEventListener?.('change', onMotionChange);
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const conn = (navigator as unknown as { connection?: { saveData?: boolean } }).connection;
+    if (reducedMotion || conn?.saveData) {
+      setUsePosterFallback(true);
+    }
 
-    return () => {
-      observer.disconnect();
-      mq.removeEventListener?.('change', onMotionChange);
-    };
+    return () => mo.disconnect();
   }, []);
 
-  const handleWebGLUnavailable = useCallback(() => {
-    setWebglFailed(true);
-  }, []);
-
-  const copyCommand = () => {
+  const copyChatPrompt = () => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText('npx chaff init --level 3');
-      setCopiedCmd(true);
-      setTimeout(() => setCopiedCmd(false), 1800);
+      navigator.clipboard.writeText(REPO_CHAT_PROMPT);
+      setCopiedPrompt(true);
+      setRippleEnergy((prev) => prev + 1);
+      setTimeout(() => setCopiedPrompt(false), 2000);
     }
   };
 
-  const isPosterMode = deviceTier === 'poster' || webglFailed;
-  const activeTierLabel = isPosterMode ? 'poster' : deviceTier;
-
   return (
-    <section className="relative min-h-[calc(100dvh-4rem)] w-full flex flex-col justify-between overflow-hidden">
-      {/* Layer 0: Full-Bleed Three.js Sculpture OR SSR Static SVG Poster */}
-      {isPosterMode ? (
-        <WinnowScenePoster
-          theme={theme}
-          reason="Tier 0 / Reduced Motion static SVG sculpture poster"
-        />
-      ) : (
-        <WinnowThreeScene
-          deviceTier={deviceTier}
-          windKnots={windKnots}
-          theme={theme}
-          onWebGLUnavailable={handleWebGLUnavailable}
-        />
-      )}
-
-      {/* Subtle typography contrast scrim (desktop left edge, mobile lower half) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 hidden lg:block"
-        style={{
-          background:
-            'linear-gradient(90deg, var(--bg-canvas) 28%, transparent 58%)',
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 lg:hidden"
-        style={{
-          background:
-            'linear-gradient(to top, var(--bg-canvas) 44%, transparent 82%)',
-        }}
-      />
-
-      {/* Foreground Monumental Typography */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-8 pt-16 sm:pt-24 pb-10 my-auto">
-        <div className="max-w-3xl space-y-7">
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent-ember)] block">
-            Level 3 Design Enforcement
-          </span>
+    <section className="relative min-h-[calc(100dvh-4rem)] flex items-center py-14 sm:py-20 lg:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-center">
+        {/* Left Column: Unclipped Type + Chat-First Paste Prompt */}
+        <div className="lg:col-span-6 space-y-7 min-w-0 relative z-10">
+          <div
+            className="hero-fade-in flex items-center gap-3 font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)] font-medium"
+            style={{ '--d': '20ms' } as React.CSSProperties}
+          >
+            <span>Design Craft Protocol</span>
+            <span className="h-[1px] w-7 bg-[var(--accent)] opacity-50" aria-hidden="true" />
+            <span className="text-[var(--text-dim)]">Levels 1–3</span>
+          </div>
 
           <h1
-            className="font-serif text-[var(--text-main)] leading-[0.96] tracking-[-0.04em]"
-            style={{ fontSize: 'clamp(3.25rem, 7.5vw, 6.75rem)' }}
+            className="font-display text-[var(--text-main)]"
+            aria-label="Strip the slop. Keep your craft."
           >
-            Winnow the slop.
-            <span className="block italic text-[var(--status-warn)]">
-              Keep the grain.
+            <span className="block">
+              {['Strip', 'the', 'slop.'].map((word, idx) => (
+                <React.Fragment key={word}>
+                  <span className="word-mask">
+                    <span
+                      className="word-in"
+                      style={{ '--d': `${70 + idx * 55}ms` } as React.CSSProperties}
+                    >
+                      {word}
+                    </span>
+                  </span>
+                  {idx < 2 ? ' ' : ''}
+                </React.Fragment>
+              ))}
+            </span>
+            <span className="block">
+              {['Keep', 'your', 'craft.'].map((word, idx) => (
+                <React.Fragment key={word}>
+                  <span className="word-mask">
+                    <span
+                      className="word-in"
+                      style={{ '--d': `${235 + idx * 55}ms` } as React.CSSProperties}
+                    >
+                      {idx === 2 ? (
+                        <>
+                          craft<span className="text-[var(--accent)]">.</span>
+                        </>
+                      ) : (
+                        word
+                      )}
+                    </span>
+                  </span>
+                  {idx < 2 ? ' ' : ''}
+                </React.Fragment>
+              ))}
             </span>
           </h1>
 
-          <p className="text-base sm:text-xl text-[var(--text-dim)] max-w-[42ch] leading-relaxed">
-            72 rules, locked brand identity, and hard WebGL budgets enforced before merge.
+          <p
+            className="hero-fade-in text-base sm:text-[17px] text-[var(--text-dim)] max-w-[44ch] leading-[1.65]"
+            style={{ '--d': '340ms' } as React.CSSProperties}
+          >
+            Paste our repo link with your prompt in chat. Your agent reads your project first,
+            asks tailored Level 1–3 design questions around your codebase, and passes every gate.
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <Link href="/playground" className="btn primary text-sm">
-              Open Playground
+          {/* Zero-Setup Chat Paste Box */}
+          <div
+            className="hero-fade-in max-w-xl"
+            style={{ '--d': '410ms' } as React.CSSProperties}
+          >
+            <div className="rounded-[10px] bg-[var(--bg-surface)] hairline-box p-2 pl-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shadow-[0_1px_2px_rgba(17,24,19,0.03)]">
+              <div className="min-w-0 py-1">
+                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--text-dim)] block mb-0.5">
+                  Paste in chat with your prompt
+                </span>
+                <code className="font-mono text-xs sm:text-[13px] text-[var(--text-main)] block truncate">
+                  https://github.com/Ameya79/chaff
+                </code>
+              </div>
+
+              <button
+                type="button"
+                onClick={copyChatPrompt}
+                aria-label="Copy chat repo prompt"
+                className="btn accent text-xs font-mono shrink-0"
+              >
+                {copiedPrompt ? 'Copied Prompt' : 'Copy Chat Prompt'}
+              </button>
+            </div>
+          </div>
+
+          {/* Crisp Secondary Actions */}
+          <div
+            className="hero-fade-in flex flex-wrap items-center gap-6 pt-1"
+            style={{ '--d': '470ms' } as React.CSSProperties}
+          >
+            <Link
+              href="#tailored-demo"
+              className="ink-link text-sm font-medium text-[var(--text-main)] min-h-[44px] min-w-[44px]"
+            >
+              See how it asks &rarr;
             </Link>
-            <Link href="/rules" className="btn text-sm">
+            <Link
+              href="/rules"
+              className="ink-link text-sm text-[var(--text-dim)] hover:text-[var(--text-main)] min-h-[44px] min-w-[44px]"
+            >
               72 Rules
             </Link>
-            <button
-              type="button"
-              onClick={copyCommand}
-              aria-label="Copy npx chaff init --level 3 command"
-              className="btn bg-[var(--bg-pill-glass)] hover:bg-[var(--bg-surface)] font-mono text-xs text-[var(--text-dim)] hover:text-[var(--text-main)] px-4"
+            <Link
+              href="/playground"
+              className="ink-link text-sm text-[var(--text-dim)] hover:text-[var(--text-main)] min-h-[44px] min-w-[44px]"
             >
-              <code>$ npx chaff init --level 3</code>
-              <span className="text-[var(--accent-ember)]">
-                {copiedCmd ? 'Copied' : 'Copy'}
-              </span>
-            </button>
+              Live Playground
+            </Link>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Kinetic Wind Force & Tier Telemetry */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-8 pb-8 pt-4">
-        <div className="hairline-t pt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4 min-w-0">
-            <label
-              htmlFor="hero-wind-range"
-              className="font-mono text-xs uppercase tracking-wider text-[var(--text-dim)] whitespace-nowrap"
-            >
-              Wind Force
-            </label>
-            <input
-              id="hero-wind-range"
-              type="range"
-              min="0"
-              max="100"
-              value={windKnots}
-              onChange={(e) => setWindKnots(parseInt(e.target.value, 10))}
-              aria-label="Adjust curl-wind force separating chaff shards from grain kernels"
-              className="w-36 sm:w-52 min-h-[44px] text-base cursor-pointer"
+        {/* Right Column: Pure 3D Crystal Artifact (No caption text below) */}
+        <div className="lg:col-span-6 relative h-[320px] sm:h-[430px] lg:h-[560px] flex items-center justify-center min-w-0 canvas-stage-in">
+          {usePosterFallback ? (
+            <WinnowScenePoster tierLabel="Static Poster Fallback" />
+          ) : (
+            <WinnowThreeScene
+              rippleEnergy={rippleEnergy}
+              themeMode={themeMode}
+              onTierResolved={setResolvedTier}
+              onFallbackToPoster={() => setUsePosterFallback(true)}
             />
-            <span className="font-mono text-xs text-[var(--text-main)] tabular-nums w-12">
-              {windKnots} kt
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4 font-mono text-xs text-[var(--text-dim)]">
-            <span>
-              Tier <strong className="text-[var(--text-main)] uppercase">{activeTierLabel}</strong>
-            </span>
-            <span aria-hidden="true">·</span>
-            <span>DPR &le; 1.5</span>
-            <span aria-hidden="true">·</span>
-            <span>
-              {isPosterMode
-                ? 'Static SVG Poster'
-                : deviceTier === 'full'
-                ? '140 Grain / 220 Husk'
-                : '35 Grain / 55 Husk'}
-            </span>
-          </div>
+          )}
         </div>
       </div>
     </section>

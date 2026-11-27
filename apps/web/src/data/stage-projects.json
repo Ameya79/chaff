@@ -1,0 +1,210 @@
+[
+  {
+    "id": "kestrel",
+    "tab": "SaaS Router",
+    "name": "Kestrel",
+    "domain": "kestrel.run",
+    "chatPrompt": "Audit my Kestrel landing page using https://github.com/Ameya79/chaff",
+    "detected": {
+      "framework": "Next.js App Router",
+      "brandHex": "#6D28D9",
+      "brandLabel": "Violet Ink",
+      "issueSummary": "Gradient headline + glowing cards hiding order-routing specs"
+    },
+    "questions": {
+      "level1": "Fix contrast, spacing & copy filler while keeping your current 3-column grid intact.",
+      "level2": "Replace the centered template with an asymmetric live waterfall split + 1 scroll reveal, keeping #6D28D9 locked.",
+      "level3": "Add a lazy-loaded WebGL order-depth visualizer (< 250 KB) with static SVG fallback and 1.5x DPR cap."
+    },
+    "beforeScore": 42,
+    "afterScore": 98,
+    "slop": {
+      "pill": "Next-Gen AI Order Platform",
+      "headline": "Empower Your Synergy with Revolutionary AI Routing",
+      "subhead": "Seamlessly supercharge your execution stack with our platform trusted by 10,000+ teams and 99.99% uptime.",
+      "primaryCta": "Get Started Free",
+      "secondaryCta": "Watch Demo",
+      "cards": [
+        { "title": "Blazing Fast", "body": "Global scale latency." },
+        { "title": "99.99% Uptime", "body": "Enterprise reliability." },
+        { "title": "10,000+ Teams", "body": "Trusted worldwide." }
+      ]
+    },
+    "crafted": {
+      "kicker": "Order Router · US-EAST",
+      "headline": "Route spot orders across 14 venues in 11.8 ms.",
+      "body": "Deterministic clearing engine with pre-trade margin checks and venue latency logs.",
+      "cta": "Deploy Route",
+      "metricLabel": "Median Hop",
+      "metricValue": "11.8 ms",
+      "metricSub": "p99 18.4 ms · 99.94% fill",
+      "rows": [
+        { "label": "NYSE Arca", "val": "3.1 ms", "pct": 42 },
+        { "label": "Nasdaq ITCH", "val": "4.4 ms", "pct": 62 },
+        { "label": "CBOE EDGX", "val": "2.6 ms", "pct": 34 }
+      ]
+    },
+    "tells": [
+      { "id": "glow", "ruleId": "UI-001", "label": "Glow Orbs", "deduction": 12, "note": "Unmotivated purple/blue radial blur orbs behind template text." },
+      { "id": "grad", "ruleId": "UI-002", "label": "Gradient Clip", "deduction": 10, "note": "Linear gradient clip-text headline reduces legibility." },
+      { "id": "grid", "ruleId": "UI-009", "label": "3-Card Boilerplate", "deduction": 18, "note": "Identical 3-card row hides real product telemetry." },
+      { "id": "copy", "ruleId": "COPY-001", "label": "Filler Copy", "deduction": 16, "note": "Synthetic buzzwords and fabricated numbers replaced by real data." }
+    ]
+  },
+  {
+    "id": "atelier",
+    "tab": "SvelteKit Studio",
+    "name": "Norden",
+    "domain": "norden.studio",
+    "chatPrompt": "Clean up our architecture portfolio using https://github.com/Ameya79/chaff",
+    "detected": {
+      "framework": "SvelteKit + Tailwind",
+      "brandHex": "#2E6648",
+      "brandLabel": "Mineral Sage",
+      "issueSummary": "320px width overflow + missing alt dimensions + bloated shadow cards"
+    },
+    "questions": {
+      "level1": "Normalize image dimensions (CLS 0.00), fix mobile horizontal overflow, and preserve your calm monochrome index.",
+      "level2": "Pitch 3 exhibition layouts with crisp sticky project index, View Transitions, and locked Mineral Sage.",
+      "level3": "Introduce a hardware-tiered cursor depth lens on architectural plates with zero mobile jank."
+    },
+    "beforeScore": 51,
+    "afterScore": 99,
+    "slop": {
+      "pill": "Award-Winning Digital Agency",
+      "headline": "Elevating Iconic Brand Experiences to New Heights",
+      "subhead": "We craft transformative visual stories powered by next-generation spatial creativity.",
+      "primaryCta": "Start a Project",
+      "secondaryCta": "Our Process",
+      "cards": [
+        { "title": "Pixel Perfection", "body": "Crafted with passion." },
+        { "title": "Future Proof", "body": "Built for tomorrow." },
+        { "title": "10x Engagement", "body": "Results that speak." }
+      ]
+    },
+    "crafted": {
+      "kicker": "Monograph Index · Zurich / Tokyo",
+      "headline": "Civic timber structures and daylight studies, 2018–2026.",
+      "body": "Sixteen built works documented with structural spans, daylight factor curves, and material provenance.",
+      "cta": "View Dossier 04",
+      "metricLabel": "Daylight Factor",
+      "metricValue": "4.8%",
+      "metricSub": "0px overflow @ 320px · CLS 0.00",
+      "rows": [
+        { "label": "01 · Basel Archive Pavilion", "val": "2,400 m²", "pct": 74 },
+        { "label": "02 · Nagano Transit Hall", "val": "5,120 m²", "pct": 88 },
+        { "label": "03 · Aarhus Library Wing", "val": "1,850 m²", "pct": 56 }
+      ]
+    },
+    "tells": [
+      { "id": "glow", "ruleId": "MOBILE-001", "label": "320px Overflow", "deduction": 16, "note": "Hardcoded fixed width breaks small mobile viewports." },
+      { "id": "grad", "ruleId": "PERF-003", "label": "Unsized Images", "deduction": 11, "note": "Missing explicit image dimensions trigger Cumulative Layout Shift." },
+      { "id": "grid", "ruleId": "UI-009", "label": "Template Grid", "deduction": 12, "note": "Generic 3-card agency pitch replaced with real project ledger." },
+      { "id": "copy", "ruleId": "COPY-001", "label": "Agency Clichés", "deduction": 10, "note": "Vague agency phrases replaced by concrete structural work." }
+    ]
+  },
+  {
+    "id": "fieldwork",
+    "tab": "SolidJS Store",
+    "name": "Fieldwork",
+    "domain": "fieldwork.audio",
+    "chatPrompt": "Make my synthesizer store feel tailored using https://github.com/Ameya79/chaff",
+    "detected": {
+      "framework": "SolidJS + TypeScript",
+      "brandHex": "#0E6F4E",
+      "brandLabel": "Instrument Jade",
+      "issueSummary": "Clickable <div> product buttons + low-contrast grey specs (< 4.5:1)"
+    },
+    "questions": {
+      "level1": "Convert div.onClick controls to semantic <button> (>= 44px) and fix WCAG AA spec contrast without touching your layout.",
+      "level2": "Re-stage hero as an asymmetric bench spec view with tactile patch selector and locked Instrument Jade.",
+      "level3": "Add a gentle live oscilloscope WebGL strip with automatic poster fallback on low-power phones."
+    },
+    "beforeScore": 48,
+    "afterScore": 97,
+    "slop": {
+      "pill": "Studio-Grade Hardware",
+      "headline": "Unleash Your Sonic Potential with AI Sound",
+      "subhead": "Streamline your workflow with cutting-edge hardware trusted by 50,000+ producers.",
+      "primaryCta": "Buy Now",
+      "secondaryCta": "Learn More",
+      "cards": [
+        { "title": "Studio Quality", "body": "Crystal clear output." },
+        { "title": "Infinite Possibilities", "body": "Zero learning curve." },
+        { "title": "Built to Last", "body": "Military grade hull." }
+      ]
+    },
+    "crafted": {
+      "kicker": "Batch 03 · CNC Anodized Chassis",
+      "headline": "Eight-voice analog matrix synthesizer with optical encoders.",
+      "body": "Discrete ladder filter, 48 kHz internal modulation bus, and USB-C MIDI class compliance.",
+      "cta": "Configure Unit · $840",
+      "metricLabel": "Noise Floor",
+      "metricValue": "-98 dBu",
+      "metricSub": "44x44px targets · Semantic controls",
+      "rows": [
+        { "label": "SNR Dynamic Range", "val": "114 dB", "pct": 86 },
+        { "label": "Scan Rate", "val": "2,000 Hz", "pct": 72 },
+        { "label": "Weight (Milled 6061)", "val": "1.18 kg", "pct": 48 }
+      ]
+    },
+    "tells": [
+      { "id": "glow", "ruleId": "CODE-001", "label": "div.onClick", "deduction": 14, "note": "Non-semantic clickable <div> breaks keyboard navigation and screen readers." },
+      { "id": "grad", "ruleId": "A11Y-001", "label": "Low Contrast", "deduction": 14, "note": "Muted slate spec text falls below 4.5:1 AA contrast." },
+      { "id": "grid", "ruleId": "MOBILE-002", "label": "< 44px Targets", "deduction": 12, "note": "Small swatch controls expanded to >= 44x44px tap areas." },
+      { "id": "copy", "ruleId": "COPY-001", "label": "Generic Hype", "deduction": 12, "note": "Hardware specs replaced vague hype phrases." }
+    ]
+  },
+  {
+    "id": "meridian",
+    "tab": "Angular Desk",
+    "name": "Meridian",
+    "domain": "meridian.aero",
+    "chatPrompt": "Refine our Angular telemetry portal using https://github.com/Ameya79/chaff",
+    "detected": {
+      "framework": "Angular + SCSS",
+      "brandHex": "#2E6648",
+      "brandLabel": "Mineral Sage",
+      "issueSummary": "<div (click)> row handlers + unindexed <img> missing ngSrc"
+    },
+    "questions": {
+      "level1": "Swap clickable <div> tags for <button> and switch <img> to NgOptimizedImage (ngSrc) without altering SCSS grids.",
+      "level2": "Author a crisp two-column flight log workspace keeping Mineral Sage (#2E6648) locked across telemetry meters.",
+      "level3": "Defer 3D corridor mesh behind Angular @defer + @chaff/tier poster fallback with capped 1.5x DPR."
+    },
+    "beforeScore": 54,
+    "afterScore": 99,
+    "slop": {
+      "pill": "AI Aviation Intelligence",
+      "headline": "Reimagine Mission Control at Enterprise Scale",
+      "subhead": "Streamline flight readiness across 10,000+ sensors with 99.9% precision insights.",
+      "primaryCta": "Book Demo",
+      "secondaryCta": "Platform Tour",
+      "cards": [
+        { "title": "Smart Telemetry", "body": "Live data pipelines." },
+        { "title": "Zero Downtime", "body": "Built for mission teams." },
+        { "title": "Rapid Insights", "body": "Unified control hub." }
+      ]
+    },
+    "crafted": {
+      "kicker": "Flight Desk · KSEA Approach",
+      "headline": "Monitor 42 approach sectors on a single calibrated schedule.",
+      "body": "Angular Standalone components with native NgOptimizedImage, tabular knots, and strict keyboard navigation.",
+      "cta": "Inspect Log",
+      "metricLabel": "Sector Latency",
+      "metricValue": "14.2 ms",
+      "metricSub": "ngSrc optimized · 0 clickable divs",
+      "rows": [
+        { "label": "Runway 16L Radar", "val": "9.4 ms", "pct": 38 },
+        { "label": "ADS-B Ingest", "val": "14.2 ms", "pct": 54 },
+        { "label": "Weather METAR Sync", "val": "21.0 ms", "pct": 68 }
+      ]
+    },
+    "tells": [
+      { "id": "glow", "ruleId": "CODE-001", "label": "<div (click)>", "deduction": 14, "note": "Angular (click) binding placed on <div> instead of native <button>." },
+      { "id": "grad", "ruleId": "CODE-003", "label": "Raw <img> Tag", "deduction": 10, "note": "Missing ngSrc attribute skips Angular NgOptimizedImage priority hints." },
+      { "id": "grid", "ruleId": "UI-009", "label": "Generic 3-Cards", "deduction": 12, "note": "Uniform promo tiles replaced by scannable radar sector ledger." },
+      { "id": "copy", "ruleId": "COPY-001", "label": "Template Hype", "deduction": 10, "note": "Marketing adjectives replaced with operational approach telemetry." }
+    ]
+  }
+]

@@ -72,7 +72,19 @@ export interface IdentityLock {
   version: string;
   generatedAt: string;
   framework: string;
-  router: 'app' | 'pages' | 'vite' | 'astro' | 'remix' | 'unknown';
+  router:
+    | 'app'
+    | 'pages'
+    | 'vite'
+    | 'astro'
+    | 'remix'
+    | 'solid-start'
+    | 'sveltekit'
+    | 'angular'
+    | 'nuxt'
+    | 'vue'
+    | 'qwik'
+    | 'unknown';
   styling: string;
   fonts: string[];
   colors: Record<string, string>;

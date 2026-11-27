@@ -11,33 +11,43 @@ interface AdapterGuide {
 
 const ADAPTERS: AdapterGuide[] = [
   {
-    id: 'cursor',
-    name: 'Cursor',
-    targetPath: '.cursor/rules/chaff.mdc',
-    content: `---
-description: Chaff design audit and level enforcement protocol
-globs: **/*.{tsx,jsx,ts,js,css}
-alwaysApply: true
----
-# CHAFF DESIGN AUDIT PROTOCOL
-1. Read framework & styles -> .chaff/identity.json
-2. Dev server @ 390px & 1440px -> inspect geometry
-3. Score against 72 rules; waive locked tokens
-4. L2/L3: Pitch 3 concepts in .chaff/pitches/; pause for approval
-5. Small commits with rule IDs; verify test & gate`,
+    id: 'antigravity',
+    name: 'Antigravity / Universal',
+    targetPath: 'AGENTS.md',
+    content: `# AGENTS.md — Universal Chaff Protocol Pointer
+1. Read CHAFF.md and inspect the user's own project first (.chaff/identity.json).
+2. Capture live UI @ 390px & 1440px (Light and Dark themes).
+3. Audit tells across 72 rules; waive locked brand tokens.
+4. Ask tailored Level 1–3 & customization questions around their project; wait for approval.
+5. Apply small, rule-tagged commits and run chaff audit + chaff gate.`,
   },
   {
     id: 'claude',
     name: 'Claude Code',
     targetPath: 'CLAUDE.md',
-    content: `# CLAUDE.md — Chaff Audit Pointer
+    content: `# CLAUDE.md — Chaff Protocol Pointer
 See CHAFF.md for full protocol. Dedicated levels in levels/level-[1-3].md.
-1. Read -> .chaff/identity.json (Modify nothing).
-2. Look -> Dev server @ 390px & 1440px (light/dark).
-3. Audit -> chaff-report.md. Waive locked identity items.
-4. Plan -> L1: fixes. L2/L3: 3 Concept Pitches first. Pause.
-5. Implement -> Small commits with rule IDs.
-6. Verify -> Run pnpm test && chaff gate.`,
+1. Inspect the user's project tokens, fonts & routes -> .chaff/identity.json.
+2. Inspect rendered UI @ 390px & 1440px.
+3. Ask project-tailored Level 1–3 questions (L2/L3: 3 Concept Pitches) & pause.
+4. Implement surgical commits tagged with rule IDs.
+5. Verify -> run pnpm test && chaff gate.`,
+  },
+  {
+    id: 'cursor',
+    name: 'Cursor',
+    targetPath: '.cursor/rules/chaff.mdc',
+    content: `---
+description: Chaff chat-first UI craft protocol and Level 1-3 gates
+globs: **/*.{tsx,jsx,ts,js,svelte,vue,astro,html,css,scss}
+alwaysApply: true
+---
+# CHAFF PROTOCOL
+1. Read user project framework & styles -> .chaff/identity.json
+2. Inspect dev server @ 390px & 1440px
+3. Score against 72 rules; waive locked tokens
+4. Ask tailored L1/L2/L3 questions (L2/L3: 3 pitches in .chaff/pitches/); wait for approval
+5. Small commits with rule IDs; verify test & gate`,
   },
   {
     id: 'windsurf',
@@ -46,33 +56,21 @@ See CHAFF.md for full protocol. Dedicated levels in levels/level-[1-3].md.
     content: `# Windsurf Chaff Rules
 - Inspect .chaff/identity.json before modifying styles.
 - Locked brand tokens (confidence > 0.80) must never be overridden.
-- Level 2/3 requires 3 concept pitches before implementation.
+- Tailor Level 1/2/3 choices directly to the user's project domain.
 - All interactive touch targets must measure >= 44x44px.
 - Zero horizontal overflow allowed at 320px viewport width.
-- Level 3 3D elements must obey the 5-part Fallback Contract.`,
-  },
-  {
-    id: 'antigravity',
-    name: 'Antigravity / AGENTS.md',
-    targetPath: 'AGENTS.md',
-    content: `# AGENTS.md — Universal Chaff Protocol Pointer
-1. Read: Inspect framework & styles. Write .chaff/identity.json.
-2. Look: Dev server @ 390px & 1440px (light/dark).
-3. Audit: Produce chaff-report.md. Score out of 100.
-4. Plan: L1: fixes. L2/L3: 3 Concept Pitches first. Pause for approval.
-5. Implement: Small commits with rule IDs.
-6. Verify: Typecheck, lint, build, test, and chaff gate.`,
+- Level 3 WebGL scenes must obey the 5-part Fallback Contract.`,
   },
   {
     id: 'copilot',
     name: 'GitHub Copilot',
     targetPath: '.github/copilot-instructions.md',
     content: `# Custom Instructions for GitHub Copilot
-- Always run Chaff checks before generating frontend components.
-- Never generate unwaived purple/blue glow gradients or gradient text masks.
-- Ensure interactive controls have minimum 44x44px touch targets.
-- Use tabular-nums on all telemetry numbers.
-- Respect prefers-reduced-motion on all animations and shaders.`,
+- Inspect the user's own tokens before applying UI rules.
+- Avoid unwaived glow gradients or clipped-gradient headlines.
+- Ensure interactive controls meet >= 44x44px touch targets.
+- Use tabular-nums on telemetry figures.
+- Respect prefers-reduced-motion across animations and shaders.`,
   },
 ];
 
@@ -85,8 +83,11 @@ const MCP_CONFIG = `{
   }
 }`;
 
+const CHAT_SNIPPET =
+  'Audit my app using https://github.com/Ameya79/chaff — inspect my project first and ask me Level 1–3 customization questions.';
+
 export function InstallAdaptersWorkbench() {
-  const [selectedAdapter, setSelectedAdapter] = useState<string>('cursor');
+  const [selectedAdapter, setSelectedAdapter] = useState<string>('antigravity');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -118,54 +119,84 @@ export function InstallAdaptersWorkbench() {
     ADAPTERS.find((a) => a.id === selectedAdapter) || ADAPTERS[0];
 
   return (
-    <div className="space-y-20">
-      {/* CLI Quickstart */}
+    <div className="space-y-20 sheet-in" style={{ '--d': '120ms' } as React.CSSProperties}>
+      {/* Zero-Config Paste In Chat */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start hairline-t pt-12">
         <div className="lg:col-span-4 space-y-2 min-w-0">
-          <span className="font-mono text-xs uppercase text-[var(--accent-ember)] block">
-            Quickstart
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)] font-medium block">
+            Recommended · Zero Setup
           </span>
-          <h2 className="font-serif text-3xl text-[var(--text-main)]">
-            Two Commands
+          <h2 className="font-display text-3xl text-[var(--text-main)]">
+            Paste in Chat
           </h2>
+          <p className="text-sm text-[var(--text-dim)] leading-relaxed">
+            No CLI init required. Drop the repo URL beside your prompt; the agent reads Chaff from the repo and tailors questions around your project.
+          </p>
         </div>
 
         <div className="lg:col-span-8 space-y-4 min-w-0">
+          <div className="rounded-[10px] bg-[var(--bg-surface)] hairline-box p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <code className="font-mono text-xs sm:text-sm text-[var(--text-main)] leading-relaxed">
+              {CHAT_SNIPPET}
+            </code>
+            <button
+              type="button"
+              onClick={() => copyToClipboard(CHAT_SNIPPET, 'chat-snippet')}
+              className="btn accent text-xs font-mono shrink-0"
+            >
+              {copiedId === 'chat-snippet' ? 'Copied' : 'Copy Prompt'}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Optional CLI Verification Commands */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start hairline-t pt-12">
+        <div className="lg:col-span-4 space-y-2 min-w-0">
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)] font-medium block">
+            Optional CI / Local Gate
+          </span>
+          <h2 className="font-display text-3xl text-[var(--text-main)]">
+            CLI Verification
+          </h2>
+        </div>
+
+        <div className="lg:col-span-8 divide-y divide-[var(--border-line)] hairline-y min-w-0">
           {[
-            { id: 'cli-init', cmd: 'npx chaff init --level 3', label: 'Lock identity' },
-            { id: 'cli-gate', cmd: 'npx chaff audit && npx chaff gate --level 3', label: 'Audit + gate' },
+            { id: 'cli-init', cmd: 'npx @chaff/cli init', label: 'Save .chaff/identity.json lock' },
+            { id: 'cli-gate', cmd: 'npx @chaff/cli audit && npx @chaff/cli gate --level 3', label: 'Run audit + gate checks' },
           ].map((item) => (
-            <div key={item.id} className="space-y-1.5">
-              <span className="font-mono text-xs text-[var(--text-dim)] block">
-                {item.label}
-              </span>
-              <div className="p-4 rounded-2xl bg-[var(--bg-surface)] flex items-center justify-between gap-3 font-mono text-xs sm:text-sm">
-                <code className="text-[var(--text-main)] overflow-x-auto">
+            <div key={item.id} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-1 min-w-0">
+                <span className="font-mono text-xs text-[var(--text-dim)] block">
+                  {item.label}
+                </span>
+                <code className="font-mono text-xs sm:text-sm text-[var(--text-main)] block overflow-x-auto">
                   $ {item.cmd}
                 </code>
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(item.cmd, item.id)}
-                  className="btn text-xs font-mono shrink-0"
-                >
-                  {copiedId === item.id ? 'Copied' : 'Copy'}
-                </button>
               </div>
+              <button
+                type="button"
+                onClick={() => copyToClipboard(item.cmd, item.id)}
+                className="btn text-xs font-mono shrink-0"
+              >
+                {copiedId === item.id ? 'Copied' : 'Copy'}
+              </button>
             </div>
           ))}
         </div>
       </section>
 
       {/* IDE Harness Adapters */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start hairline-t pt-12">
+      <section className="scroll-sheet grid grid-cols-1 lg:grid-cols-12 gap-8 items-start hairline-t pt-12">
         <div className="lg:col-span-4 space-y-4 min-w-0">
-          <span className="font-mono text-xs uppercase text-[var(--accent-ember)] block">
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)] font-medium block">
             Adapters
           </span>
-          <h2 className="font-serif text-3xl text-[var(--text-main)]">
-            Select Harness
+          <h2 className="font-display text-3xl text-[var(--text-main)]">
+            Pin to Workspace
           </h2>
-          <div className="divide-y divide-[var(--border-line)]">
+          <div className="divide-y divide-[var(--border-line)] hairline-y">
             {ADAPTERS.map((a) => {
               const active = a.id === selectedAdapter;
               return (
@@ -174,10 +205,10 @@ export function InstallAdaptersWorkbench() {
                   type="button"
                   onClick={() => handleSelectAdapter(a.id)}
                   aria-pressed={active}
-                  className={`w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs flex items-center justify-between gap-2 transition-colors rounded-lg ${
+                  className={`w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs flex items-center justify-between gap-2 transition-colors duration-200 border-l-2 ${
                     active
-                      ? 'bg-[var(--accent-ember)] text-[var(--btn-primary-text)] font-semibold'
-                      : 'text-[var(--text-dim)] hover:text-[var(--text-main)]'
+                      ? 'border-[var(--accent)] bg-[var(--bg-surface)] text-[var(--text-main)] font-semibold'
+                      : 'border-transparent text-[var(--text-dim)] hover:text-[var(--text-main)]'
                   }`}
                 >
                   <span>{a.name}</span>
@@ -188,9 +219,9 @@ export function InstallAdaptersWorkbench() {
           </div>
         </div>
 
-        <div className="lg:col-span-8 space-y-4 min-w-0">
+        <div key={currentAdapter.id} className="lg:col-span-8 space-y-4 min-w-0 panel-enter">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <span className="font-mono text-xs text-[var(--accent-ember)]">
+            <span className="font-mono text-xs text-[var(--accent)]">
               {currentAdapter.targetPath}
             </span>
             <button
@@ -202,19 +233,19 @@ export function InstallAdaptersWorkbench() {
             </button>
           </div>
 
-          <pre className="p-5 rounded-2xl bg-[var(--bg-surface)] font-mono text-xs text-[var(--text-main)] overflow-x-auto leading-relaxed">
+          <pre className="p-5 rounded-[8px] bg-[var(--bg-surface)] hairline-box font-mono text-xs text-[var(--text-main)] overflow-x-auto leading-relaxed">
             <code>{currentAdapter.content}</code>
           </pre>
         </div>
       </section>
 
       {/* MCP Server Config */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start hairline-t pt-12">
+      <section className="scroll-sheet grid grid-cols-1 lg:grid-cols-12 gap-8 items-start hairline-t pt-12">
         <div className="lg:col-span-4 space-y-2 min-w-0">
-          <span className="font-mono text-xs uppercase text-[var(--accent-ember)] block">
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)] font-medium block">
             Stdio MCP
           </span>
-          <h2 className="font-serif text-3xl text-[var(--text-main)]">
+          <h2 className="font-display text-3xl text-[var(--text-main)]">
             MCP Server
           </h2>
           <p className="text-sm text-[var(--text-dim)]">
@@ -232,7 +263,7 @@ export function InstallAdaptersWorkbench() {
               {copiedId === 'mcp-config' ? 'Copied' : 'Copy JSON'}
             </button>
           </div>
-          <pre className="p-5 rounded-2xl bg-[var(--bg-surface)] font-mono text-xs text-[var(--text-main)] overflow-x-auto">
+          <pre className="p-5 rounded-[8px] bg-[var(--bg-surface)] hairline-box font-mono text-xs text-[var(--text-main)] overflow-x-auto">
             <code>{MCP_CONFIG}</code>
           </pre>
         </div>

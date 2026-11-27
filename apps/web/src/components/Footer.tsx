@@ -1,16 +1,20 @@
 import React from 'react';
 import Link from 'next/link';
+import { ChaffLogoMark } from './Header';
 
 export function Footer() {
   return (
     <footer className="hairline-t py-16 px-4 sm:px-8 mt-24">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
+      <div className="scroll-sheet max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
         <div className="md:col-span-5 space-y-3 min-w-0">
-          <span className="font-serif text-2xl tracking-tight text-[var(--text-main)] block">
-            Chaff
-          </span>
+          <div className="flex items-center gap-2.5 text-[var(--text-main)]">
+            <ChaffLogoMark className="w-7 h-7 shrink-0" />
+            <span className="font-display font-semibold text-lg tracking-[-0.03em] text-[var(--text-main)]">
+              Chaff
+            </span>
+          </div>
           <p className="text-sm text-[var(--text-dim)] max-w-[38ch]">
-            Rendered UI audit, identity lock, and Level 3 budget gate.
+            Chat-first UI craft protocol, Identity Lock, and Level 1–3 performance gates.
           </p>
           <span className="font-mono text-xs text-[var(--text-dim)] block pt-1">
             v0.1.0 · Local execution · Zero telemetry
@@ -30,7 +34,7 @@ export function Footer() {
             <Link
               key={item.href}
               href={item.href}
-              className="inline-flex items-center min-h-[44px] min-w-[44px] text-[var(--text-dim)] hover:text-[var(--text-main)] transition-colors"
+              className="ink-link min-h-[44px] min-w-[44px] text-[var(--text-dim)] hover:text-[var(--text-main)] transition-colors duration-200"
             >
               {item.label}
             </Link>
@@ -38,16 +42,16 @@ export function Footer() {
         </div>
 
         <div className="md:col-span-3 md:text-right space-y-2 min-w-0">
-          <span className="font-mono text-xs text-[var(--status-sage)] block">
+          <span className="font-mono text-xs text-[var(--status-pass)] block">
             Downgrade effect, never budget.
           </span>
           <a
-            href="https://github.com/chaff-dev/chaff"
+            href="https://github.com/Ameya79/chaff"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center min-h-[44px] min-w-[44px] font-mono text-xs text-[var(--text-dim)] hover:text-[var(--accent-ember)] transition-colors"
+            className="ink-link min-h-[44px] min-w-[44px] font-mono text-xs text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors duration-200"
           >
-            GitHub &rarr;
+            github.com/Ameya79/chaff &rarr;
           </a>
         </div>
       </div>

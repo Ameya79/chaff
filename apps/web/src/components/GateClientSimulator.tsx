@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 
 export function GateClientSimulator() {
   const [simLevel, setSimLevel] = useState<2 | 3>(3);
-  const [simJsSize, setSimJsSize] = useState<number>(142);
-  const [simLazy3dKb, setSimLazy3dKb] = useState<number>(152);
+  const [simJsSize, setSimJsSize] = useState<number>(102);
+  const [simLazy3dKb, setSimLazy3dKb] = useState<number>(7);
   const [simCls, setSimCls] = useState<number>(0.02);
   const [simTouchTarget, setSimTouchTarget] = useState<number>(44);
 
@@ -17,25 +17,25 @@ export function GateClientSimulator() {
   const overallPass = isBaselinePass && isLazyPass && isClsPass && isTouchPass;
 
   return (
-    <section className="rounded-2xl bg-[var(--bg-surface)] p-6 sm:p-10 space-y-8 min-w-0">
+    <section className="scroll-sheet rounded-[10px] bg-[var(--bg-surface)] hairline-box p-6 sm:p-10 space-y-8 min-w-0">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-1">
-          <span className="font-mono text-xs uppercase text-[var(--accent-ember)] block">
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)] font-medium block">
             Simulator
           </span>
-          <h2 className="font-serif text-3xl text-[var(--text-main)]">
+          <h2 className="font-display text-3xl text-[var(--text-main)]">
             PR Budget Check (Level {simLevel})
           </h2>
         </div>
 
-        <div className="inline-flex rounded-full bg-[var(--bg-surface-elevated)] p-1 gap-1 shrink-0">
+        <div className="inline-flex rounded-[8px] bg-[var(--bg-surface-elevated)] border border-[var(--border-line)] p-1 gap-1 shrink-0">
           <button
             type="button"
             onClick={() => setSimLevel(2)}
             aria-pressed={simLevel === 2}
-            className={`px-4 py-2 rounded-full min-h-[44px] min-w-[44px] font-mono text-xs transition-colors ${
+            className={`px-4 py-2 rounded-[6px] min-h-[44px] min-w-[44px] font-mono text-xs transition-colors duration-200 ${
               simLevel === 2
-                ? 'bg-[var(--text-main)] text-[var(--bg-canvas)] font-semibold'
+                ? 'bg-[var(--text-main)] text-[var(--btn-primary-text)] font-medium'
                 : 'text-[var(--text-dim)]'
             }`}
           >
@@ -45,9 +45,9 @@ export function GateClientSimulator() {
             type="button"
             onClick={() => setSimLevel(3)}
             aria-pressed={simLevel === 3}
-            className={`px-4 py-2 rounded-full min-h-[44px] min-w-[44px] font-mono text-xs transition-colors ${
+            className={`px-4 py-2 rounded-[6px] min-h-[44px] min-w-[44px] font-mono text-xs transition-colors duration-200 ${
               simLevel === 3
-                ? 'bg-[var(--text-main)] text-[var(--bg-canvas)] font-semibold'
+                ? 'bg-[var(--text-main)] text-[var(--btn-primary-text)] font-medium'
                 : 'text-[var(--text-dim)]'
             }`}
           >
@@ -63,7 +63,7 @@ export function GateClientSimulator() {
               <label htmlFor="simJs" className="text-[var(--text-main)]">
                 Baseline JS: {simJsSize} KB
               </label>
-              <span className={isBaselinePass ? 'text-[var(--status-sage)]' : 'text-[var(--accent-ember)]'}>
+              <span className={isBaselinePass ? 'text-[var(--status-pass)]' : 'text-[var(--status-fail)]'}>
                 {isBaselinePass ? 'PASS' : 'FAIL > 170 KB'}
               </span>
             </div>
@@ -84,7 +84,7 @@ export function GateClientSimulator() {
                 <label htmlFor="simLazy3d" className="text-[var(--text-main)]">
                   Lazy 3D Chunk: {simLazy3dKb} KB
                 </label>
-                <span className={isLazyPass ? 'text-[var(--status-sage)]' : 'text-[var(--accent-ember)]'}>
+                <span className={isLazyPass ? 'text-[var(--status-pass)]' : 'text-[var(--status-fail)]'}>
                   {isLazyPass ? 'PASS' : 'FAIL > 250 KB'}
                 </span>
               </div>
@@ -105,7 +105,7 @@ export function GateClientSimulator() {
               <label htmlFor="simCls" className="text-[var(--text-main)]">
                 CLS: {simCls.toFixed(2)}
               </label>
-              <span className={isClsPass ? 'text-[var(--status-sage)]' : 'text-[var(--accent-ember)]'}>
+              <span className={isClsPass ? 'text-[var(--status-pass)]' : 'text-[var(--status-fail)]'}>
                 {isClsPass ? 'PASS' : 'FAIL > 0.10'}
               </span>
             </div>
@@ -125,7 +125,7 @@ export function GateClientSimulator() {
               <label htmlFor="simTouch" className="text-[var(--text-main)]">
                 Touch Target: {simTouchTarget}px
               </label>
-              <span className={isTouchPass ? 'text-[var(--status-sage)]' : 'text-[var(--accent-ember)]'}>
+              <span className={isTouchPass ? 'text-[var(--status-pass)]' : 'text-[var(--status-fail)]'}>
                 {isTouchPass ? 'PASS' : 'FAIL < 44px'}
               </span>
             </div>
@@ -141,14 +141,14 @@ export function GateClientSimulator() {
           </div>
         </div>
 
-        <div className="lg:col-span-5 rounded-xl bg-[var(--bg-surface-elevated)] p-6 space-y-4 font-mono text-xs min-w-0">
+        <div className="lg:col-span-5 rounded-[8px] bg-[var(--bg-surface-elevated)] hairline-box p-6 space-y-4 font-mono text-xs min-w-0">
           <div className="flex items-center justify-between gap-2">
             <span className="uppercase text-[var(--text-dim)]">CI Verdict</span>
             <span
-              className={`px-3 py-1 rounded-full uppercase font-semibold ${
+              className={`px-3 py-1 rounded-[4px] uppercase font-semibold ${
                 overallPass
-                  ? 'bg-[var(--status-sage-soft)] text-[var(--status-sage)]'
-                  : 'bg-[var(--accent-ember-soft)] text-[var(--accent-ember)]'
+                  ? 'bg-[var(--status-pass-soft)] text-[var(--status-pass)]'
+                  : 'bg-[var(--status-fail-soft)] text-[var(--status-fail)]'
               }`}
             >
               {overallPass ? 'PASS' : 'BLOCKED'}

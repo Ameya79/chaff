@@ -1,9 +1,9 @@
-# Concept Pitch Direction A (Selected): Archival Proof Sheet & Live Specimen Stage
+# Concept Pitch Direction A (Selected): Gallery White Architectural Specimen & Pure WebGL2 3D Faceted Rotor
 
 - **Status:** SELECTED / APPROVED
-- **Operating Level:** Level 3 (Risk — Custom WebGL2 Shader + 5-Part Fallback Contract)
-- **Palette:** Archival cream ground (`#FBF7EE`), crisp specimen white (`#FFFFFF`), deep charcoal ink (`#16120E`), WCAG AA ember (`#9E3308`), botanical sage (`#354A21`), and Kestrel locked brand violet (`#6D28D9`); Night palette (`#110F0C` / `#EFE6D2` / `#F08048`).
-- **Type Hierarchy:** `Fraunces` optical serif display (`opsz`, `SOFT`) paired with `GeistSans` body and `GeistMono` tabular telemetry.
-- **Layout Architecture:** Full-bleed interactive Kestrel Before/After transformation stage above the fold, followed by dedicated purpose-built routes (`/rules` sticky inspector, `/levels` interactive horizontal rail, `/gallery` visual viewport frames, `/playground` live specimen + fix toggle).
-- **Motion & Level 3 Signature Moment:** Lazy-loaded custom WebGL2 GLSL winnowing displacement/particle shader (~6KB, zero extra npm deps) coupled to the interactive Before/After curtain wipe, plus animated SVG ember proof marks (`stroke-dashoffset`).
-- **Fallback Contract:** 5/5 guarantees enforced via `next/dynamic(..., { ssr: false })`, SSR SVG poster fallback, `@chaff/tier` classification (`full`/`lite`/`poster`), `governor({ maxPixelRatio: 1.5 })` offscreen pause, and explicit WebGL teardown.
+- **Operating Level:** Level 3 (Risk — Pure WebGL2 3D Faceted Rotor + 5-Part Fallback Contract)
+- **Palette:** Gallery white ground (`#FAFAF8`), crisp specimen sheet (`#FFFFFF`), carbon ink (`#111113`), measured slate (`#52525B`), Signal Vermilion (`#C4380F`), Moss Proof (`#1B6535`), and Kestrel locked violet (`#6D28D9`); Night palette (`#0E0E11` / `#151519` / `#F2F0EB` / `#F06A42`).
+- **Type Hierarchy:** `Archivo` (`wdth` sculpted Swiss neo-grotesque display) paired with `IBM Plex Sans` architectural UI copy and `IBM Plex Mono` tabular telemetry.
+- **Layout Architecture:** Full-viewport Gallery White hero with right-pedestal WebGL2 closed-volume beveled louver rotor and masked baseline text choreography, followed by the chat-first tailored project transformation stage, 7-step protocol strip, and ruled 8-domain taxonomy ledger.
+- **Motion & Level 3 Signature Moment:** Post-paint lazy WebGL2 3D closed-volume faceted rotor with Signal Vermilion inner core, 3D beveled datum rings, and 3D prism chaff slivers (~8 KB gzip, zero Three.js overhead), paired with compositor-only masked word entrances, cross-browser `IntersectionObserver` section reveals, and native CSS scroll-driven rules.
+- **Fallback Contract:** 5/5 guarantees enforced via post-paint deferred `next/dynamic(..., { ssr: false })`, SSR SVG poster fallback, `@chaff/tier` classification (`full`/`lite`/`poster`), `governor({ maxPixelRatio: 1.5 })` offscreen pause, and explicit WebGL2 buffer/shader/context teardown.

@@ -1,23 +1,23 @@
 {
   "$schema": "https://chaff.dev/schemas/identity.v1.json",
   "version": "1.0.0",
-  "generatedAt": "2026-11-25T18:45:00.000Z",
+  "generatedAt": "2026-11-27T17:00:00.000Z",
   "framework": "next",
   "router": "app",
   "styling": "tailwind",
   "fonts": [
-    "Fraunces",
-    "GeistSans",
-    "GeistMono"
+    "Plus Jakarta Sans",
+    "JetBrains Mono"
   ],
   "colors": {
-    "bg-canvas": "#09090B",
-    "bg-surface": "#111114",
-    "bg-surface-elevated": "#18181D",
-    "text-main": "#F4F1EA",
-    "text-dim": "#9D968B",
-    "accent-ember": "#F2713A",
-    "status-sage": "#7DC885",
+    "bg-canvas": "#F1F2EC",
+    "bg-surface": "#FBFBF7",
+    "bg-surface-elevated": "#E6E8DF",
+    "text-main": "#141A15",
+    "text-dim": "#4F5A51",
+    "accent": "#2E6648",
+    "status-pass": "#1F6843",
+    "status-fail": "#B43C3E",
     "kestrel-brand-violet": "#6D28D9"
   },
   "spacingRhythm": [
@@ -26,24 +26,25 @@
   ],
   "tokens": [
     {
-      "name": "obsidian-atelier-palette",
+      "name": "mineral-alabaster-sage-palette",
       "value": {
-        "darkCanvas": "#09090B",
-        "darkSurface": "#111114",
-        "darkInk": "#F4F1EA",
-        "darkEmber": "#F2713A",
-        "darkSage": "#7DC885",
-        "dayCanvas": "#F8F6F1",
-        "dayInk": "#11100E"
+        "dayCanvas": "#F1F2EC",
+        "daySurface": "#FBFBF7",
+        "dayInk": "#141A15",
+        "daySageAccent": "#2E6648",
+        "dayPass": "#1F6843",
+        "darkCanvas": "#0B0F0D",
+        "darkInk": "#EFF3EF",
+        "darkSageAccent": "#76B591"
       },
-      "confidence": 0.97,
+      "confidence": 0.99,
       "locked": true,
       "source": "src/app/globals.css"
     },
     {
-      "name": "typography-fraunces-geist",
-      "value": "Fraunces + GeistSans + GeistMono",
-      "confidence": 0.95,
+      "name": "typography-jakarta-jetbrains",
+      "value": "Plus Jakarta Sans (display & UI sans, negative tracking) + JetBrains Mono (tabular)",
+      "confidence": 0.98,
       "locked": true,
       "source": "src/app/layout.tsx"
     },
@@ -52,7 +53,7 @@
       "value": "#6D28D9",
       "confidence": 0.98,
       "locked": true,
-      "source": "src/components/HeroTransformationStage.tsx"
+      "source": "src/data/stage-projects.json"
     },
     {
       "name": "tailwind-config",
@@ -62,25 +63,25 @@
       "source": "tailwind.config.ts"
     },
     {
-      "name": "level-3-three-sculpture",
-      "value": "Three.js InstancedMesh Sculpture & Curl-Wind Field (Tree-shaken lazy island)",
-      "confidence": 0.94,
+      "name": "level-3-webgl2-manifold",
+      "value": "Raymarched Botanical Sage Crystal Core & Concentric Gimbal Rings (@chaff/tier governed)",
+      "confidence": 0.97,
       "locked": true,
       "source": "src/components/WinnowThreeScene.tsx"
     }
   ],
   "locked": [
-    "obsidian-atelier-palette",
-    "typography-fraunces-geist",
+    "mineral-alabaster-sage-palette",
+    "typography-jakarta-jetbrains",
     "color-kestrel-violet",
     "tailwind-config",
-    "level-3-three-sculpture"
+    "level-3-webgl2-manifold"
   ],
   "waivers": [
     {
       "ruleId": "UI-004",
       "token": "color-kestrel-violet",
-      "reason": "Kestrel showcase product primary brand identity (#6D28D9 / #A78BFA) locked intentionally and preserved across Before/After transformation.",
+      "reason": "Kestrel demo product primary brand identity (#6D28D9) locked intentionally in interactive Before/After showcase.",
       "approvedBy": "user"
     }
   ]

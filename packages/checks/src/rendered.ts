@@ -18,14 +18,17 @@ export interface GateReport {
   failuresCount: number;
 }
 
-async function readNextCompiledMetrics(projectRoot: string): Promise<{
+async function readCompiledMetrics(projectRoot: string): Promise<{
   baselineGzipKb: number | null;
   lazy3dGzipKb: number | null;
+  sourceLabel: string | null;
 }> {
-  const nextDir = path.join(projectRoot, '.next');
   let baselineGzipKb: number | null = null;
   let lazy3dGzipKb: number | null = null;
+  let sourceLabel: string | null = null;
 
+  // 1. Next.js (.next manifests)
+  const nextDir = path.join(projectRoot, '.next');
   try {
     const appBuildRaw = await fs.readFile(path.join(nextDir, 'app-build-manifest.json'), 'utf-8');
     const appBuild = JSON.parse(appBuildRaw) as { pages?: Record<string, string[]> };
@@ -41,6 +44,7 @@ async function readNextCompiledMetrics(projectRoot: string): Promise<{
         gzipBytes += zlib.gzipSync(buf).length;
       }
       baselineGzipKb = Math.round((gzipBytes / 1024) * 10) / 10;
+      sourceLabel = '.next';
     }
   } catch {
     // .next/app-build-manifest.json unavailable before production build
@@ -69,7 +73,82 @@ async function readNextCompiledMetrics(projectRoot: string): Promise<{
     // .next/react-loadable-manifest.json unavailable
   }
 
-  return { baselineGzipKb, lazy3dGzipKb };
+  if (baselineGzipKb !== null) {
+    return { baselineGzipKb, lazy3dGzipKb, sourceLabel };
+  }
+
+  // 2. Vite / SolidJS / SvelteKit / Nuxt / Angular / Astro compiled bundles
+  const candidateOutputs: { dir: string; label: string }[] = [
+    { dir: path.join(projectRoot, 'dist'), label: 'dist' },
+    { dir: path.join(projectRoot, '.svelte-kit', 'output', 'client'), label: '.svelte-kit' },
+    { dir: path.join(projectRoot, '.output', 'public'), label: '.output/public' },
+  ];
+
+  // Angular v17+ outputs to dist/<project>/browser
+  try {
+    const distEntries = await fs.readdir(path.join(projectRoot, 'dist'), { withFileTypes: true });
+    for (const ent of distEntries) {
+      if (ent.isDirectory()) {
+        candidateOutputs.unshift({
+          dir: path.join(projectRoot, 'dist', ent.name, 'browser'),
+          label: `dist/${ent.name}/browser`,
+        });
+      }
+    }
+  } catch {
+    // dist not present
+  }
+
+  for (const cand of candidateOutputs) {
+    try {
+      const indexHtml = await fs.readFile(path.join(cand.dir, 'index.html'), 'utf-8');
+      const scriptSrcs = [...indexHtml.matchAll(/<script[^>]+src=["']([^"']+\.(?:m?js))["']/gi)].map(
+        (m) => m[1].replace(/^\//, '')
+      );
+      if (scriptSrcs.length > 0) {
+        let baseBytes = 0;
+        let resolvedAny = false;
+        for (const rel of scriptSrcs) {
+          try {
+            const buf = await fs.readFile(path.join(cand.dir, rel));
+            baseBytes += zlib.gzipSync(buf).length;
+            resolvedAny = true;
+          } catch {
+            // Skip external or missing chunk reference
+          }
+        }
+        if (resolvedAny) {
+          baselineGzipKb = Math.round((baseBytes / 1024) * 10) / 10;
+          sourceLabel = cand.label;
+
+          // Inspect lazy 3D chunks in asset directory if present
+          const assetDir = path.join(cand.dir, 'assets');
+          try {
+            const assetFiles = await fs.readdir(assetDir);
+            let lazyBytes = 0;
+            let found3d = false;
+            for (const f of assetFiles) {
+              if (/(webgl|three|threlte|tres|scene|3d)/i.test(f) && /\.(m?js)$/.test(f)) {
+                const buf = await fs.readFile(path.join(assetDir, f));
+                lazyBytes += zlib.gzipSync(buf).length;
+                found3d = true;
+              }
+            }
+            if (found3d) {
+              lazy3dGzipKb = Math.round((lazyBytes / 1024) * 10) / 10;
+            }
+          } catch {
+            // No assets directory
+          }
+          break;
+        }
+      }
+    } catch {
+      // No index.html in this candidate dir
+    }
+  }
+
+  return { baselineGzipKb, lazy3dGzipKb, sourceLabel };
 }
 
 export async function checkRenderedBudgets(
@@ -80,16 +159,44 @@ export async function checkRenderedBudgets(
 
   // 1. Scan files recursively
   const allFiles: { relPath: string; content: string; size: number }[] = [];
+  const excludedDirs = new Set([
+    'node_modules',
+    '.git',
+    '.next',
+    '.svelte-kit',
+    '.angular',
+    '.nuxt',
+    '.output',
+    '.astro',
+    'dist',
+    'build',
+  ]);
+  const scannableExts = new Set([
+    '.tsx',
+    '.jsx',
+    '.ts',
+    '.js',
+    '.mts',
+    '.mjs',
+    '.svelte',
+    '.vue',
+    '.astro',
+    '.mdx',
+    '.css',
+    '.scss',
+    '.html',
+  ]);
+
   async function walk(dir: string) {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     for (const ent of entries) {
-      if (['node_modules', '.git', '.next', 'dist', 'build'].includes(ent.name)) continue;
+      if (excludedDirs.has(ent.name)) continue;
       const full = path.join(dir, ent.name);
       if (ent.isDirectory()) {
         await walk(full);
       } else if (ent.isFile()) {
         const ext = path.extname(ent.name);
-        if (['.tsx', '.jsx', '.ts', '.js', '.css', '.html'].includes(ext)) {
+        if (scannableExts.has(ext)) {
           const content = await fs.readFile(full, 'utf-8');
           const stat = await fs.stat(full);
           allFiles.push({
@@ -152,7 +259,13 @@ export async function checkRenderedBudgets(
   let clsRisk = false;
   let clsEvidence = '';
   for (const f of allFiles) {
-    if (/<img\b/i.test(f.content) && !/\bwidth=/i.test(f.content) && !/\bheight=/i.test(f.content)) {
+    if (
+      /<img\b/i.test(f.content) &&
+      !/\bngSrc\b/i.test(f.content) &&
+      !/enhanced:img/i.test(f.content) &&
+      !/\bwidth=/i.test(f.content) &&
+      !/\bheight=/i.test(f.content)
+    ) {
       clsRisk = true;
       clsEvidence = `${f.relPath}: <img> tag missing width/height attributes`;
       break;
@@ -189,19 +302,19 @@ export async function checkRenderedBudgets(
   });
 
   // --- Budget 5: First-load JavaScript Payload ---
-  const compiled = await readNextCompiledMetrics(projectRoot);
+  const compiled = await readCompiledMetrics(projectRoot);
   if (compiled.baselineGzipKb !== null) {
     const baselinePassed = compiled.baselineGzipKb <= 170;
     results.push({
       metric: 'First-Load Baseline JS',
       budget: '<= 170 KB gzip',
-      measured: `${compiled.baselineGzipKb} KB gzip (.next compiled)`,
+      measured: `${compiled.baselineGzipKb} KB gzip (${compiled.sourceLabel ?? 'compiled'})`,
       status: baselinePassed ? 'pass' : 'fail',
     });
   } else {
     let totalJsBytes = 0;
     for (const f of allFiles) {
-      if (f.relPath.endsWith('.ts') || f.relPath.endsWith('.tsx') || f.relPath.endsWith('.js')) {
+      if (/\.(ts|tsx|js|jsx|mts|mjs|svelte|vue|astro)$/i.test(f.relPath)) {
         totalJsBytes += f.size;
       }
     }
@@ -229,14 +342,24 @@ export async function checkRenderedBudgets(
 
     for (const f of allFiles) {
       if (
-        /from\s+['"](three|@react-three\/fiber)['"]/.test(f.content) ||
+        /\bfrom\s+['"](three|@react-three\/fiber|@threlte\/core|@tresjs\/core|solid-three|angular-three)['"]/.test(
+          f.content
+        ) ||
         /require\(['"]three['"]\)/.test(f.content) ||
         /getContext\(['"]webgl2?['"]/.test(f.content) ||
         f.content.includes('WEBGL_lose_context')
       ) {
         hasThreeUsage = true;
       }
-      if (f.content.includes('dynamic(') || f.content.includes('React.lazy(')) {
+      if (
+        f.content.includes('dynamic(') ||
+        f.content.includes('React.lazy(') ||
+        /\blazy\s*\(/.test(f.content) ||
+        f.content.includes('defineAsyncComponent(') ||
+        f.content.includes('@defer') ||
+        /\bimport\s*\(/.test(f.content) ||
+        /client:(visible|idle|only)/i.test(f.content)
+      ) {
         hasDynamicImport = true;
       }
       if (f.content.includes('Poster') || f.content.includes('poster') || f.content.includes('<picture>')) {
@@ -268,7 +391,7 @@ export async function checkRenderedBudgets(
         results.push({
           metric: 'Lazy 3D / WebGL Chunk Payload',
           budget: '<= 250 KB gzip',
-          measured: `${compiled.lazy3dGzipKb} KB gzip (.next dynamic chunk)`,
+          measured: `${compiled.lazy3dGzipKb} KB gzip (${compiled.sourceLabel ?? 'compiled'} dynamic chunk)`,
           status: compiled.lazy3dGzipKb <= 250 ? 'pass' : 'fail',
         });
       }
