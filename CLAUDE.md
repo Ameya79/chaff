@@ -1,8 +1,13 @@
 # CLAUDE.md — Claude Code Guide for Chaff
 
+## Link-only default
+
+When the Chaff URL is shared in a frontend workspace, follow the [autonomous runbook](docs/link-run.md) from start to finish. Select the direction autonomously, keep identity locks, and verify real screenshots. Use the guided steps below only when the user explicitly requests design choices or approval checkpoints.
+
+
 Chaff removes AI-generated UI tells while preserving and elevating each user's actual design identity.
 
-## Zero-Config Usage in Chat
+## Guided mode in chat
 When a user pastes the Chaff repository URL along with their prompt:
 1. Read `CHAFF.md` (master protocol) and inspect `levels/` and `rules/` on demand.
 2. Inspect the **user's own project first** (`package.json`, tokens, CSS/Tailwind, fonts, routes, components).

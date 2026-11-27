@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import { KestrelRouteSheet } from './KestrelRouteSheet';
 import Link from 'next/link';
 import stageProjectsData from '../data/stage-projects.json';
 import { RollingCounter } from './RollingCounter';
@@ -68,7 +69,12 @@ export function HeroTransformationStage() {
   const [projectId, setProjectId] = useState<string>(PROJECTS[0].id);
   const [selectedLevel, setSelectedLevel] = useState<SelectedLevel>('level2');
   const [lockBrandColor, setLockBrandColor] = useState<boolean>(true);
+  const [notesOpen, setNotesOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('curtain');
+  React.useEffect(() => {
+    setNotesOpen(window.matchMedia('(min-width: 1024px)').matches);
+    if (window.matchMedia('(max-width: 900px)').matches) setViewMode('after');
+  }, []);
   const [wipePercent, setWipePercent] = useState<number>(42);
   const [activeTellId, setActiveTellId] = useState<string>(PROJECTS[0].tells[0].id);
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -158,8 +164,10 @@ export function HeroTransformationStage() {
     </div>
   );
 
-  const renderAfter = () => (
-    <div className="bg-[var(--bg-surface)] text-[var(--text-main)] h-full p-6 sm:p-8 min-h-[420px] flex flex-col justify-between gap-6">
+  const renderAfter = () => project.id === 'kestrel' && selectedLevel !== 'level1' ? (
+    <KestrelRouteSheet venues={project.crafted.rows} median={project.crafted.metricValue} summary={project.crafted.metricSub} accent={accentColor} />
+  ) : (
+    <div style={{ "--project-ink": accentColor } as React.CSSProperties} className="crafted-sheet bg-[var(--bg-surface)] text-[var(--text-main)] h-full p-6 sm:p-8 min-h-[420px] flex flex-col justify-between gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3 hairline-b pb-4">
         <div className="flex items-center gap-2.5 min-w-0">
           <span
@@ -215,34 +223,28 @@ export function HeroTransformationStage() {
             selectedLevel === 'level1'
               ? 'hairline-t pt-4'
               : 'sm:col-span-6 sm:pl-6 sm:border-l sm:border-[var(--border-line)]'
-          } space-y-4 min-w-0`}
+          } metric-plate space-y-4 min-w-0`}
         >
           <div className="flex items-baseline justify-between gap-2 hairline-b pb-3">
             <div>
               <span className="font-mono text-[11px] text-[var(--text-dim)] block">
                 {project.crafted.metricLabel}
               </span>
-              <span className="font-display text-3xl sm:text-4xl font-semibold text-[var(--text-main)] tabular-nums">
+              <span className="metric-value font-display text-3xl sm:text-4xl font-semibold text-[var(--text-main)] tabular-nums">
                 {project.crafted.metricValue}
               </span>
             </div>
-            <span className="font-mono text-[11px] text-[var(--status-pass)] text-right">
-              {selectedLevel === 'level3'
-                ? 'L3 · WebGL Tiered'
-                : selectedLevel === 'level2'
-                ? 'L2 · Asymmetric'
-                : 'L1 · Layout Kept'}
-            </span>
+
           </div>
 
-          <div className="space-y-2.5">
+          <div className="metric-rows space-y-2.5">
             {project.crafted.rows.map((row) => (
               <div key={row.label} className="space-y-1">
                 <div className="flex justify-between font-mono text-xs gap-2">
                   <span className="text-[var(--text-main)] truncate">{row.label}</span>
                   <span className="text-[var(--text-dim)] tabular-nums shrink-0">{row.val}</span>
                 </div>
-                <div className="h-1.5 w-full rounded-full bg-[var(--bg-surface-elevated)] overflow-hidden">
+                <div className="metric-track h-1.5 w-full rounded-full bg-[var(--bg-surface-elevated)] overflow-hidden">
                   <div
                     className="h-full rounded-full transition-transform duration-500 origin-left"
                     style={{
@@ -267,23 +269,37 @@ export function HeroTransformationStage() {
   return (
     <section
       id="tailored-demo"
-      className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-8 space-y-10 hairline-t scroll-mt-20"
+      className="workshop-shell py-4 sm:py-8 max-w-7xl mx-auto px-4 sm:px-8 space-y-10 hairline-t scroll-mt-20"
     >
-      {/* Concise Header + Project Switcher */}
-      <div className="scroll-sheet flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-        <div className="space-y-2 max-w-xl">
-          <span className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)] font-medium block">
-            How It Works On Your Codebase
-          </span>
-          <h2 className="font-display text-[var(--text-main)]">
-            No rigid template. Tailored around your project.
-          </h2>
-          <p className="font-mono text-[11px] text-[var(--text-dim)] pt-1">
-            Framework-native detection &amp; budgets: Next.js · React · SolidJS · Vite · Angular · SvelteKit · Vue · Nuxt · Astro · Qwik
-          </p>
+      <header className="grain-cover">
+        <div className="grain-copy">
+          <h1>Find the grain.<br /><em>Keep the character.</em></h1>
+          <p>Give even a small coding agent a visual reference, a clear design brief, and a way to check its work. Start with one GitHub link.</p>
+          <Link href="/install" className="grain-cta">Use Chaff <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 16 15 5M5 5h10v10" stroke="currentColor" strokeWidth="2" /></svg></Link>
         </div>
-
-        {/* Select Which User Repo to Simulate */}
+        <svg className="grain-print" viewBox="0 0 340 240" aria-hidden="true" focusable="false">
+          <defs>
+            <pattern id="engraving" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(36)">
+              <path d="M0 0V7" stroke="currentColor" strokeWidth="3" />
+            </pattern>
+          </defs>
+          <g opacity=".25" fill="none" stroke="currentColor" strokeDasharray="2 5"><circle cx="180" cy="125" r="104" /><circle cx="180" cy="125" r="88" /><path d="M0 218h340M32 0v240" /></g>
+          <g fill="url(#engraving)">
+            <path d="M32 218C12 126 47 58 132 19C145 110 114 174 32 218Z" />
+            <path d="M128 222C110 143 143 82 213 45C226 123 201 181 128 222Z" />
+            <path d="M215 218C206 161 231 115 288 89C295 145 275 188 215 218Z" />
+          </g>
+          <path d="M32 218L128 30M128 222L210 55M215 218L285 98" stroke="currentColor" fill="none" />
+        </svg>
+      </header>
+      <div className="specimen-heading">
+        <h2>Inside the edit</h2>
+        <label className="phone-project">
+          <span className="sr-only">Choose example project</span>
+          <select value={project.id} onChange={e => handleProjectSwitch(e.target.value)}>
+            {PROJECTS.map(item => <option key={item.id} value={item.id}>{item.tab}</option>)}
+          </select>
+        </label>
         <div
           role="group"
           aria-label="Simulated project domain"
@@ -315,8 +331,11 @@ export function HeroTransformationStage() {
         {/* Left: Chat Interaction Panel */}
         <div
           key={project.id}
-          className="lg:col-span-5 space-y-5 min-w-0 panel-enter"
+          className="order-2 lg:order-1 lg:col-span-4 space-y-5 min-w-0 panel-enter"
         >
+          <details className="audit-notes" open={notesOpen} onToggle={event => setNotesOpen(event.currentTarget.open)}>
+          <summary>Explore the audit for {project.name}</summary>
+          <div className="space-y-5 pt-4">
           {/* User Message */}
           <div className="rounded-[10px] bg-[var(--bg-surface)] hairline-box p-4 space-y-1.5">
             <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--text-dim)] block">
@@ -402,10 +421,12 @@ export function HeroTransformationStage() {
               </button>
             </div>
           </div>
+          </div>
+          </details>
         </div>
 
         {/* Right: Visual Before/After Transformation Stage */}
-        <div className="lg:col-span-7 space-y-3 min-w-0">
+        <div className="specimen-frame order-1 lg:order-2 lg:col-span-8 space-y-3 min-w-0">
           {/* Controls Header */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div
@@ -475,15 +496,16 @@ export function HeroTransformationStage() {
             onPointerUp={() => setIsDragging(false)}
             onPointerLeave={() => setIsDragging(false)}
             className={`relative rounded-[10px] hairline-box overflow-hidden select-none shadow-[0_1px_3px_rgba(12,14,20,0.04)] ${
-              viewMode === 'curtain' ? 'cursor-ew-resize touch-none' : ''
+              viewMode === 'curtain' ? 'cursor-ew-resize touch-pan-y' : ''
             }`}
           >
             <div className="relative grid grid-cols-1">
-              <div className="col-start-1 row-start-1 relative z-0">
+              <div hidden={viewMode === 'before'} className="col-start-1 row-start-1 relative z-0">
                 {renderAfter()}
               </div>
 
               <div
+                hidden={viewMode === 'after'}
                 className="col-start-1 row-start-1 relative z-10"
                 style={{
                   clipPath: `inset(0 ${100 - effectiveBeforePct}% 0 0)`,

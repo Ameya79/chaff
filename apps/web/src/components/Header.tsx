@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { ChaffWordmark } from './ChaffWordmark';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -13,35 +14,6 @@ const NAV_LINKS = [
   { href: '/gate', label: 'Gate' },
   { href: '/install', label: 'Install' },
 ];
-
-export function ChaffLogoMark({ className = 'w-7 h-7' }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 32 32"
-      width="28"
-      height="28"
-      aria-hidden="true"
-      className={className}
-    >
-      <rect
-        x="0.5"
-        y="0.5"
-        width="31"
-        height="31"
-        rx="8"
-        fill="#131C17"
-        stroke="rgba(118, 181, 145, 0.28)"
-        strokeWidth="1"
-      />
-      <path
-        d="M20.5 7.5C14.5 7.5 8.5 11.5 8.5 17.8C8.5 21.6 10.9 24.4 14.8 25.2L15.8 21.4C13.7 20.9 12.4 19.6 12.4 17.6C12.4 13.8 15.8 11.4 19.6 11.4L22.8 11.4Z"
-        fill="#F7F9F7"
-      />
-      <polygon points="24.2,13.2 17.8,15.3 16.0,21.8" fill="#8CD1A6" />
-      <polygon points="24.2,13.2 16.0,21.8 22.0,19.7" fill="#418960" />
-    </svg>
-  );
-}
 
 export function Header() {
   const pathname = usePathname();
@@ -123,10 +95,7 @@ export function Header() {
           href="/"
           className="flex items-center gap-2.5 shrink-0 min-h-[44px] min-w-[44px] text-[var(--text-main)] group"
         >
-          <ChaffLogoMark className="w-7 h-7 shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
-          <span className="font-display font-semibold text-[18px] tracking-[-0.03em] text-[var(--text-main)]">
-            Chaff
-          </span>
+          <ChaffWordmark />
         </Link>
 
         {/* Desktop Navigation */}
@@ -196,12 +165,6 @@ export function Header() {
           </button>
         </div>
       </div>
-
-      {/* Compositor Scroll Progress Hairline */}
-      <div
-        aria-hidden="true"
-        className="h-[1px] w-full bg-[var(--accent)] scroll-progress-bar origin-left opacity-70 pointer-events-none"
-      />
 
       {/* Accessible Mobile Navigation Drawer */}
       {menuOpen && (

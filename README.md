@@ -1,29 +1,16 @@
-# Chaff — Taste & Craft Protocol for AI Coding Agents
+# Chaff
 
-**Paste the Chaff repo link + your prompt in chat. Chaff reads your project first, asks tailored creative questions around your own codebase and chosen level (1 / 2 / 3), strips AI design tells, locks your intentional brand identity, and verifies every change against strict accessibility and performance gates.**
+**Give a small coding agent a design brief it can actually execute.** Chaff turns a GitHub link into a frontend workflow: inspect the real product, compose one strong screen, build it, then render and revise it against the Chaff showcase.
 
-```
-You in chat:  "Use https://github.com/Ameya79/chaff on my app — improve the landing and pricing flow."
-                                       │
-                                       ▼
-Agent:   1. Reads CHAFF.md, levels/, and rules/ directly from the repo
-         2. Inspects YOUR project (framework, tokens, fonts, layout, routes, live UI)
-         3. Asks concise, project-specific questions about Level 1 / 2 / 3 & your brand tokens
-         4. Waives your locked identity, plans surgical fixes or 3 tailored pitches, waits for approval
-         5. Implements + proves zero regressions via audit, build, and gate checks
-```
+## Start with one link
 
----
+Open your frontend project in a coding agent that can read GitHub and edit the workspace. Paste this URL in chat:
 
-## Why Paste-Repo-First Instead of Rigid Prompts
+`https://github.com/Ameya79/chaff`
 
-Most "design prompt" repos impose one opinionated theme onto every site—turning your SaaS, store, or portfolio into a clone of someone else's template.
+A route or brief is optional. With the URL alone, use the project's primary public route. **Agents: open the [autonomous runbook](docs/link-run.md) now.** It contains the design decisions, visual references and browser check. No Chaff installation, MCP server, account, or second prompt is required. The agent needs a running preview and browser access to verify visual results.
 
-Chaff flips the order:
-1. **No setup required to start**: Paste the repository link alongside your normal prompt in Antigravity, Claude Code, Cursor, Windsurf, or any AI agent chat.
-2. **Reads your project before speaking**: In Step 1 (`Read`), the agent scans your framework, CSS variables/Tailwind config, font imports, and rendered pages, saving confidence-scored tokens into `.chaff/identity.json`.
-3. **Interactive choices tailored to your project**: Instead of forcing boilerplate templates, the agent asks targeted **Level 1 / Level 2 / Level 3** questions grounded in *your* colors, typography, product domain, and interactive ambitions.
-4. **Hard enforcement at the end**: Every claim is verified against **72 deterministic rules**, real headless Chrome inspection (`390px` & `1440px`), and non-negotiable bundle/WebGL performance budgets.
+![Chaff desktop reference](docs/reference/showcase-desktop.png)
 
 ### Supported Frontend Frameworks
 
@@ -40,7 +27,7 @@ Chaff's Identity Lock (`.chaff/identity.json`), rule checks, and build gates wor
 | Level | Intent | What Changes | Guardrail |
 | :--- | :--- | :--- | :--- |
 | **Level 1 · Clean** | Safe tell removal | Contrast, type hygiene, copy polish, states, mobile overflow & tap targets (`<= 10` files) | Zero layout rewrites, zero new motion dependencies |
-| **Level 2 · Authored** | Confident point of view | **3 tailored Concept Pitches** for your domain, editorial/modular structure, 1 signature interaction | Max 1 lightweight motion dependency, `<= 170 KB` gzip JS |
+| **Level 2 · Authored** | Confident point of view | Project-specific direction (three pitches in guided mode), editorial/modular structure, 1 signature interaction | Max 1 lightweight motion dependency, `<= 170 KB` gzip JS |
 | **Level 3 · Risk** | Interactive 3D & shaders | Custom WebGL/GLSL/Three.js showcase alongside clean minimal UI | **Mandatory 5-Part Fallback Contract** (`<= 250 KB` lazy chunk, `@chaff/tier`, DPR `<= 1.5`) |
 
 See [`levels/level-1.md`](levels/level-1.md), [`levels/level-2.md`](levels/level-2.md), and [`levels/level-3.md`](levels/level-3.md) for the exact contracts.

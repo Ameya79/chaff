@@ -10,7 +10,7 @@ export function PageHeader({ eyebrow, title, lead }: PageHeaderProps) {
   const words = title.split(/\s+/).filter(Boolean);
 
   return (
-    <header className="space-y-4">
+    <header className="folio-header space-y-4">
       <div
         className="hero-fade-in flex items-center gap-3 font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)] font-medium"
         style={{ '--d': '0ms' } as React.CSSProperties}

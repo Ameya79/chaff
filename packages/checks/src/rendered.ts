@@ -215,7 +215,7 @@ export async function checkRenderedBudgets(
   let overflowEvidence = '';
   for (const f of allFiles) {
     if (
-      /\b(width|minWidth|min-width)['"]?\s*:\s*['"]?([4-9]\d{2}|\d{4,})px\b/i.test(f.content) ||
+      /(?<![-\w(])(width|minWidth|min-width)['"]?\s*:\s*['"]?([4-9]\d{2}|\d{4,})px\b/i.test(f.content) ||
       /\b(w|min-w)-\[([4-9]\d{2}|\d{4,})px\]/.test(f.content)
     ) {
       overflowFound = true;

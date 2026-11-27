@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: '%s · Chaff',
   },
   description:
-    'Paste the Chaff repo link in chat alongside your prompt. Your agent inspects your codebase, asks tailored Level 1–3 craft questions, locks identity, and passes strict gates.',
+    'Give your coding agent one GitHub link to build and verify a frontend using real visual references.',
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     siteName: 'Chaff',
     title: 'Chaff — Paste the repo. Keep what is yours.',
     description:
-      'Zero-setup chat workflow for UI craft: tailored Level 1–3 questions around your own project, Identity Lock, and WebGL performance gates.',
+      'Give your coding agent one GitHub link to build and verify a frontend using real visual references.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Chaff — Paste the repo. Keep what is yours.',
     description:
-      'Share the Chaff repo in chat: project-tailored craft audits, Identity Lock, and performance gates.',
+      'Give your coding agent one GitHub link to build and verify a frontend using real visual references.',
   },
 };
 

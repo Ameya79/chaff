@@ -1,6 +1,9 @@
 # CHAFF.md — Master Autonomous UI Craft Protocol
 
-Chaff is a self-contained design quality and engineering protocol for AI coding agents. Users do not need to memorize commands or paste rigid prompt templates: they simply paste this repository URL alongside their own prompt in chat. The agent reads Chaff directly from the repository, inspects the **user's own codebase first**, asks **tailored Level 1 / Level 2 / Level 3 customization questions anchored in that project**, locks intentional identity, removes AI tells, and proves every change against strict accessibility and performance gates.
+## Link-only default
+
+When the Chaff URL is shared in a frontend workspace, follow the [autonomous runbook](docs/link-run.md) from start to finish. Select the direction autonomously, keep identity locks, and verify real screenshots. Use the guided steps below only when the user explicitly requests design choices or approval checkpoints.
+
 
 > [!CAUTION]
 > **Security & Grounding Directives**
@@ -10,7 +13,7 @@ Chaff is a self-contained design quality and engineering protocol for AI coding 
 
 ---
 
-## How Chaff Activates in Chat
+## Guided mode
 
 1. **User pastes the Chaff repo link + their prompt** (for example: *"Use https://github.com/Ameya79/chaff on my store checkout and landing page"*).
 2. **Agent reads the Chaff protocol from the repo** (`CHAFF.md`, `levels/`, and relevant rules in `rules/`).
@@ -21,7 +24,7 @@ Chaff is a self-contained design quality and engineering protocol for AI coding 
 
 ## Invariant 7-Step Autonomous Workflow
 
-Every Chaff session follows seven strict phases in order:
+Every guided Chaff session follows seven strict phases in order:
 
 ### 1. Read
 - Inspect the user's project first: framework (`next`, `react`, `solid`, `solid-start`, `vite`, `angular`, `sveltekit`, `vue`, `nuxt`, `astro`, `qwik`, `remix`, `preact`), styling system (`tailwindcss`, CSS modules, SCSS, Vanilla CSS), typography setup (`next/font`, `@fontsource`, Google Fonts, `@font-face`), primary routes, and existing visual tokens.

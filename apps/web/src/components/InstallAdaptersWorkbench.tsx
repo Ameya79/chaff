@@ -18,7 +18,7 @@ const ADAPTERS: AdapterGuide[] = [
 1. Read CHAFF.md and inspect the user's own project first (.chaff/identity.json).
 2. Capture live UI @ 390px & 1440px (Light and Dark themes).
 3. Audit tells across 72 rules; waive locked brand tokens.
-4. Ask tailored Level 1–3 & customization questions around their project; wait for approval.
+Follow https://github.com/Ameya79/chaff/blob/main/docs/link-run.md and choose a direction autonomously.
 5. Apply small, rule-tagged commits and run chaff audit + chaff gate.`,
   },
   {
@@ -29,7 +29,7 @@ const ADAPTERS: AdapterGuide[] = [
 See CHAFF.md for full protocol. Dedicated levels in levels/level-[1-3].md.
 1. Inspect the user's project tokens, fonts & routes -> .chaff/identity.json.
 2. Inspect rendered UI @ 390px & 1440px.
-3. Ask project-tailored Level 1–3 questions (L2/L3: 3 Concept Pitches) & pause.
+Follow https://github.com/Ameya79/chaff/blob/main/docs/link-run.md and choose a direction autonomously.
 4. Implement surgical commits tagged with rule IDs.
 5. Verify -> run pnpm test && chaff gate.`,
   },
@@ -46,7 +46,7 @@ alwaysApply: true
 1. Read user project framework & styles -> .chaff/identity.json
 2. Inspect dev server @ 390px & 1440px
 3. Score against 72 rules; waive locked tokens
-4. Ask tailored L1/L2/L3 questions (L2/L3: 3 pitches in .chaff/pitches/); wait for approval
+Follow https://github.com/Ameya79/chaff/blob/main/docs/link-run.md and choose a direction autonomously.
 5. Small commits with rule IDs; verify test & gate`,
   },
   {
@@ -84,7 +84,7 @@ const MCP_CONFIG = `{
 }`;
 
 const CHAT_SNIPPET =
-  'Audit my app using https://github.com/Ameya79/chaff — inspect my project first and ask me Level 1–3 customization questions.';
+  'https://github.com/Ameya79/chaff';
 
 export function InstallAdaptersWorkbench() {
   const [selectedAdapter, setSelectedAdapter] = useState<string>('antigravity');
@@ -130,7 +130,7 @@ export function InstallAdaptersWorkbench() {
             Paste in Chat
           </h2>
           <p className="text-sm text-[var(--text-dim)] leading-relaxed">
-            No CLI init required. Drop the repo URL beside your prompt; the agent reads Chaff from the repo and tailors questions around your project.
+            Open your project in a coding agent and paste this GitHub link. The agent picks a route, builds a direction, then checks the rendered result on phone and desktop.
           </p>
         </div>
 
@@ -144,7 +144,7 @@ export function InstallAdaptersWorkbench() {
               onClick={() => copyToClipboard(CHAT_SNIPPET, 'chat-snippet')}
               className="btn accent text-xs font-mono shrink-0"
             >
-              {copiedId === 'chat-snippet' ? 'Copied' : 'Copy Prompt'}
+              {copiedId === 'chat-snippet' ? 'Copied' : 'Copy GitHub link'}
             </button>
           </div>
         </div>

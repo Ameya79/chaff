@@ -14,8 +14,8 @@ export default function InstallPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-14 sm:py-20 space-y-12">
       <PageHeader
         eyebrow="Chat & CLI"
-        title="Use in Seconds"
-        lead="Paste our repo link in chat, or wire local adapters and CI gates with zero telemetry."
+        title="Start with one link"
+        lead="Open your frontend workspace and give the GitHub link to your coding agent."
       />
 
       <InstallAdaptersWorkbench />

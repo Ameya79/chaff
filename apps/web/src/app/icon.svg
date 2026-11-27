@@ -1,9 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="8" fill="#131C17" />
-  <path
-    d="M20.5 7.5C14.5 7.5 8.5 11.5 8.5 17.8C8.5 21.6 10.9 24.4 14.8 25.2L15.8 21.4C13.7 20.9 12.4 19.6 12.4 17.6C12.4 13.8 15.8 11.4 19.6 11.4L22.8 11.4Z"
-    fill="#F7F9F7"
-  />
-  <polygon points="24.2,13.2 17.8,15.3 16.0,21.8" fill="#8CD1A6" />
-  <polygon points="24.2,13.2 16.0,21.8 22.0,19.7" fill="#418960" />
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="5" fill="#f1f2ec"/><path d="M24 8C16 1 5 7 5 17s10 16 19 9" stroke="#141a15" stroke-width="4.3" stroke-linecap="square" fill="none"/></svg>

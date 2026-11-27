@@ -1,5 +1,7 @@
 # Level 1 Contract: Clean (Safe Tell Removal)
 
+For a link-only session, follow the [autonomous runbook](../docs/link-run.md). Approval and pitching steps here apply to guided sessions. All budgets and identity locks apply in both modes.
+
 ## 1. Philosophy & Purpose
 Level 1 is the baseline cleanup contract in Chaff. Its goal is **safe tell removal**: eliminate every recognizable AI-generated visual and textual fingerprint while altering as little code as possible. It stabilizes the user interface, restores craft hygiene, and ensures strict accessibility compliance without altering application layout architecture, visual brand identity, or component state structure.
 

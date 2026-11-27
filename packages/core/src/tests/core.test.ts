@@ -113,6 +113,7 @@ describe('@chaff/core', () => {
     const tempRoot = await fsp.mkdtemp(path.join(os.tmpdir(), 'chaff-core-fw-'));
     try {
       const frameworks = [
+        { name: 'legacy-angular', deps: { angular: '^1.8.0' }, cssRel: 'src/index.css', cssBody: ':root { --ink: #141A15; }', expectedFramework: 'angularjs', expectedRouter: 'unknown' },
         {
           name: 'solid-js-app',
           deps: { 'solid-js': '^1.9.0', vite: '^6.0.0' },

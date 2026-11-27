@@ -1,7 +1,7 @@
 # Chaff Audit Report
 
-**Timestamp:** 2026-11-27T20:26:19.555Z  
-**Operating Level:** Level 3  
+**Timestamp:** 2026-11-27T23:04:47.317Z  
+**Operating Level:** Level 2  
 **Overall Chaff Score:** **100 / 100**
 
 ## Score Breakdown

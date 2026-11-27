@@ -11,7 +11,7 @@ export function checkCodePatterns(
 
   // 1. Non-semantic div with click handler across React, SolidJS, Svelte, Angular, Vue, Qwik, Astro (CODE-001)
   const divOnClickMatches = content.matchAll(
-    /<div\b([^>]*(?:\bonClick\$?\b|\bon:click\b|\bv-on:click\b|\(click\)|@click)[^>]*)>/gis
+    /<div\b([^>]*(?:\bonClick\$?\b|\bon:click\b|\bv-on:click\b|\(click\)|@click|\b(?:data-)?ng-click\s*=)[^>]*)>/gis
   );
   for (const m of divOnClickMatches) {
     const matchContent = m[1];
@@ -56,9 +56,9 @@ export function checkCodePatterns(
       const hasAngularNgSrc = /\bngSrc\b/i.test(line);
       const hasEnhancedImg = /enhanced:img/i.test(line);
       const hasExplicitDims = /\bwidth\s*=/i.test(line) && /\bheight\s*=/i.test(line);
-      const isJsxComponent = filePath.endsWith('.tsx') || filePath.endsWith('.jsx');
+      const nextImagePreferred = framework === 'next' && /\.[jt]sx$/.test(filePath);
 
-      if (!hasAngularNgSrc && !hasEnhancedImg && (isJsxComponent || !hasExplicitDims)) {
+      if (!hasAngularNgSrc && !hasEnhancedImg && (nextImagePreferred || !hasExplicitDims)) {
         const hint =
           framework === 'angular'
             ? 'Raw <img> missing ngSrc or explicit width/height; prefer NgOptimizedImage (ngSrc)'
@@ -68,7 +68,9 @@ export function checkCodePatterns(
                 ? 'Raw <img> missing explicit dimensions; prefer <NuxtImg> or <picture> with width/height'
                 : framework === 'astro'
                   ? 'Raw <img> missing explicit dimensions; prefer astro:assets <Image />'
-                  : 'Raw <img> tag used in component; prefer next/image, explicit width/height, or responsive <picture>';
+                  : nextImagePreferred
+                    ? 'Use next/image for optimized loading, or document an exception for this asset.'
+                    : 'Reserve image space with explicit width and height.';
 
         findings.push({
           id: `CODE-003-${idx + 1}`,

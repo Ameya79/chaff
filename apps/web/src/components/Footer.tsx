@@ -1,17 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
-import { ChaffLogoMark } from './Header';
+import { ChaffWordmark } from './ChaffWordmark';
 
 export function Footer() {
   return (
-    <footer className="hairline-t py-16 px-4 sm:px-8 mt-24">
+    <footer className="site-colophon hairline-t py-10 sm:py-16 px-4 sm:px-8 mt-8">
       <div className="scroll-sheet max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
         <div className="md:col-span-5 space-y-3 min-w-0">
           <div className="flex items-center gap-2.5 text-[var(--text-main)]">
-            <ChaffLogoMark className="w-7 h-7 shrink-0" />
-            <span className="font-display font-semibold text-lg tracking-[-0.03em] text-[var(--text-main)]">
-              Chaff
-            </span>
+            <ChaffWordmark />
           </div>
           <p className="text-sm text-[var(--text-dim)] max-w-[38ch]">
             Chat-first UI craft protocol, Identity Lock, and Level 1–3 performance gates.

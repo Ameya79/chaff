@@ -1,5 +1,7 @@
 # Level 3 Contract: Risk (Ultra Creative & 3D Experiences)
 
+For a link-only session, follow the [autonomous runbook](../docs/link-run.md). Approval and pitching steps here apply to guided sessions. All budgets and identity locks apply in both modes.
+
 ## 1. Philosophy & Purpose
 Level 3 is the experimental frontier contract in Chaff. Its goal is to create **unforgettable, tactile web experiences** utilizing WebGL, Three.js, GLSL shaders, and spatial interaction design.
 

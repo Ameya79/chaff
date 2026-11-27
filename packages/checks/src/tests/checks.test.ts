@@ -180,3 +180,31 @@ describe('@chaff/checks', () => {
     }
   });
 });
+
+test('advertised stacks yield findings in native templates', async () => {
+  const cases = [
+    ['react', 'react', 'jsx', 'onClick={save}'],
+    ['next', 'next', 'tsx', 'onClick={save}'],
+    ['solid-js', 'solid', 'tsx', 'onClick={save}'],
+    ['vite', 'vite', 'html', 'onclick="save()"'],
+    ['@angular/core', 'angular', 'html', '(click)="save()"'],
+    ['angular', 'angularjs', 'html', 'ng-click="save()"'],
+    ['@sveltejs/kit', 'sveltekit', 'svelte', 'onclick={save}'],
+    ['vue', 'vue', 'vue', '@click="save"'],
+    ['nuxt', 'nuxt', 'vue', '@click="save"'],
+    ['astro', 'astro', 'astro', 'onclick="save()"'],
+  ];
+  for (const [dependency, expected, extension, binding] of cases) {
+    const dir = await fsp.mkdtemp(path.join(os.tmpdir(), 'chaff-stack-'));
+    try {
+      await fsp.writeFile(path.join(dir, 'package.json'), JSON.stringify({ dependencies: { [dependency]: '*' } }));
+      await fsp.writeFile(path.join(dir, 'Screen.' + extension), '<div ' + binding + '>Save</div>');
+      const identity = await buildIdentity(dir);
+      assert.equal(identity.framework, expected);
+      const findings = await runSourceChecks(dir, identity);
+      assert.ok(findings.some(f => f.ruleId === 'CODE-001'), dependency);
+    } finally {
+      await fsp.rm(dir, { recursive: true, force: true });
+    }
+  }
+});

@@ -10,7 +10,7 @@ export function checkMobilePatterns(
 
   lines.forEach((line, idx) => {
     // 1. Hardcoded desktop pixel widths exceeding 320px (MOBILE-001) - matches CSS & JSX styles
-    const fixedWidthMatch = line.match(/\b(width|minWidth|min-width)['"]?\s*:\s*['"]?([4-9]\d{2}|\d{4,})px\b/i);
+    const fixedWidthMatch = line.match(/(?<![-\w(])(width|minWidth|min-width)['"]?\s*:\s*['"]?([4-9]\d{2}|\d{4,})px\b/i);
     const twFixedMatch = line.match(/\b(w|min-w)-\[([4-9]\d{2}|\d{4,})px\]/);
     if (fixedWidthMatch || twFixedMatch) {
       findings.push({

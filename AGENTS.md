@@ -1,6 +1,11 @@
 # AGENTS.md — Universal Chaff Protocol Pointer
 
-## Quickstart: Paste-Repo Chat Flow
+## Link-only default
+
+When the Chaff URL is shared in a frontend workspace, follow the [autonomous runbook](docs/link-run.md) from start to finish. Select the direction autonomously, keep identity locks, and verify real screenshots. Use the guided steps below only when the user explicitly requests design choices or approval checkpoints.
+
+
+## Guided mode quickstart
 When a user shares this repository link alongside their prompt in chat:
 1. Read `CHAFF.md` and rules on demand from `rules/<category>/<ID>.md`.
 2. Inspect the **user's own project first** (framework, tokens, fonts, routes, UI).

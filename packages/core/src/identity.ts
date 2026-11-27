@@ -39,10 +39,12 @@ export async function buildIdentity(projectRoot: string): Promise<IdentityLock> 
       router = 'solid-start';
     } else if (deps['solid-js']) {
       framework = 'solid';
-      router = deps.vite ? 'vite' : 'solid-start';
+      router = deps.vite ? 'vite' : 'unknown';
     } else if (deps['@angular/core']) {
       framework = 'angular';
       router = 'angular';
+    } else if (deps.angular) {
+      framework = 'angularjs';
     } else if (deps['@sveltejs/kit']) {
       framework = 'sveltekit';
       router = 'sveltekit';
