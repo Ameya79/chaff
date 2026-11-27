@@ -2,16 +2,23 @@
 
 When the user gives you the Chaff GitHub link in a frontend workspace, use this runbook. The main branch contains everything needed to start. You need access to the target project's files and a rendered preview to verify the result. Leave Chaff itself in place unless it is the user's target.
 
-## Short path for a small context window
+## Small-model path
 
-Read this page first. Load only the one example or rule relevant to your next edit. Keep this four-line working note through every revision:
+Complete one row at a time. This table is the entire default workflow. Read the longer examples below only when a decision is unclear.
 
-- Visitor and action: who needs to do what, and where does the action lead?
-- Specimen: which existing object, data or interaction can show the product working?
-- Desktop and phone: which element leads, and what moves below it on a narrow screen?
-- Proof: which click, screenshot and measurement will demonstrate the result?
+| Step | Do this in the target project | Evidence to carry forward |
+| --- | --- | --- |
+| 1. Ground | Open the requested route, its component, and its styles. Run the current screen. Identify the real content and the user's main task. | Route, component path, one real content example, existing brand constraint. |
+| 2. Compose | Sketch the screen in three lines: what leads, what supports it, what comes next on a phone. Choose one distinctive detail that helps the task. | A concrete arrangement. Example for a bookstore: selected book cover and title, edition and price, then related books. |
+| 3. Implement | Build that one route. Use the project's components and tokens. Connect the principal action or reading path. Work with actual content, including the longest title. | The real click destination or resulting state. For a reading page, show the reader can reach and navigate the article. |
+| 4. Inspect | Render at desktop and phone sizes. Look first at the primary object, then type, alignment and wrapping. Run [the browser check](browser-check.js) at 320, 390 and 1440 pixels. | A screenshot per composition, findings per width, and the observed result of the primary task. |
+| 5. Repair | Pick the most consequential failed observation. Change its cause, render the same viewport, and repeat the same interaction. Run the project's build and existing checks. | A specific before/after observation. Finish when the requested flow works and the visual review passes, or identify exactly what remains unverified. |
 
-Build the specimen before polishing the surrounding page. For a dashboard, select a record and show its actual detail. For a store, select a real variant and keep its price and purchase action together. For an editorial page, lead with a real story and a readable excerpt. When content is scarce, use a smaller composition.
+**Keep the handoff short.** If context runs low, retain only the route and file, brand constraint, composition, most recent failed observation, and next edit. Resume there.
+
+**Example of a repair decision.** A narrow booking screen puts the month, date picker and three promotional cards before the first available appointment. Move available times directly after the selected date. Keep the selected time and booking action together. Reopen the same date at 390 pixels, pick a time with the keyboard, and check that the confirmation shows that time. Increasing border radii would leave the original problem in place.
+
+**When tools are limited.** If screenshots are unavailable, use rendered dimensions, computed styles, accessible names and interaction results where available. If the agent can capture images but cannot inspect them, attach them for review. Mark visual review pending in either case. Source inspection and a successful build cannot establish that the screen looks finished.
 
 ## 1. Pick a real task
 
