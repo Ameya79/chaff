@@ -26,3 +26,13 @@ def test_showcase_copies_only_the_repository_url():
     source = workbench.read_text(encoding="utf-8")
     assert re.search(r"const CHAT_SNIPPET\s*=\s*'https://github\.com/Ameya79/chaff';", source)
     assert "copyToClipboard(CHAT_SNIPPET," in source
+
+def test_readme_wordmark_and_navigation():
+    text = (ROOT / "README.md").read_text(encoding="utf-8-sig")
+    assert chr(0x2014) not in text
+    assert 'src="docs/reference/chaff-wordmark.svg"' in text
+    targets = re.findall(r'\]\(([^)]+)\)|src="([^"]+)"', text)
+    for markdown, html in targets:
+        path = markdown or html
+        if "://" not in path:
+            assert (ROOT / path).exists(), path

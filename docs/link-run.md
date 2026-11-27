@@ -2,6 +2,17 @@
 
 When the user gives you the Chaff GitHub link in a frontend workspace, use this runbook. The main branch contains everything needed to start. You need access to the target project's files and a rendered preview to verify the result. Leave Chaff itself in place unless it is the user's target.
 
+## Short path for a small context window
+
+Read this page first. Load only the one example or rule relevant to your next edit. Keep this four-line working note through every revision:
+
+- Visitor and action: who needs to do what, and where does the action lead?
+- Specimen: which existing object, data or interaction can show the product working?
+- Desktop and phone: which element leads, and what moves below it on a narrow screen?
+- Proof: which click, screenshot and measurement will demonstrate the result?
+
+Build the specimen before polishing the surrounding page. For a dashboard, select a record and show its actual detail. For a store, select a real variant and keep its price and purchase action together. For an editorial page, lead with a real story and a readable excerpt. When content is scarce, use a smaller composition.
+
 ## 1. Pick a real task
 
 Follow the user's requested route. With only the URL, find the main public entry point and improve its primary task. In a blank frontend workspace, use the project brief or existing assets to establish the audience and purpose. If both are missing, ask what the product should do. Preserve real data, brand colors, actions, routing, and any existing identity locks. Keep uncertain tokens unchanged. Read only relevant project files and avoid credentials.
@@ -39,5 +50,7 @@ Implement the primary route end to end using the existing framework, tokens and 
 Start the project's own preview using its documented commands. Capture before and after screenshots at 390 and 1440 pixels, plus 320 pixels for overflow. Compare the actual output against each row above. Record one concrete observation per row. If a row fails, change the component and inspect a fresh render. Test the primary action and keyboard navigation. Check the narrowest width again with the longest real label.
 
 Run [the browser layout check](browser-check.js) in the target preview's browser evaluation context at each width after fonts load. It reads rendered DOM geometry locally. If your agent cannot evaluate JavaScript, measure overflow and inspect headings directly in browser tools. A clean geometry check alone cannot establish visual quality.
+
+If the first pass looks generic, pick the largest failure and make a structural repair. Equal-weight cards: promote the primary object and collapse secondary metadata into a list. Phone screenshot dominated by navigation: compact the navigation and show the first useful item earlier. An impressive graphic with no product meaning: replace it with a view of the actual object or data. Re-render the same viewport after each repair so the comparison is meaningful.
 
 Run the target project's existing tests, lint and production build. Use Chaff CLI checks when available. Report routes, screenshots, actual measurements, unresolved defects and anything the environment prevented you from verifying. Continue autonomously through reversible work. Ask only for a missing project goal, a change to locked identity, a destructive action, or access you genuinely need.
