@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/discovery';
 import benchData from '../../data/bench-results.json';
 import {
   BenchClientTable,
@@ -8,11 +8,7 @@ import {
 } from '../../components/BenchClientTable';
 import { PageHeader } from '../../components/PageHeader';
 
-export const metadata: Metadata = {
-  title: 'Bench',
-  description:
-    'Measured static audit and gate runs across 10 workspace fixtures and agent profiles.',
-};
+export const metadata = pageMetadata('/bench');
 
 export default function BenchPage() {
   const formattedRunDate = new Intl.DateTimeFormat('en-US', {

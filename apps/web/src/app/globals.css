@@ -646,7 +646,9 @@ input[type='range']::-moz-range-thumb {
 .rail-track {display:flex;width:max-content;animation:framework-scroll 38s linear infinite}
 .rail-track ul {display:flex;list-style:none;align-items:center;gap:3rem;padding:1.25rem 3rem 0 0;margin:0}
 .rail-track li {display:flex;align-items:center;gap:.7rem;font-weight:600;font-size:1.15rem}
-.rail-track img {background:#fafaf7;border-radius:5px;padding:3px}
+.rail-track img {object-fit:contain;width:30px;height:30px}
+[data-theme="dark"] .rail-track [data-framework="nextjs"] img {filter:invert(1)}
+[data-theme="dark"] .rail-track [data-framework="astro"] img {content:url("/frameworks/astro-dark.svg")}
 @keyframes framework-scroll {to {transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.rail-track {animation:none;width:auto}.rail-track ul {flex-wrap:wrap;padding:1rem 2rem;gap:1rem 2rem}.rail-track ul[aria-hidden],.rail-heading button {display:none}}
 
@@ -776,3 +778,45 @@ input[type='range']::-moz-range-thumb {
   .route-stops span { font-size: .68rem; }
   .route-stops strong { font-size: 1rem; }
 }
+
+.print-pause { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; font: .75rem monospace; cursor: pointer; }
+.print-pause input { accent-color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .grain-print g[fill^="url"] > path {
+    transform-box: fill-box;
+    transform-origin: bottom left;
+    animation: grain-unfold 850ms cubic-bezier(.2,.8,.25,1) backwards;
+  }
+  .grain-print g[fill^="url"] > path:nth-child(2) { animation-delay: 90ms; }
+  .grain-print g[fill^="url"] > path:nth-child(3) { animation-delay: 180ms; }
+  .grain-copy h1 { animation: grain-title-in 550ms ease-out backwards; }
+  .domain-print > * { animation-duration: 4s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
+  [data-domain="ui"] path:last-child { animation-name: layout-measure; transform-origin: 28px 22px; }
+  [data-domain="copy"] path { animation-name: ink-cycle; }
+  [data-domain="code"] circle { animation-name: ink-cycle; }
+  [data-domain="code"] circle:nth-child(3) { animation-delay: .28s; }
+  [data-domain="code"] circle:nth-child(4) { animation-delay: .56s; }
+  [data-domain="code"] circle:nth-child(5) { animation-delay: .84s; }
+  [data-domain="perf"] path:last-child { animation-name: needle-cycle; transform-origin: 89px 70px; }
+  [data-domain="mobile"] path { animation-name: screen-measure; transform-origin: 80px 46px; }
+  [data-domain="a11y"] circle:last-child { animation-name: gaze-cycle; }
+  .curve-tracer { animation-name: trace-curve; offset-path: path('M25 70C81 70 65 22 116 22H155'); offset-anchor: 25px 70px; offset-rotate: 0deg; }
+  [data-domain="three"] path { animation-name: cube-turn; transform-origin: 90px 50px; }
+  .rule-index:has(.print-pause input:checked) .domain-print > * { animation-play-state: paused; }
+}
+@media (prefers-reduced-motion: reduce) { .print-pause { display: none; } }
+@keyframes grain-unfold { from { opacity: 0; transform: rotate(-8deg) scale(.7,.3); } to { opacity: 1; transform: none; } }
+@keyframes grain-title-in { from { opacity: .4; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+@keyframes layout-measure { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(.52); } }
+@keyframes ink-cycle { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes needle-cycle { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-47deg); } }
+@keyframes screen-measure { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(.82); } }
+@keyframes gaze-cycle { 0%,100% { transform: translateX(0); } 30% { transform: translateX(7px); } 70% { transform: translateX(-7px); } }
+@keyframes trace-curve { 0%,100% { offset-distance: 0%; } 50% { offset-distance: 100%; } }
+@keyframes cube-turn { 0%,100% { transform: skewY(0); } 50% { transform: skewY(-7deg); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .grain-guides > * { animation: reveal-guide 1.1s ease-out 120ms backwards; }
+  .grain-guides > :nth-child(2) { animation-delay: 240ms; }
+}
+@keyframes reveal-guide { from { opacity: 0; stroke-dashoffset: 14; } to { opacity: 1; stroke-dashoffset: 0; } }

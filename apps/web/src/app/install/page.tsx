@@ -1,13 +1,9 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/discovery';
 import { InstallAdaptersWorkbench } from '../../components/InstallAdaptersWorkbench';
 import { PageHeader } from '../../components/PageHeader';
 
-export const metadata: Metadata = {
-  title: 'Install',
-  description:
-    'Install Chaff CLI, generate IDE adapters, and connect the local MCP server.',
-};
+export const metadata = pageMetadata('/install');
 
 export default function InstallPage() {
   return (

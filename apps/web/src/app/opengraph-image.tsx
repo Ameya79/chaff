@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Chaff — Paste the repo. Keep what is yours.';
+export const alt = 'Chaff frontend design protocol for AI coding agents';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -39,10 +39,10 @@ export default function OpenGraphImage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '940px' }}>
           <div style={{ fontSize: '82px', fontWeight: 600, lineHeight: 1.04, letterSpacing: '-0.04em' }}>
-            Strip the slop. Keep your craft.
+            Frontend craft for coding agents.
           </div>
           <div style={{ fontSize: '28px', color: '#4F5A51', lineHeight: 1.4 }}>
-            Paste the repo link in chat. Tailored around your project, locked identity, and verified budgets.
+            One GitHub link gives your agent a design brief, visual references and a browser check.
           </div>
         </div>
 

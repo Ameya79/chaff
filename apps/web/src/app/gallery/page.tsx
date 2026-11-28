@@ -1,14 +1,10 @@
 import React, { Suspense } from 'react';
-import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/discovery';
 import caseStudiesData from '../../data/case-studies.json';
 import { GalleryWorkbench, CaseStudyDto } from '../../components/GalleryWorkbench';
 import { PageHeader } from '../../components/PageHeader';
 
-export const metadata: Metadata = {
-  title: 'Gallery',
-  description:
-    'Before and After visual comparisons and reconciled scores across five workspace fixtures.',
-};
+export const metadata = pageMetadata('/gallery');
 
 export default function GalleryPage() {
   const studies = caseStudiesData as CaseStudyDto[];

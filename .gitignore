@@ -58,3 +58,6 @@ chaff-report.tmp*
 .idea/
 *.swp
 *.swo
+
+.vercel
+.env*

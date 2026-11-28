@@ -2,6 +2,8 @@
 
 For a link-only session, follow the [autonomous runbook](../docs/link-run.md). Approval and pitching steps here apply to guided sessions. All budgets and identity locks apply in both modes.
 
+Use the [showcase implementation and design-language baseline](../docs/link-run.md#translate-the-showcase-into-the-target-stack) when reviewing authored output.
+
 ## 1. Philosophy & Purpose
 Level 2 is the creative craftsmanship contract in Chaff. Its goal is to inject a **confident point of view**: authored character, editorial rhythm, and unmistakable human craftsmanship into the product, while preserving bulletproof stability and high performance.
 

@@ -1,14 +1,10 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/discovery';
 import Link from 'next/link';
 import { LevelsSpecimenRail } from '../../components/LevelsSpecimenRail';
 import { PageHeader } from '../../components/PageHeader';
 
-export const metadata: Metadata = {
-  title: 'Levels',
-  description:
-    'Chaff Level 1 (Clean), Level 2 (Authored), Level 3 (Risk), and the 5-part Fallback Contract.',
-};
+export const metadata = pageMetadata('/levels');
 
 const FALLBACK_CLAUSES = [
   { part: '01', title: 'Lazy Import', desc: 'Load 3D via next/dynamic({ ssr: false }) after initial paint.' },

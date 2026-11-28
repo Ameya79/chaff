@@ -1,0 +1,31 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "web": {
+      "root": "apps/web",
+      "framework": "nextjs",
+      "buildCommand": "pnpm --filter chaff-web... run build",
+      "devCommand": "next dev"
+    },
+    "mcp": {
+      "root": "packages/mcp",
+      "runtime": "node",
+      "entrypoint": "src/http.ts",
+      "buildCommand": "pnpm --filter @chaff/mcp... run build",
+      "functions": {
+        "src/http.ts": {
+          "includeFiles": "dist/rules/**"
+        }
+      },
+      "devCommand": "pnpm --filter @chaff/mcp... run build && node dev.mjs"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "web"
+      }
+    }
+  ]
+}

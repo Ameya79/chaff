@@ -274,7 +274,7 @@ export function HeroTransformationStage() {
       <header className="grain-cover">
         <div className="grain-copy">
           <h1>Find the grain.<br /><em>Keep the character.</em></h1>
-          <p>Give even a small coding agent a visual reference, a clear design brief, and a way to check its work. Start with one GitHub link.</p>
+          <p>A frontend design guide for small coding models. Give your agent one GitHub link to replace generic layouts with interfaces it can build, inspect, and refine.</p>
           <Link href="/install" className="grain-cta">Use Chaff <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 16 15 5M5 5h10v10" stroke="currentColor" strokeWidth="2" /></svg></Link>
         </div>
         <svg className="grain-print" viewBox="0 0 340 240" aria-hidden="true" focusable="false">
@@ -283,7 +283,7 @@ export function HeroTransformationStage() {
               <path d="M0 0V7" stroke="currentColor" strokeWidth="3" />
             </pattern>
           </defs>
-          <g opacity=".25" fill="none" stroke="currentColor" strokeDasharray="2 5"><circle cx="180" cy="125" r="104" /><circle cx="180" cy="125" r="88" /><path d="M0 218h340M32 0v240" /></g>
+          <g className="grain-guides" opacity=".25" fill="none" stroke="currentColor" strokeDasharray="2 5"><circle cx="180" cy="125" r="104" /><circle cx="180" cy="125" r="88" /><path d="M0 218h340M32 0v240" /></g>
           <g fill="url(#engraving)">
             <path d="M32 218C12 126 47 58 132 19C145 110 114 174 32 218Z" />
             <path d="M128 222C110 143 143 82 213 45C226 123 201 181 128 222Z" />

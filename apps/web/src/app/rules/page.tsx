@@ -1,14 +1,10 @@
 import React, { Suspense } from 'react';
-import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/discovery';
 import { getCachedRules } from '../../lib/rules-loader';
 import { RulesClientLedger, RulePublicDto } from '../../components/RulesClientLedger';
 import { PageHeader } from '../../components/PageHeader';
 
-export const metadata: Metadata = {
-  title: '72 Rules',
-  description:
-    'Search and inspect all 72 Chaff design, accessibility, mobile, motion, and Level 3 WebGL rules.',
-};
+export const metadata = pageMetadata('/rules');
 
 export default async function RulesPage() {
   const fullRules = await getCachedRules();
@@ -45,6 +41,9 @@ export default async function RulesPage() {
       >
         <RulesClientLedger initialRules={publicRules} />
       </Suspense>
+      <details><summary className="cursor-pointer py-3">Browse individual rule pages</summary>
+        <ul className="grid sm:grid-cols-2 gap-3">{publicRules.map(rule => <li key={rule.id}><a className="underline" href={'/rules/' + rule.id.toLowerCase()}>{rule.id} / {rule.title}</a></li>)}</ul>
+      </details>
     </div>
   );
 }

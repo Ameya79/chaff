@@ -171,7 +171,7 @@ export function Header() {
         <nav
           id="mobile-nav-drawer"
           aria-label="Mobile Navigation"
-          className="lg:hidden hairline-t bg-[var(--bg-surface)] px-4 py-3 space-y-1 panel-enter"
+          className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto lg:hidden hairline-t bg-[var(--bg-surface)] px-4 py-3 space-y-1 panel-enter"
         >
           {NAV_LINKS.map((link) => {
             const isActive = pathname.startsWith(link.href);

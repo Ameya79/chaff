@@ -47,3 +47,5 @@ The link workflow needs no Chaff installation. Visual verification requires a pr
 | [CLI](packages/cli), [MCP server](packages/mcp), [GitHub Action](action) | Optional integrations for local projects and CI |
 | [Reference fixtures](fixtures) | Small projects with known audit findings |
 | [Model evaluation](bench/model-trial.md) | A repeatable comparison of the same model with and without Chaff |
+
+Maintained by **Ameya Kulkarni**. [GitHub](https://github.com/Ameya79) · [LinkedIn](https://www.linkedin.com/in/ameya-kulkarni-a31b74246)

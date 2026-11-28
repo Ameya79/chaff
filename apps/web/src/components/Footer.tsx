@@ -27,6 +27,7 @@ export function Footer() {
             { href: '/bench', label: 'Bench' },
             { href: '/gate', label: 'Gate' },
             { href: '/install', label: 'Install' },
+            { href: '/llms.txt', label: 'Agent resources' },
           ].map((item) => (
             <Link
               key={item.href}
@@ -40,8 +41,9 @@ export function Footer() {
 
         <div className="md:col-span-3 md:text-right space-y-2 min-w-0">
           <span className="font-mono text-xs text-[var(--status-pass)] block">
-            Downgrade effect, never budget.
+            Maintained by Ameya Kulkarni
           </span>
+          <p className="flex gap-4 md:justify-end"><a className="underline" href="https://github.com/Ameya79">GitHub profile</a><a className="underline" href="https://www.linkedin.com/in/ameya-kulkarni-a31b74246">LinkedIn</a></p>
           <a
             href="https://github.com/Ameya79/chaff"
             target="_blank"

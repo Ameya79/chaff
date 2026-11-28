@@ -1,14 +1,10 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/discovery';
 import { getCachedRules } from '../../lib/rules-loader';
 import { PlaygroundWorkbench, CanonicalRuleSummary } from '../../components/PlaygroundWorkbench';
 import { PageHeader } from '../../components/PageHeader';
 
-export const metadata: Metadata = {
-  title: 'Playground',
-  description:
-    'Run Chaff static checks live in the browser and preview automated fixes.',
-};
+export const metadata = pageMetadata('/playground');
 
 export default async function PlaygroundPage() {
   const rules = await getCachedRules();

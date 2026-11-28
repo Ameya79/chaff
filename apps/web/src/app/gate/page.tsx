@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/discovery';
 import fs from 'node:fs/promises';
 import fsSync from 'node:fs';
 import path from 'node:path';
@@ -10,11 +10,7 @@ import { PageHeader } from '../../components/PageHeader';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: 'Gate',
-  description:
-    'Live chaff gate --level 3 budgets, .next bundle telemetry, and threshold simulator.',
-};
+export const metadata = pageMetadata('/gate');
 
 function resolveWebRoot(): string {
   const cwd = path.resolve(process.cwd());

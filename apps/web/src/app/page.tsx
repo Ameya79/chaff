@@ -1,16 +1,13 @@
+import { RepositorySupport } from '../components/RepositorySupport';
 import React from 'react';
-import type { Metadata } from 'next';
+import { pageMetadata } from '../lib/discovery';
 import Link from 'next/link';
 import { FrameworkRail } from '../components/FrameworkRail';
 import { HeroTransformationStage } from '../components/HeroTransformationStage';
 import { ProtocolSection } from '../components/ProtocolSection';
 import { TaxonomyLedger } from '../components/TaxonomyLedger';
 
-export const metadata: Metadata = {
-  title: 'Chaff — Paste the repo. Keep what is yours.',
-  description:
-    'Give a small coding agent a design brief, visual references and a browser check with one GitHub link.',
-};
+export const metadata = pageMetadata('/');
 
 export default function HomePage() {
   return (
@@ -30,8 +27,9 @@ export default function HomePage() {
           <div className="space-y-3 max-w-xl">
 
             <h2 className="font-display text-[var(--text-main)]">
-              Try Chaff on your interface.
+              Support Chaff.
             </h2>
+            <p>Use Chaff with smaller models in Codex, Claude Code, Antigravity, Windsurf, or Cursor. If the guide improves a real screen, star the project on GitHub.</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
@@ -41,9 +39,7 @@ export default function HomePage() {
             <Link href="/playground" className="btn font-mono text-xs">
               Playground
             </Link>
-            <Link href="/gate" className="btn ghost font-mono text-xs">
-              Gate Telemetry
-            </Link>
+            <RepositorySupport />
           </div>
         </div>
       </section>

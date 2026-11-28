@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { siteUrl, repository, pages } from '../lib/discovery';
 import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '../components/Header';
@@ -18,30 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains',
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://chaff.dev'),
-  title: {
-    default: 'Chaff — Paste the repo. Keep what is yours.',
-    template: '%s · Chaff',
-  },
-  description:
-    'Give your coding agent one GitHub link to build and verify a frontend using real visual references.',
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://chaff.dev',
-    siteName: 'Chaff',
-    title: 'Chaff — Paste the repo. Keep what is yours.',
-    description:
-      'Give your coding agent one GitHub link to build and verify a frontend using real visual references.',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Chaff — Paste the repo. Keep what is yours.',
-    description:
-      'Give your coding agent one GitHub link to build and verify a frontend using real visual references.',
-  },
-};
+export const metadata = { metadataBase: siteUrl };
 
 export default function RootLayout({
   children,
@@ -56,6 +33,10 @@ export default function RootLayout({
       className={`${plusJakarta.variable} ${jetbrainsMono.variable}`}
     >
       <head>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org", "@type": "SoftwareSourceCode", name: "Chaff",
+          description: pages["/"][1], url: siteUrl.href, codeRepository: repository, maintainer: { "@type": "Person", name: "Ameya Kulkarni", url: "https://github.com/Ameya79", sameAs: ["https://www.linkedin.com/in/ameya-kulkarni-a31b74246"] }, programmingLanguage: "TypeScript",
+        }).replace(/</g, "\\u003c") }} />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var s=localStorage.getItem('chaff-theme');var t=s==='dark'?'dark':'light';document.documentElement.setAttribute('data-theme',t);if(t==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();`,

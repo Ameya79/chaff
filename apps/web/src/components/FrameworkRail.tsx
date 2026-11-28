@@ -24,7 +24,7 @@ export function FrameworkRail() {
           {[0, 1].map(copy => (
             <ul key={copy} aria-hidden={copy === 1 || undefined}>
               {stacks.map(([label, slug]) => (
-                <li key={slug}><Image unoptimized src={'/frameworks/' + slug + '.svg'} width={30} height={30} alt="" />{label}</li>
+                <li key={slug} data-framework={slug}><Image unoptimized src={'/frameworks/' + slug + '.svg'} width={30} height={30} alt="" />{label}</li>
               ))}
             </ul>
           ))}

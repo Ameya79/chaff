@@ -132,7 +132,7 @@ export function RulesClientLedger({
 
   const copyPermalink = (id: string) => {
     if (typeof window !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(`${window.location.origin}/rules#${id}`);
+      navigator.clipboard.writeText(`${window.location.origin}/rules/${id.toLowerCase()}`);
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 1800);
     }

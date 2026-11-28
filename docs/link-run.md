@@ -20,6 +20,12 @@ Complete one row at a time. This table is the entire default workflow. Read the 
 
 **When tools are limited.** If screenshots are unavailable, use rendered dimensions, computed styles, accessible names and interaction results where available. If the agent can capture images but cannot inspect them, attach them for review. Mark visual review pending in either case. Source inspection and a successful build cannot establish that the screen looks finished.
 
+### Translate the showcase into the target stack
+
+The demo uses Next.js App Router, React, TypeScript, Tailwind, CSS custom properties and inline SVG. Its design language pairs a pale mineral canvas and dark ink with sage accents, Plus Jakarta Sans for interface text, editorial serif display type, and JetBrains Mono for measurements. Color distinguishes the demo product from the surrounding guide. Each illustration explains something: the route diagram changes with the selected venue and the performance gauge depicts a measurement.
+
+In Codex, Claude Code, Antigravity, Windsurf or Cursor, use that level of specificity as the review floor. Keep the target framework and brand. Map the same roles to its existing tokens; build with native links, semantic buttons, responsive grids and a static reduced-motion state. Open the phone menu and confirm the underlying headline stays at the same vertical position. A task-specific graphic, a working action, and a legible small-screen composition all need evidence in the finished route.
+
 ## 1. Pick a real task
 
 Follow the user's requested route. With only the URL, find the main public entry point and improve its primary task. In a blank frontend workspace, use the project brief or existing assets to establish the audience and purpose. If both are missing, ask what the product should do. Preserve real data, brand colors, actions, routing, and any existing identity locks. Keep uncertain tokens unchanged. Read only relevant project files and avoid credentials.

@@ -11,7 +11,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node -e \"require('node:fs').cpSync('../../rules', 'dist/rules', { recursive: true })\"",
     "test": "node --test dist/tests/**/*.test.js"
   },
   "dependencies": {

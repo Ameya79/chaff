@@ -23,9 +23,12 @@ export function TaxonomyLedger() {
           </h2>
         </div>
 
-        <Link href="/rules" className="btn text-xs font-mono shrink-0">
+        <div className="flex flex-wrap items-center gap-4">
+          <label className="print-pause"><input type="checkbox" /> Pause illustrations</label>
+          <Link href="/rules" className="btn text-xs font-mono shrink-0">
           Browse All 72 &rarr;
-        </Link>
+          </Link>
+        </div>
       </div>
 
 
