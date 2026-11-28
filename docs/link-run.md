@@ -20,6 +20,21 @@ Complete one row at a time. This table is the entire default workflow. Read the 
 
 **When tools are limited.** If screenshots are unavailable, use rendered dimensions, computed styles, accessible names and interaction results where available. If the agent can capture images but cannot inspect them, attach them for review. Mark visual review pending in either case. Source inspection and a successful build cannot establish that the screen looks finished.
 
+### A recipe for choosing the visual
+
+Pick a real noun from the interface, then a decision the user makes about it. Draw only what is needed to explain that decision. Connect a real input to a visible change. If context is tight, complete this sentence before writing CSS: "Choosing ___ changes ___ because ___."
+
+| Product | Weak first pass | Implement this relationship | Verify one state change |
+| --- | --- | --- | --- |
+| Trading router | Gradient pitch and three promises | Venue selection highlights a network path | CBOE selects its path and shows 2.6 ms |
+| Architecture studio | A strip of unlabeled portfolio tiles | Select a building to show a schematic study and its area | Aarhus shows its frame and 1,850 m² |
+| Synthesizer store | A loud promotion with no instrument detail | Waveform buttons change the trace on the faceplate | Saw shows a ramp; Square shows steps |
+| Flight desk | Three generic status summaries | A feed selects an approach trace and a latency reading | Weather METAR Sync shows 21.0 ms |
+
+Before finishing, audit every factual label against the brief or source data. Remove invented specifications and unsupported claims. Check small-screen text at normal zoom; keep decision-critical details comfortably readable (start around 14px). For a mutually exclusive choice, use native radio controls or synchronize aria-pressed on every button. Confirm that selecting a different item clears a stale confirmation and updates every linked visual. Delete any secondary control that has no real destination.
+
+For a new domain, translate the relationship. On a print booking screen the selected press can highlight its available slot; confirming should name that press and time. Keep a single selection value and derive the graphic, selected control and detail from it. Use an ordinary button or select so the same change works from a keyboard. The demo data is illustrative. Use actual records and units in the target product.
+
 ### Translate the showcase into the target stack
 
 The demo uses Next.js App Router, React, TypeScript, Tailwind, CSS custom properties and inline SVG. Its design language pairs a pale mineral canvas and dark ink with sage accents, Plus Jakarta Sans for interface text, editorial serif display type, and JetBrains Mono for measurements. Color distinguishes the demo product from the surrounding guide. Each illustration explains something: the route diagram changes with the selected venue and the performance gauge depicts a measurement.

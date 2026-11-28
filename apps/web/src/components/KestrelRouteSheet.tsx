@@ -35,7 +35,7 @@ export function KestrelRouteSheet({ venues, accent, median, summary }: RouteShee
               <text x="381" y={32 + i * 43} fill="#242222" fontSize="13" fontFamily="monospace">{venue.label}</text>
             </g>
           ))}
-          <path d={paths[selected]} fill="none" stroke="var(--route-ink)" strokeWidth="5" />
+          <path key={selected} className="route-trace" pathLength="1" d={paths[selected]} fill="none" stroke="var(--route-ink)" strokeWidth="5" />
           {venues.map((venue, i) => <circle key={venue.label} cx="365" cy={27 + i * 43} r="5" fill={selected === i ? 'var(--route-ink)' : '#fff'} stroke="#302f31" strokeWidth="2" />)}
           <path d="m49 102 10 10-10 10-10-10Z" fill="#202022" />
           <text x="26" y="140" fontSize="12" fill="#242222" fontFamily="monospace">US-EAST</text>

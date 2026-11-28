@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import { BeforeSpecimen } from './BeforeSpecimen';
+import { ProjectSpecimen } from './ProjectSpecimen';
 import { KestrelRouteSheet } from './KestrelRouteSheet';
 import Link from 'next/link';
 import stageProjectsData from '../data/stage-projects.json';
@@ -111,7 +113,9 @@ export function HeroTransformationStage() {
     setWipePercent(pct);
   };
 
-  const renderBefore = () => (
+  const renderBefore = () => project.id !== 'kestrel' ? (
+    <BeforeSpecimen id={project.id} name={project.name} copy={project.slop} />
+  ) : (
     <div className="slop-specimen-shell relative h-full p-6 sm:p-8 min-h-[420px] flex flex-col justify-between gap-5">
       <div className="slop-orb-purple" aria-hidden="true" />
       <div className="slop-orb-cyan" aria-hidden="true" />
@@ -166,6 +170,8 @@ export function HeroTransformationStage() {
 
   const renderAfter = () => project.id === 'kestrel' && selectedLevel !== 'level1' ? (
     <KestrelRouteSheet venues={project.crafted.rows} median={project.crafted.metricValue} summary={project.crafted.metricSub} accent={accentColor} />
+  ) : selectedLevel !== 'level1' ? (
+    <ProjectSpecimen key={project.id} id={project.id} rows={project.crafted.rows} accent={accentColor} />
   ) : (
     <div style={{ "--project-ink": accentColor } as React.CSSProperties} className="crafted-sheet bg-[var(--bg-surface)] text-[var(--text-main)] h-full p-6 sm:p-8 min-h-[420px] flex flex-col justify-between gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3 hairline-b pb-4">
@@ -189,11 +195,9 @@ export function HeroTransformationStage() {
       </div>
 
       <div
-        className={`grid grid-cols-1 ${
-          selectedLevel === 'level1' ? 'gap-5' : 'sm:grid-cols-12 gap-6 items-center'
-        } my-auto`}
+        className="grid grid-cols-1 gap-5 my-auto"
       >
-        <div className={selectedLevel === 'level1' ? 'space-y-3' : 'sm:col-span-6 space-y-4'}>
+        <div className="space-y-3">
           <span
             className="font-mono text-[11px] uppercase tracking-[0.14em] block font-medium"
             style={{ color: accentColor }}
@@ -219,11 +223,7 @@ export function HeroTransformationStage() {
         </div>
 
         <div
-          className={`${
-            selectedLevel === 'level1'
-              ? 'hairline-t pt-4'
-              : 'sm:col-span-6 sm:pl-6 sm:border-l sm:border-[var(--border-line)]'
-          } metric-plate space-y-4 min-w-0`}
+          className="hairline-t pt-4 metric-plate space-y-4 min-w-0"
         >
           <div className="flex items-baseline justify-between gap-2 hairline-b pb-3">
             <div>
