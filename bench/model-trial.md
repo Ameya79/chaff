@@ -7,3 +7,5 @@ Use two clean copies of the same working app, the same exact model version, tool
 Capture desktop and phone screenshots from both outputs. Have a reviewer inspect them in random order with model and condition hidden. Use the same five decisions in the runbook: first screen, hierarchy, identity, detail and phone composition. For each decision record a visible observation and pass or repair. Mark a run incomplete if its primary action fails, its identity locks change, or its screenshots are missing. Record tool failures separately.
 
 Keep the brief, exact model ID, commit, screenshots, measurements and review together. Repeat on different product types and more than one run per condition before making a general model claim. A fixture audit score measures rule findings and cannot substitute for this comparison.
+
+[Read the GPT-5.6 Luna print-booking trial and see its screenshots](trials/print-booking/README.md).
