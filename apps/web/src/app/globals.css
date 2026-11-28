@@ -885,3 +885,27 @@ input[type='range']::-moz-range-thumb {
   .grain-cta svg { transition:transform .18s ease-out; }
   .grain-cta:is(:hover,:focus-visible) svg { transform:translate(2px,-2px); }
 }
+
+.grain-evidence {
+  position:relative; grid-column:1/-1; display:flex; flex-wrap:wrap;
+  align-items:baseline; gap:.45rem 1.25rem; margin-top:2rem; padding-top:1rem;
+  border-top:1px solid #809586; color:#f1f2ec; min-height:44px;
+}
+.grain-evidence strong { font:normal 1.5rem Georgia,serif; }
+.grain-evidence span { font-size:.82rem; text-decoration:underline; text-underline-offset:.2em; }
+.specimen-stage { height:32rem; grid-template-rows:minmax(0,1fr); }
+.specimen-stage > div:not([aria-hidden]) { min-height:0; overflow:auto; scrollbar-width:thin; }
+.before-portfolio h3 { text-align:center; letter-spacing:.04em; }
+.before-store .mock-buy { box-shadow:3px 3px #db6351; }
+.before-console .console-summary { border:1px solid #a3afc7; border-radius:2px; }
+.slop-specimen-shell .slop-pill-badge { border:1px dashed currentColor; }
+@media(max-width:740px) {
+  .grain-print { bottom:auto; top:2rem; right:-5%; width:25%; }
+  .grain-copy h1 { max-width:80%; }
+  .grain-copy p { max-width:36ch; }
+  .specimen-stage { height:clamp(27rem,76svh,32rem); }
+}
+@media(prefers-reduced-motion:no-preference) {
+  .specimen-stage { animation:specimen-ink .24s ease-out; }
+  @keyframes specimen-ink { from {opacity:.65} to {opacity:1} }
+}

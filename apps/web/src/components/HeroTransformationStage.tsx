@@ -273,8 +273,8 @@ export function HeroTransformationStage() {
     >
       <header className="grain-cover">
         <div className="grain-copy">
-          <h1>Give your agent<br /><em>a designer's eye.</em></h1>
-          <p>One GitHub link helps small coding models turn a generic screen into a working, considered interface.</p>
+          <h1>The first draft<br /><em>is for editing.</em></h1>
+          <p>Give your coding agent a frontend field guide. Chaff walks smaller models through the details of type, layout and interaction, one screen at a time.</p>
           <Link href="/install" className="grain-cta">Get the guide <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 16 15 5M5 5h10v10" stroke="currentColor" strokeWidth="2" /></svg></Link>
         </div>
         <svg className="grain-print" viewBox="0 0 340 240" aria-hidden="true" focusable="false">
@@ -291,6 +291,7 @@ export function HeroTransformationStage() {
           </g>
           <path d="M32 218L128 30M128 222L210 55M215 218L285 98" stroke="currentColor" fill="none" />
         </svg>
+        <a className="grain-evidence" href="https://github.com/Ameya79/chaff/tree/main/bench/trials/print-booking"><strong>3 viewport widths</strong><span>One booking flow tested with GPT-5.6 Luna. Read the trial ↗</span></a>
       </header>
       <div className="specimen-heading">
         <h2>Inside the edit</h2>
@@ -499,7 +500,7 @@ export function HeroTransformationStage() {
               viewMode === 'curtain' ? 'cursor-ew-resize touch-pan-y' : ''
             }`}
           >
-            <div className="relative grid grid-cols-1">
+            <div key={project.id} className="specimen-stage relative grid grid-cols-1">
               <div hidden={viewMode === 'before'} className="col-start-1 row-start-1 relative z-0">
                 {renderAfter()}
               </div>
