@@ -14,6 +14,8 @@ https://github.com/Ameya79/chaff
 
 **Agent entry point:** Follow the [autonomous runbook](docs/link-run.md). With the URL alone, improve the primary public route. Add a route or brief if you want a different scope.
 
+[Live showcase](https://chaff-ai.vercel.app/) · [Contribute](CONTRIBUTING.md) · [MIT license](LICENSE)
+
 ## See the target
 
 | Desktop composition | Phone composition |

@@ -867,3 +867,21 @@ input[type='range']::-moz-range-thumb {
 .console-summary { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:.15rem .5rem; background:white; margin:.35rem 0; padding:.5rem; }
 .console-summary i { width:.65rem; height:.65rem; border-radius:50%; background:#79958c; }
 .console-summary span { grid-column:2; font-size:.7rem; }
+
+/* Keep the first specimen within reach on compact screens. */
+@media (max-width: 740px) {
+  .grain-cover { display:block; padding:clamp(1.25rem,5vw,2.5rem); }
+  .grain-copy h1 { font-size:clamp(2.55rem,9vw,4.6rem); line-height:.98; }
+  .grain-copy p { max-width:min(32ch,77%); margin:.8rem 0 1rem; }
+  .grain-print { position:absolute; width:30%; bottom:.15rem; right:-3%; }
+  .specimen-heading { flex-wrap:wrap; gap:.35rem .8rem; }
+  .phone-project select { max-width:100%; }
+  .specimen-frame [aria-label="Preview view mode"] { width:100%; }
+  .specimen-frame [aria-label="Preview view mode"] button { flex:1; }
+}
+@media (prefers-reduced-motion:no-preference) {
+  .project-specimen > svg,.route-sheet .route-figure { animation:specimen-arrive .32s ease-out; }
+  @keyframes specimen-arrive { from {opacity:.6;transform:translateY(4px)} to {opacity:1;transform:none} }
+  .grain-cta svg { transition:transform .18s ease-out; }
+  .grain-cta:is(:hover,:focus-visible) svg { transform:translate(2px,-2px); }
+}

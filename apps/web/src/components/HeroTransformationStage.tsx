@@ -273,9 +273,9 @@ export function HeroTransformationStage() {
     >
       <header className="grain-cover">
         <div className="grain-copy">
-          <h1>Find the grain.<br /><em>Keep the character.</em></h1>
-          <p>A frontend design guide for small coding models. Give your agent one GitHub link to replace generic layouts with interfaces it can build, inspect, and refine.</p>
-          <Link href="/install" className="grain-cta">Use Chaff <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 16 15 5M5 5h10v10" stroke="currentColor" strokeWidth="2" /></svg></Link>
+          <h1>Give your agent<br /><em>a designer's eye.</em></h1>
+          <p>One GitHub link helps small coding models turn a generic screen into a working, considered interface.</p>
+          <Link href="/install" className="grain-cta">Get the guide <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 16 15 5M5 5h10v10" stroke="currentColor" strokeWidth="2" /></svg></Link>
         </div>
         <svg className="grain-print" viewBox="0 0 340 240" aria-hidden="true" focusable="false">
           <defs>

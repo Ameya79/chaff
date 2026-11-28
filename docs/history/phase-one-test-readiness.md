@@ -1,4 +1,6 @@
-# E2E Test Suite Ready
+# Phase 1 test readiness snapshot
+
+Historical planning record. For current setup and verification, see the [contributor guide](../../CONTRIBUTING.md).
 
 ## Test Runner
 - Command: `python -m pytest tests/test_phase1.py -v`
